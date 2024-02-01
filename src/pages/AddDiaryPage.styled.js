@@ -27,7 +27,6 @@ export const TagnIconsContainer = styled.div`
 `;
 
 export const TagWrapper = styled.div`
-  background-color: aliceblue;
   width: 40%;
 `;
 

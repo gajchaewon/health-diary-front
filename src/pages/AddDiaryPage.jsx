@@ -7,6 +7,8 @@ import SmartDisplayRoundedIcon from "@mui/icons-material/SmartDisplayRounded";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import LockOpenRoundedIcon from "@mui/icons-material/LockOpenRounded";
 import PhotoRoundedIcon from "@mui/icons-material/PhotoRounded";
+import TagInput from "../components/TagInput";
+
 const AddDiaryPage = () => {
   const [isPublic, setIsOpen] = useState(false);
   const onLockClicked = () => {
@@ -35,12 +37,14 @@ const AddDiaryPage = () => {
       </S.ContentWrapper>
       <S.TagnIconsContainer>
         <S.TagWrapper>
-          <TextField
+          {/* <TextField
             id="outlined-multiline-flexible"
             label="태그"
             color="grey"
             fullWidth
-          />
+          /> */}
+          태그
+          <TagInput />
         </S.TagWrapper>
         <S.IconsContainer>
           {isPublic ? (
