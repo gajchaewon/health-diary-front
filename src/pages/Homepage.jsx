@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import * as S from "./Homepage.styled";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import List from "@mui/material/List";
@@ -11,6 +11,22 @@ import Typography from "@mui/material/Typography";
 import DiaryCard from "../components/DiaryCard.main";
 
 const Homepage = () => {
+  const [data, setData] = useState({});
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/data.json");
+        const jsonData = await response.json();
+        setData(jsonData.personalExerciseDiaries);
+      } catch (error) {
+        console.error("데이터를 불러오는 중 에러가 발생했습니다.", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  console.log(data);
+
   return (
     <div>
       {/* 로그인, 운동일지 X */}
@@ -31,7 +47,7 @@ const Homepage = () => {
         <S.CalendarDiaryContainer>
           <S.CalendarWrapper> 달력 </S.CalendarWrapper>
           <S.DiaryWrapper>
-            <DiaryCard />
+            <DiaryCard title={data.title} content={data.content} />
           </S.DiaryWrapper>
         </S.CalendarDiaryContainer>
       </S.MyDiaryContainer>

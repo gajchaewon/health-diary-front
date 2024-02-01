@@ -29,12 +29,12 @@ export const ContentinCard = styled.div`
   flex-wrap: wrap;
 `;
 
-const DiaryCard = () => {
+const DiaryCard = (props) => {
   return (
     <div>
-      <TitleinCard to="/comm/diaryId">제목</TitleinCard>
+      <TitleinCard to="/comm/diaryId">{props.title}</TitleinCard>
       <PictureinCard />
-      <ContentinCard>글</ContentinCard>
+      <ContentinCard>{props.content}</ContentinCard>
     </div>
   );
 };
