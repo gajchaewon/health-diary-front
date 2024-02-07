@@ -20,12 +20,12 @@ const LoginPage = () => {
       <S.Login>로그인</S.Login>
       <S.IdPwdContainer>
         <FormControl fullWidth color="grey" sx={{ m: 1 }} variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-id">ID</InputLabel>
-          <OutlinedInput id="outlined-adornment-id" label="ID" />
+          <InputLabel htmlFor="outlined-adornment-id"> 아이디 </InputLabel>
+          <OutlinedInput id="outlined-adornment-id" label="아이디" />
         </FormControl>
         <FormControl fullWidth color="grey" sx={{ m: 1 }} variant="outlined">
           <InputLabel htmlFor="outlined-adornment-password">
-            Password
+            비밀번호
           </InputLabel>
           <OutlinedInput
             id="outlined-adornment-password"
@@ -46,7 +46,7 @@ const LoginPage = () => {
           />
         </FormControl>
         <S.LoginBtn>로그인</S.LoginBtn>
-        <S.SignIn to="signin">회원가입</S.SignIn>
+        <S.SignUp to="/signup">회원가입</S.SignUp>
       </S.IdPwdContainer>
     </S.LoginContainer>
   );

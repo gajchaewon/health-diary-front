@@ -24,23 +24,28 @@ export const IdPwdContainer = styled.div`
   width: 35%;
 `;
 
-export const LoginBtn = styled.button`
-  margin: 10px 0;
+export const LoginBtn = styled(Link)`
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  margin: 30px 0;
+  padding: 10px;
   width: 100%;
   height: 50px;
-  border: none;
+  box-sizing: border-box;
   border-radius: 0.3rem;
   background-color: grey;
   color: white;
+  text-decoration: none;
   cursor: pointer;
+  font-size: 18px;
+  font-weight: 600;
   &:hover {
     background-color: #212121;
   }
-  font-size: 18px;
-  font-weight: 600;
 `;
 
-export const SignIn = styled(Link)`
+export const SignUp = styled(Link)`
   margin: 30px 0;
   text-decoration: none;
   color: grey;
