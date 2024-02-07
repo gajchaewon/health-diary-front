@@ -11,6 +11,7 @@ import ProfilePageLike from "./pages/ProfilePage_Like";
 import ProfilePageEdit from "./pages/ProfilePage_Edit";
 import ProfilePageComment from "./pages/ProfilePage_Comments";
 import ProfilePage from "./pages/ProfilePage";
+import SignupPage from "./pages/SignupPage";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="mydiary" element={<MyDiaryPage />} />
         <Route path="adddiary" element={<AddDiaryPage />} />
         <Route path="login" element={<LoginPage />} />
+        <Route path="signup" element={<SignupPage />} />
         <Route path="comm">
           <Route index element={<CommPage />} />
           <Route path="diaryId" element={<CommDetailPage />} />
