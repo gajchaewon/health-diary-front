@@ -24,7 +24,7 @@ export const IdPwdContainer = styled.div`
   width: 35%;
 `;
 
-export const SignupBtn = styled(Link)`
+export const SignupBtn = styled.button`
   display: flex;
   align-content: center;
   justify-content: center;
@@ -37,6 +37,7 @@ export const SignupBtn = styled(Link)`
   background-color: grey;
   color: white;
   text-decoration: none;
+  border: none;
   cursor: pointer;
   font-size: 18px;
   font-weight: 600;

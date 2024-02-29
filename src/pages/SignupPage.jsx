@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setSignup } from "../features/auth/signUpSlice";
+import { useNavigate } from "react-router-dom";
 import * as S from "./SignupPage.styled";
 import IconButton from "@mui/material/IconButton";
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -11,18 +14,56 @@ import Divider from "@mui/material/Divider";
 import Chip from "@mui/material/Chip";
 
 const LoginPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const onEmailChange = (e) => setEmail(e.target.value);
+
+  const onpasswordChange = (e) => setPassword(e.target.value);
+  const onNicknameChange = (e) => setNickname(e.target.value);
+
+  const saveCheck = [email, password].every(Boolean) === true;
+
+  const onSaveClick = () => {
+    if (saveCheck) {
+      try {
+        dispatch(setSignup({ email, password })).unwrap();
+        setEmail("");
+        setPassword("");
+        navigate("/login");
+      } catch (err) {
+        console.error("failed to signup", err);
+      }
+    } else {
+      alert("필수항목을 확인해 주세요");
+    }
+  };
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+
+  const emailValid = (email) => {
+    let regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
+    if (!regex.test(email)) {
+      return "이메일 형식을 확인해주세요";
+    } else {
+      return "올바른 이메일 형식입니다";
+    }
+  };
+
   return (
     <S.SignupContainer>
       <S.Signup>회원가입</S.Signup>
       <S.IdPwdContainer>
         <Divider>
-          <Chip label="아이디" size="Large" />
+          <Chip label="이메일 (필수)" size="Large" />
         </Divider>
         <S.TextBtnContainer>
           <FormControl
@@ -31,13 +72,18 @@ const LoginPage = () => {
             sx={{ margin: "20px 0" }}
             variant="outlined"
           >
-            <InputLabel htmlFor="outlined-adornment-id">아이디</InputLabel>
-            <OutlinedInput id="outlined-adornment-id" label="아이디" />
+            <InputLabel htmlFor="outlined-adornment-id">이메일</InputLabel>
+            <OutlinedInput
+              id="outlined-adornment-id"
+              label="이메일"
+              value={email}
+              onChange={onEmailChange}
+            />
           </FormControl>
-          <S.Btn>아이디 중복 체크</S.Btn>
+          <S.Btn>이메일 중복 체크</S.Btn>
         </S.TextBtnContainer>
         <Divider>
-          <Chip label="비밀번호" size="Large" />
+          <Chip label="비밀번호 (필수)" size="Large" />
         </Divider>
         <FormControl
           fullWidth
@@ -45,12 +91,14 @@ const LoginPage = () => {
           sx={{ marginTop: "30px" }}
           variant="outlined"
         >
-          <InputLabel htmlFor="outlined-adornment-password">
+          <InputLabel htmlFor="outlined-adornment-password" value={password}>
             비밀번호
           </InputLabel>
           <OutlinedInput
             id="outlined-adornment-password"
             type={showPassword ? "text" : "password"}
+            value={password}
+            onChange={onpasswordChange}
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
@@ -67,7 +115,7 @@ const LoginPage = () => {
           />
         </FormControl>
 
-        <FormControl
+        {/* <FormControl
           fullWidth
           color="grey"
           sx={{ margin: "20px 0" }}
@@ -79,6 +127,8 @@ const LoginPage = () => {
           <OutlinedInput
             id="outlined-adornment-password"
             type={showPassword ? "text" : "password"}
+            value={password}
+            onChange={onpasswordChange}
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
@@ -93,8 +143,31 @@ const LoginPage = () => {
             }
             label="비밀번호 확인"
           />
+        </FormControl> */}
+        <S.TextBtnContainer />
+        <Divider>
+          <Chip label="닉네임" size="Large" />
+        </Divider>
+        <FormControl
+          fullWidth
+          color="grey"
+          sx={{ marginTop: "30px" }}
+          variant="outlined"
+        >
+          <InputLabel htmlFor="outlined-adornment-nickname" value={nickname}>
+            닉네임
+          </InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-nickname"
+            value={nickname}
+            onChange={onNicknameChange}
+            label="닉네임"
+          />
         </FormControl>
-        <S.SignupBtn to="/login">회원가입</S.SignupBtn>
+
+        <S.SignupBtn type="button" onClick={onSaveClick}>
+          회원가입
+        </S.SignupBtn>
       </S.IdPwdContainer>
     </S.SignupContainer>
   );
