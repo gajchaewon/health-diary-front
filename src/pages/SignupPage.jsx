@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setSignup } from "../features/auth/signUpSlice";
+import { useSignupMutation } from "../features/auth/authApiSlice";
 import { useNavigate } from "react-router-dom";
 import * as S from "./SignupPage.styled";
 import IconButton from "@mui/material/IconButton";
@@ -13,29 +13,31 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Divider from "@mui/material/Divider";
 import Chip from "@mui/material/Chip";
 
-const LoginPage = () => {
-  const dispatch = useDispatch();
+const SignUpPage = () => {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [nickname, setNickname] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = React.useState(false);
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const [userPassword, setPassword] = useState("");
+
+  const [signup, { userInfo, token }] = useSignupMutation();
 
   const onEmailChange = (e) => setEmail(e.target.value);
-
   const onpasswordChange = (e) => setPassword(e.target.value);
   const onNicknameChange = (e) => setNickname(e.target.value);
 
-  const saveCheck = [email, password].every(Boolean) === true;
+  const [showPassword, setShowPassword] = React.useState(false);
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const onSaveClick = () => {
+  const saveCheck = [email, userPassword].every(Boolean) === true;
+
+  const onSaveClick = async () => {
     if (saveCheck) {
       try {
-        dispatch(setSignup({ email, password })).unwrap();
+        await signup({ email, userPassword, nickname });
         setEmail("");
         setPassword("");
+        setNickname("");
         navigate("/login");
       } catch (err) {
         console.error("failed to signup", err);
@@ -91,13 +93,16 @@ const LoginPage = () => {
           sx={{ marginTop: "30px" }}
           variant="outlined"
         >
-          <InputLabel htmlFor="outlined-adornment-password" value={password}>
+          <InputLabel
+            htmlFor="outlined-adornment-password"
+            value={userPassword}
+          >
             비밀번호
           </InputLabel>
           <OutlinedInput
             id="outlined-adornment-password"
             type={showPassword ? "text" : "password"}
-            value={password}
+            value={userPassword}
             onChange={onpasswordChange}
             endAdornment={
               <InputAdornment position="end">
@@ -173,4 +178,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default SignUpPage;

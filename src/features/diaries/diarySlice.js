@@ -1,4 +1,4 @@
-import axios from "../../api/apiSlice";
+import { apiSlice } from "../../api/apiSlice";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -18,7 +18,7 @@ const initialState = {
 export const getAllDiaries = createAsyncThunk(
   "diaries/getallDiariesP",
   async () => {
-    const res = await axios.get("diaries");
+    const res = await apiSlice.baseQuery.get("diaries");
     console.log(res);
   }
 );
@@ -27,7 +27,7 @@ export const addNewDiary = createAsyncThunk(
   "diaries/addNewDiary",
   async (initialDiary) => {
     try {
-      const res = await axios.post("new", initialDiary);
+      const res = await apiSlice.baseQuery.post("new", initialDiary);
       return res.data;
     } catch (err) {
       return err.message;
@@ -49,7 +49,7 @@ export const deletePost = createAsyncThunk(
   async (initialDiary) => {
     const { diaryId } = initialDiary;
     try {
-      const res = await axios.delete(`${diaryId}`);
+      const res = await apiSlice.baseQuery.delete(`${diaryId}`);
       if (res?.status === 200) {
         return initialDiary;
       }
@@ -65,7 +65,7 @@ export const updateDiary = createAsyncThunk(
   async (initialDiary) => {
     const { diaryId } = initialDiary;
     try {
-      const res = await axios.put(`${diaryId}`, initialDiary);
+      const res = await apiSlice.baseQuery.put(`${diaryId}`, initialDiary);
       return res.data;
     } catch (err) {
       return err.message;
