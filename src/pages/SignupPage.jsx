@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { setSignup } from "../features/auth/signUpSlice";
+import { useSignupMutation } from "../features/auth/authApiSlice";
 import { useNavigate } from "react-router-dom";
 import * as S from "./SignupPage.styled";
 import IconButton from "@mui/material/IconButton";
@@ -13,48 +12,81 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Divider from "@mui/material/Divider";
 import Chip from "@mui/material/Chip";
 
-const LoginPage = () => {
-  const dispatch = useDispatch();
+const SignUpPage = () => {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
-  const [nickname, setNickname] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = React.useState(false);
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const [passwordCheck, setPasswordCheck] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [eValidmsg, setEValidationMessage] = useState("");
+  const [pValidmsg, setPValidationMessage] = useState("");
+  const [isEValid, setEValidation] = useState(false);
+  const [isPValid, setPValidation] = useState(false);
 
-  const onEmailChange = (e) => setEmail(e.target.value);
+  const [signup, { data }] = useSignupMutation();
 
   const onpasswordChange = (e) => setPassword(e.target.value);
   const onNicknameChange = (e) => setNickname(e.target.value);
 
-  const saveCheck = [email, password].every(Boolean) === true;
-
-  const onSaveClick = () => {
-    if (saveCheck) {
-      try {
-        dispatch(setSignup({ email, password })).unwrap();
-        setEmail("");
-        setPassword("");
-        navigate("/login");
-      } catch (err) {
-        console.error("failed to signup", err);
-      }
-    } else {
-      alert("필수항목을 확인해 주세요");
-    }
-  };
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [showPasswordCheck, setShowPasswordCheck] = React.useState(false);
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowPasswordCheck = () =>
+    setShowPasswordCheck((show) => !show);
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
 
-  const emailValid = (email) => {
+  const emailValid = (e) => {
+    setEmail(e.target.value); // 이메일 상태 업데이트
     let regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
-    if (!regex.test(email)) {
-      return "이메일 형식을 확인해주세요";
+    if (!regex.test(e.target.value)) {
+      setEValidation(false);
+      setEValidationMessage("유효하지 않은 이메일 형식입니다.");
     } else {
-      return "올바른 이메일 형식입니다";
+      setEValidation(true);
+      setEValidationMessage("유효한 이메일 형식입니다.");
+    }
+  };
+
+  const passwordValid = (e) => {
+    setPasswordCheck(e.target.value);
+    if (!(e.target.value === password)) {
+      setPValidation(false);
+      setPValidationMessage("비밀번호가 일치하지 않습니다.");
+    } else {
+      setPValidation(true);
+      setPValidationMessage("비밀번호가 일치합니다.");
+    }
+  };
+
+  const saveCheck =
+    [email, password, isEValid, isPValid].every(Boolean) === true;
+
+  const onSaveClick = async () => {
+    if (saveCheck) {
+      try {
+        await signup({ email, password, nickname }).unwrap();
+        setEmail("");
+        setPassword("");
+        setNickname("");
+
+        navigate("/login");
+      } catch (err) {
+        alert("failed to signup", err);
+      }
+    } else {
+      if (email || password === true) {
+        if (isEValid === false) {
+          alert("이메일을 체크해주세요.");
+        } else if (isPValid === false) {
+          alert("비밀번호를 체크해주세요.");
+        }
+      } else {
+        alert("필수항목을 작성해주세요.");
+      }
     }
   };
 
@@ -77,11 +109,20 @@ const LoginPage = () => {
               id="outlined-adornment-id"
               label="이메일"
               value={email}
-              onChange={onEmailChange}
+              onChange={emailValid}
             />
           </FormControl>
           <S.Btn>이메일 중복 체크</S.Btn>
         </S.TextBtnContainer>
+        <div
+          style={{
+            color: isEValid ? "black" : "red",
+            marginBottom: "30px",
+            marginTop: "-40px",
+          }}
+        >
+          {eValidmsg}
+        </div>
         <Divider>
           <Chip label="비밀번호 (필수)" size="Large" />
         </Divider>
@@ -91,7 +132,7 @@ const LoginPage = () => {
           sx={{ marginTop: "30px" }}
           variant="outlined"
         >
-          <InputLabel htmlFor="outlined-adornment-password" value={password}>
+          <InputLabel htmlFor="outlined-adornment-password">
             비밀번호
           </InputLabel>
           <OutlinedInput
@@ -115,10 +156,10 @@ const LoginPage = () => {
           />
         </FormControl>
 
-        {/* <FormControl
+        <FormControl
           fullWidth
           color="grey"
-          sx={{ margin: "20px 0" }}
+          sx={{ margin: "20px 0 0 0" }}
           variant="outlined"
         >
           <InputLabel htmlFor="outlined-adornment-password">
@@ -126,14 +167,14 @@ const LoginPage = () => {
           </InputLabel>
           <OutlinedInput
             id="outlined-adornment-password"
-            type={showPassword ? "text" : "password"}
-            value={password}
-            onChange={onpasswordChange}
+            type={showPasswordCheck ? "text" : "password"}
+            value={passwordCheck}
+            onChange={passwordValid}
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
                   aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
+                  onClick={handleClickShowPasswordCheck}
                   onMouseDown={handleMouseDownPassword}
                   edge="end"
                 >
@@ -143,8 +184,17 @@ const LoginPage = () => {
             }
             label="비밀번호 확인"
           />
-        </FormControl> */}
+        </FormControl>
         <S.TextBtnContainer />
+        <div
+          style={{
+            color: isPValid ? "black" : "red",
+            marginBottom: "30px",
+            marginTop: "-50px",
+          }}
+        >
+          {pValidmsg}
+        </div>
         <Divider>
           <Chip label="닉네임" size="Large" />
         </Divider>
@@ -173,4 +223,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default SignUpPage;
