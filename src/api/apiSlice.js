@@ -1,10 +1,3 @@
-// //baseUrl 만들어서 api 만들어놓기~
-// import Axios from "axios";
-
-// export const axios = Axios.create({
-//   baseURL: "http://localhost:8080/",
-// });
-
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { logOut } from "../features/auth/authSlice";
 
@@ -13,7 +6,7 @@ const baseQuery = fetchBaseQuery({
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const accessToken = getState().auth.token;
-    if (accessToken) {
+    if (accessToken.constructor !== Object && accessToken) {
       headers.set("authorization", `Bearer ${accessToken}`);
     }
     return headers;
@@ -23,7 +16,7 @@ const baseQuery = fetchBaseQuery({
 const baseQueryWithReAuth = async (args, api) => {
   let result = await baseQuery(args, api);
   if (result?.error?.originalStatus === 403) {
-    const refreshResult = await baseQuery("/refresh", api);
+    const refreshResult = await baseQuery("/refresh-token", api);
     if (refreshResult?.data) {
       //const userInfo = api.getState().auth.userInfo;
       //api.dispatch(logIn({ ...refreshResult.data, userInfo }));
@@ -36,6 +29,6 @@ const baseQueryWithReAuth = async (args, api) => {
 };
 
 export const apiSlice = createApi({
-  baseQuery: baseQuery,
+  baseQuery: baseQueryWithReAuth,
   endpoints: (builder) => ({}),
 });

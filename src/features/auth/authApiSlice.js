@@ -8,7 +8,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: {
           email: data.email,
-          userPassword: data.userPassword,
+          password: data.password,
           nickname: data.nickname,
         },
       }),
@@ -17,7 +17,10 @@ export const authApiSlice = apiSlice.injectEndpoints({
       query: (data) => ({
         url: "/auth/login",
         method: "POST",
-        body: { ...data },
+        body: {
+          email: data.email,
+          password: data.password,
+        },
       }),
     }),
   }),
