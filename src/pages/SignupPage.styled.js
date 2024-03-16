@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export const SignupContainer = styled.div`
@@ -59,7 +58,7 @@ export const TextBtnContainer = styled.div`
   align-items: center;
   justify-content: center;
   margin-bottom: 30px;
-  margin-top: 10px;
+  margin-top: 30px;
 `;
 
 export const Btn = styled.button`

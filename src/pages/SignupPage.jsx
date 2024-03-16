@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
 import { useSignupMutation } from "../features/auth/authApiSlice";
 import { useNavigate } from "react-router-dom";
 import * as S from "./SignupPage.styled";
@@ -17,46 +16,77 @@ const SignUpPage = () => {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordCheck, setPasswordCheck] = useState("");
   const [nickname, setNickname] = useState("");
-  const [userPassword, setPassword] = useState("");
+  const [eValidmsg, setEValidationMessage] = useState("");
+  const [pValidmsg, setPValidationMessage] = useState("");
+  const [isEValid, setEValidation] = useState(false);
+  const [isPValid, setPValidation] = useState(false);
 
-  const [signup, { userInfo, token }] = useSignupMutation();
+  const [signup, { data }] = useSignupMutation();
 
-  const onEmailChange = (e) => setEmail(e.target.value);
   const onpasswordChange = (e) => setPassword(e.target.value);
   const onNicknameChange = (e) => setNickname(e.target.value);
 
   const [showPassword, setShowPassword] = React.useState(false);
+  const [showPasswordCheck, setShowPasswordCheck] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const saveCheck = [email, userPassword].every(Boolean) === true;
-
-  const onSaveClick = async () => {
-    if (saveCheck) {
-      try {
-        await signup({ email, userPassword, nickname });
-        setEmail("");
-        setPassword("");
-        setNickname("");
-        navigate("/login");
-      } catch (err) {
-        console.error("failed to signup", err);
-      }
-    } else {
-      alert("필수항목을 확인해 주세요");
-    }
-  };
+  const handleClickShowPasswordCheck = () =>
+    setShowPasswordCheck((show) => !show);
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
 
-  const emailValid = (email) => {
+  const emailValid = (e) => {
+    setEmail(e.target.value); // 이메일 상태 업데이트
     let regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
-    if (!regex.test(email)) {
-      return "이메일 형식을 확인해주세요";
+    if (!regex.test(e.target.value)) {
+      setEValidation(false);
+      setEValidationMessage("유효하지 않은 이메일 형식입니다.");
     } else {
-      return "올바른 이메일 형식입니다";
+      setEValidation(true);
+      setEValidationMessage("유효한 이메일 형식입니다.");
+    }
+  };
+
+  const passwordValid = (e) => {
+    setPasswordCheck(e.target.value);
+    if (!(e.target.value === password)) {
+      setPValidation(false);
+      setPValidationMessage("비밀번호가 일치하지 않습니다.");
+    } else {
+      setPValidation(true);
+      setPValidationMessage("비밀번호가 일치합니다.");
+    }
+  };
+
+  const saveCheck =
+    [email, password, isEValid, isPValid].every(Boolean) === true;
+
+  const onSaveClick = async () => {
+    if (saveCheck) {
+      try {
+        await signup({ email, password, nickname }).unwrap();
+        setEmail("");
+        setPassword("");
+        setNickname("");
+
+        navigate("/login");
+      } catch (err) {
+        alert("failed to signup", err);
+      }
+    } else {
+      if (email || password === true) {
+        if (isEValid === false) {
+          alert("이메일을 체크해주세요.");
+        } else if (isPValid === false) {
+          alert("비밀번호를 체크해주세요.");
+        }
+      } else {
+        alert("필수항목을 작성해주세요.");
+      }
     }
   };
 
@@ -79,11 +109,20 @@ const SignUpPage = () => {
               id="outlined-adornment-id"
               label="이메일"
               value={email}
-              onChange={onEmailChange}
+              onChange={emailValid}
             />
           </FormControl>
           <S.Btn>이메일 중복 체크</S.Btn>
         </S.TextBtnContainer>
+        <div
+          style={{
+            color: isEValid ? "black" : "red",
+            marginBottom: "30px",
+            marginTop: "-40px",
+          }}
+        >
+          {eValidmsg}
+        </div>
         <Divider>
           <Chip label="비밀번호 (필수)" size="Large" />
         </Divider>
@@ -93,41 +132,8 @@ const SignUpPage = () => {
           sx={{ marginTop: "30px" }}
           variant="outlined"
         >
-          <InputLabel
-            htmlFor="outlined-adornment-password"
-            value={userPassword}
-          >
-            비밀번호
-          </InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-password"
-            type={showPassword ? "text" : "password"}
-            value={userPassword}
-            onChange={onpasswordChange}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="비밀번호"
-          />
-        </FormControl>
-
-        {/* <FormControl
-          fullWidth
-          color="grey"
-          sx={{ margin: "20px 0" }}
-          variant="outlined"
-        >
           <InputLabel htmlFor="outlined-adornment-password">
-            비밀번호 확인
+            비밀번호
           </InputLabel>
           <OutlinedInput
             id="outlined-adornment-password"
@@ -146,10 +152,49 @@ const SignUpPage = () => {
                 </IconButton>
               </InputAdornment>
             }
+            label="비밀번호"
+          />
+        </FormControl>
+
+        <FormControl
+          fullWidth
+          color="grey"
+          sx={{ margin: "20px 0 0 0" }}
+          variant="outlined"
+        >
+          <InputLabel htmlFor="outlined-adornment-password">
+            비밀번호 확인
+          </InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-password"
+            type={showPasswordCheck ? "text" : "password"}
+            value={passwordCheck}
+            onChange={passwordValid}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPasswordCheck}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
             label="비밀번호 확인"
           />
-        </FormControl> */}
+        </FormControl>
         <S.TextBtnContainer />
+        <div
+          style={{
+            color: isPValid ? "black" : "red",
+            marginBottom: "30px",
+            marginTop: "-50px",
+          }}
+        >
+          {pValidmsg}
+        </div>
         <Divider>
           <Chip label="닉네임" size="Large" />
         </Divider>
