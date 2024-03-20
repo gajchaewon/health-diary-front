@@ -12,7 +12,6 @@ import ProfilePageEdit from "./pages/profile/profile_edit/ProfilePage_Edit";
 import ProfilePageComment from "./pages/profile/profile_comment/ProfilePage_Comments";
 import ProfilePage from "./pages/profile/ProfilePage";
 import SignupPage from "./pages/signup/SignupPage";
-import RequireAuth from "./features/auth/RequireAuth";
 
 function App() {
   return (
@@ -21,19 +20,17 @@ function App() {
         <Route index element={<Homepage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="signup" element={<SignupPage />} />
-        <Route element={<RequireAuth />}>
-          <Route path="mprof" element={<Profile />}>
-            <Route path="view" element={<ProfilePage />} />
-            <Route path="edit" element={<ProfilePageEdit />} />
-            <Route path="like" element={<ProfilePageLike />} />
-            <Route path="comment" element={<ProfilePageComment />} />
-          </Route>
-          <Route path="mydiary" element={<MyDiaryPage />} />
-          <Route path="adddiary" element={<AddDiaryPage />} />
-          <Route path="comm">
-            <Route index element={<CommPage />} />
-            <Route path="diaryId" element={<CommDetailPage />} />
-          </Route>
+        <Route path="mprof" element={<Profile />}>
+          <Route path="view" element={<ProfilePage />} />
+          <Route path="edit" element={<ProfilePageEdit />} />
+          <Route path="like" element={<ProfilePageLike />} />
+          <Route path="comment" element={<ProfilePageComment />} />
+        </Route>
+        <Route path="mydiary" element={<MyDiaryPage />} />
+        <Route path="adddiary" element={<AddDiaryPage />} />
+        <Route path="comm">
+          <Route index element={<CommPage />} />
+          <Route path="diaryId" element={<CommDetailPage />} />
         </Route>
       </Route>
     </Routes>
