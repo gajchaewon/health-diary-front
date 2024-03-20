@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useSignupMutation } from "../features/auth/authApiSlice";
+import { useSignupMutation } from "../../features/auth/authApiSlice";
+import { signUp } from "../../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 import * as S from "./SignupPage.styled";
 import IconButton from "@mui/material/IconButton";
@@ -11,9 +12,11 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Divider from "@mui/material/Divider";
 import Chip from "@mui/material/Chip";
+import { useDispatch } from "react-redux";
 
 const SignUpPage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,7 +27,7 @@ const SignUpPage = () => {
   const [isEValid, setEValidation] = useState(false);
   const [isPValid, setPValidation] = useState(false);
 
-  const [signup, { data }] = useSignupMutation();
+  const [signup, { isLoading }] = useSignupMutation();
 
   const onpasswordChange = (e) => setPassword(e.target.value);
   const onNicknameChange = (e) => setNickname(e.target.value);
@@ -68,7 +71,8 @@ const SignUpPage = () => {
   const onSaveClick = async () => {
     if (saveCheck) {
       try {
-        await signup({ email, password, nickname }).unwrap();
+        const userData = await signup({ email, password, nickname }).unwrap();
+        dispatch(signUp({ ...userData, nickname }));
         setEmail("");
         setPassword("");
         setNickname("");
