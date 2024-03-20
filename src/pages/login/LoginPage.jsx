@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as S from "./LoginPage.styled";
 import IconButton from "@mui/material/IconButton";
@@ -11,8 +11,12 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useLoginMutation } from "../../features/auth/authApiSlice";
 import { logIn } from "../../features/auth/authSlice";
 import { useDispatch } from "react-redux";
+import { useOutletContext } from "react-router-dom";
+import { Widgets } from "@mui/icons-material";
 
 const LoginPage = () => {
+  const { token } = useOutletContext();
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -25,6 +29,12 @@ const LoginPage = () => {
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const loginCheck = [email, password].every(Boolean) === true;
+
+  useEffect(() => {
+    if (token) {
+      navigate("/");
+    }
+  }, []);
 
   const onLoginBtnClick = async (e) => {
     e.preventDefault();

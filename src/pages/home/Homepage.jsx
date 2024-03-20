@@ -9,8 +9,10 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import DiaryCard from "../../components/DiaryCard.main";
+import { useOutletContext } from "react-router-dom";
 
 const Homepage = () => {
+  const { token } = useOutletContext();
   return (
     <div>
       {/* 로그인, 운동일지 X */}
@@ -18,23 +20,22 @@ const Homepage = () => {
         <S.MyDiaryLink to="mydiary">나의 운동일지</S.MyDiaryLink>
         <S.CalendarDiaryContainer>
           <S.CalendarWrapper> 달력 </S.CalendarWrapper>
-          <S.DiaryWrapper>
-            <S.AddDiaryBtn to="adddiary">
-              <AddCircleRoundedIcon sx={{ fontSize: "90px" }} />
-            </S.AddDiaryBtn>
-            <S.LoginBtn to="login">로그인</S.LoginBtn>
-          </S.DiaryWrapper>
+          {!token ? (
+            <S.DiaryWrapper>
+              {/* <S.AddDiaryBtn to="adddiary">
+                <AddCircleRoundedIcon sx={{ fontSize: "90px" }} />
+              </S.AddDiaryBtn> */}
+              <S.LoginBtn to="login">로그인</S.LoginBtn>
+            </S.DiaryWrapper>
+          ) : (
+            <S.DiaryWrapper>
+              {/* 운동일지 O */}
+              <DiaryCard title={"제목"} content={"내용"} />
+            </S.DiaryWrapper>
+          )}
         </S.CalendarDiaryContainer>
       </S.MyDiaryContainer>
-      {/* 운동일지 O */}
-      <S.MyDiaryContainer>
-        <S.CalendarDiaryContainer>
-          <S.CalendarWrapper> 달력 </S.CalendarWrapper>
-          <S.DiaryWrapper>
-            <DiaryCard title={"제목"} content={"내용"} />
-          </S.DiaryWrapper>
-        </S.CalendarDiaryContainer>
-      </S.MyDiaryContainer>
+
       <S.CommunityContainer>
         <S.CommunityLink to="comm">커뮤니티</S.CommunityLink>
         <S.ListContainer>
