@@ -8,7 +8,7 @@ import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import LockOpenRoundedIcon from "@mui/icons-material/LockOpenRounded";
 import PhotoRoundedIcon from "@mui/icons-material/PhotoRounded";
 import DeleteIcon from "@mui/icons-material/Delete";
-import TagInput from "../components/TagInput";
+import TagInput from "../../../components/TagInput";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 
