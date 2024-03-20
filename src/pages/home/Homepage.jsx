@@ -8,7 +8,7 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-import DiaryCard from "../components/DiaryCard.main";
+import DiaryCard from "../../components/DiaryCard.main";
 
 const Homepage = () => {
   return (

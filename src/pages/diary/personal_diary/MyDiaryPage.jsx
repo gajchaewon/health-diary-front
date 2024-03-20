@@ -1,6 +1,6 @@
 import React from "react";
 import * as S from "./MyDiaryPage.styled";
-import Diarycard from "../components/DiaryCard";
+import Diarycard from "../../../components/DiaryCard";
 
 const MyDiaryPage = () => {
   return (
