@@ -12,10 +12,9 @@ import { useLoginMutation } from "../../features/auth/authApiSlice";
 import { logIn } from "../../features/auth/authSlice";
 import { useDispatch } from "react-redux";
 import { useOutletContext } from "react-router-dom";
-import { Widgets } from "@mui/icons-material";
 
 const LoginPage = () => {
-  const { token } = useOutletContext();
+  const { isLoggedIn, token } = useOutletContext();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -31,10 +30,10 @@ const LoginPage = () => {
   const loginCheck = [email, password].every(Boolean) === true;
 
   useEffect(() => {
-    if (token) {
+    if (isLoggedIn) {
       navigate("/");
     }
-  }, []);
+  }, [isLoggedIn]);
 
   const onLoginBtnClick = async (e) => {
     e.preventDefault();
@@ -48,8 +47,18 @@ const LoginPage = () => {
 
         console.log("success");
       } catch (err) {
-        console.log("fail");
-        alert("failed to login", err);
+        console.log("login failed");
+        if (err.status === 401) {
+          window.alert(
+            "로그인에 실패했습니다. 이메일과 비밀번호를 다시 확인해주세요."
+          );
+        } else {
+          // 일반적인 실패 메시지 표시
+          window.alert("로그인에 실패했습니다. 잠시 후 다시 시도해주세요.");
+        }
+        setEmail("");
+        setPassword("");
+        navigate("/login");
       }
     }
   };
@@ -57,15 +66,16 @@ const LoginPage = () => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+
   return (
     <S.LoginContainer>
       <S.Login>로그인</S.Login>
       <S.IdPwdContainer>
         <FormControl fullWidth color="grey" sx={{ m: 1 }} variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-id"> 아이디 </InputLabel>
+          <InputLabel htmlFor="outlined-adornment-id"> 이메일 </InputLabel>
           <OutlinedInput
             id="outlined-adornment-id"
-            label="아이디"
+            label="이메일"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />

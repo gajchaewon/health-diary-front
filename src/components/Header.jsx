@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { logOut } from "../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 
-const Header = ({ token }) => {
+const Header = ({ isLoggedIn }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const onLogoutBtnClick = () => {
@@ -17,7 +17,7 @@ const Header = ({ token }) => {
     }
   };
 
-  return token ? (
+  return isLoggedIn ? (
     <S.Header>
       <S.HeaderLogo to="/">BODYTOK</S.HeaderLogo>
       <div>
