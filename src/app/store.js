@@ -11,14 +11,14 @@ import { combineReducers } from "redux";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["auth"], // 지속할 리듀서 목록
+  whitelist: ["auth", "diary"], // 지속할 리듀서 목록
 };
 
 const persistedReducer = persistReducer(
   persistConfig,
   combineReducers({
     [apiSlice.reducerPath]: apiSlice.reducer,
-    diaries: diaryReducer,
+    diary: diaryReducer,
     auth: authReducer,
   })
 );

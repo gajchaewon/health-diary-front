@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import * as S from "./Homepage.styled";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import List from "@mui/material/List";
@@ -10,10 +10,24 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import DiaryCard from "../../components/DiaryCard.main";
 import { useOutletContext } from "react-router-dom";
+import { useGetAllDiariesQuery } from "../../features/diaries/diaryApiSlice";
+import { getAllDiaries } from "../../features/diaries/diarySlice";
+import { useDispatch } from "react-redux";
 
 const Homepage = () => {
   const { isLoggedIn } = useOutletContext();
-  console.log(isLoggedIn);
+  const [diaries, setDiaries] = useState([]);
+  const dispatch = useDispatch();
+
+  const { data, error, isLoading } = useGetAllDiariesQuery();
+
+  useEffect(() => {
+    if (!isLoading && data) {
+      dispatch(getAllDiaries({ ...data.content }));
+      setDiaries(data.content);
+    }
+  }, [data, isLoading, dispatch]);
+
   return (
     <div>
       {/* 로그인, 운동일지 X */}
@@ -41,155 +55,37 @@ const Homepage = () => {
         <S.CommunityLink to="comm">커뮤니티</S.CommunityLink>
         <S.ListContainer>
           <List sx={{ width: "80%", margin: "30px 0" }}>
-            <ListItem alignItems="flex-start">
-              <ListItemAvatar sx={{ margin: "10px 18px 15px 0" }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-              </ListItemAvatar>
-              <ListItemText
-                primary={
-                  <S.DiaryTitle to="/comm/diaryId">Diary Details</S.DiaryTitle>
-                }
-                secondary={
-                  <React.Fragment>
-                    <Typography
-                      sx={{ display: "inline" }}
-                      component="span"
-                      variant="body2"
-                      color="text.primary"
-                      fontSize="20px"
-                    >
-                      Ali Connors
-                    </Typography>
-                    {" — I'll be in your neighborhood doing errands this…"}
-                  </React.Fragment>
-                }
-              />
-            </ListItem>
-            <Divider variant="fullWidth" component="li" />
-            <ListItem alignItems="flex-start">
-              <ListItemAvatar sx={{ margin: "10px 18px 15px 0" }}>
-                <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-              </ListItemAvatar>
-              <ListItemText
-                primary={
-                  <S.DiaryTitle to="/comm/diaryId">Diary Details</S.DiaryTitle>
-                }
-                secondary={
-                  <React.Fragment>
-                    <Typography
-                      sx={{ display: "inline" }}
-                      component="span"
-                      variant="body2"
-                      color="text.primary"
-                      fontSize="20px"
-                    >
-                      to Scott, Alex, Jennifer
-                    </Typography>
-                    {" — Wish I could come, but I'm out of town this…"}
-                  </React.Fragment>
-                }
-              />
-            </ListItem>
-            <Divider variant="fullWidth" component="li" />
-            <ListItem alignItems="flex-start">
-              <ListItemAvatar sx={{ margin: "10px 18px 15px 0" }}>
-                <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
-              </ListItemAvatar>
-              <ListItemText
-                primary={
-                  <S.DiaryTitle to="/comm/diaryId">Diary Details</S.DiaryTitle>
-                }
-                secondary={
-                  <React.Fragment>
-                    <Typography
-                      sx={{ display: "inline" }}
-                      component="span"
-                      variant="body2"
-                      color="text.primary"
-                      fontSize="20px"
-                    >
-                      Sandra Adams
-                    </Typography>
-                    {" — Do you have Paris recommendations? Have you ever…"}
-                  </React.Fragment>
-                }
-              />
-            </ListItem>
-            <Divider variant="fullWidth" component="li" />
-            <ListItem alignItems="flex-start">
-              <ListItemAvatar sx={{ margin: "10px 18px 15px 0" }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-              </ListItemAvatar>
-              <ListItemText
-                primary={
-                  <S.DiaryTitle to="/comm/diaryId">Diary Details</S.DiaryTitle>
-                }
-                secondary={
-                  <React.Fragment>
-                    <Typography
-                      sx={{ display: "inline" }}
-                      component="span"
-                      variant="body2"
-                      color="text.primary"
-                      fontSize="20px"
-                    >
-                      Ali Connors
-                    </Typography>
-                    {" — I'll be in your neighborhood doing errands this…"}
-                  </React.Fragment>
-                }
-              />
-            </ListItem>
-            <Divider variant="fullWidth" component="li" />
-            <ListItem alignItems="flex-start">
-              <ListItemAvatar sx={{ margin: "10px 18px 15px 0" }}>
-                <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-              </ListItemAvatar>
-              <ListItemText
-                primary={
-                  <S.DiaryTitle to="/comm/diaryId">Diary Details</S.DiaryTitle>
-                }
-                secondary={
-                  <React.Fragment>
-                    <Typography
-                      sx={{ display: "inline" }}
-                      component="span"
-                      variant="body2"
-                      color="text.primary"
-                      fontSize="20px"
-                    >
-                      to Scott, Alex, Jennifer
-                    </Typography>
-                    {" — Wish I could come, but I'm out of town this…"}
-                  </React.Fragment>
-                }
-              />
-            </ListItem>
-            <Divider variant="fullWidth" component="li" />
-            <ListItem alignItems="flex-start">
-              <ListItemAvatar sx={{ margin: "10px 18px 15px 0" }}>
-                <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
-              </ListItemAvatar>
-              <ListItemText
-                primary={
-                  <S.DiaryTitle to="/comm/diaryId">Diary Details</S.DiaryTitle>
-                }
-                secondary={
-                  <React.Fragment>
-                    <Typography
-                      sx={{ display: "inline" }}
-                      component="span"
-                      variant="body2"
-                      color="text.primary"
-                      fontSize="20px"
-                    >
-                      Sandra Adams
-                    </Typography>
-                    {" — Do you have Paris recommendations? Have you ever…"}
-                  </React.Fragment>
-                }
-              />
-            </ListItem>
+            {diaries &&
+              diaries.slice(0, 6).map((diary) => (
+                <div key={diary.id}>
+                  <ListItem alignItems="flex-start">
+                    <ListItemAvatar sx={{ margin: "10px 18px 15px 0" }}>
+                      <Avatar
+                        alt="Remy Sharp"
+                        src="/static/images/avatar/1.jpg"
+                      />
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={<S.DiaryTitle>{diary.title}</S.DiaryTitle>}
+                      secondary={
+                        <React.Fragment>
+                          <Typography
+                            sx={{ display: "inline", marginRight: "10px" }}
+                            component="span"
+                            variant="body2"
+                            color="text.primary"
+                            fontSize="20px"
+                          >
+                            {diary.nickname}
+                          </Typography>
+                          {diary.content}
+                        </React.Fragment>
+                      }
+                    />
+                  </ListItem>
+                  <Divider variant="fullWidth" component="li" />
+                </div>
+              ))}
           </List>
         </S.ListContainer>
       </S.CommunityContainer>

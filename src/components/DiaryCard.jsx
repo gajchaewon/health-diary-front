@@ -38,13 +38,14 @@ export const ContentinCard = styled.div`
   font-size: 15px;
 `;
 
-const DiaryCard = () => {
+const DiaryCard = ({ diary, key }) => {
+  console.log(diary);
   return (
     <CommunityCard>
-      <TitleinCard to="/comm/diaryId">제목</TitleinCard>
-      <NicknameinCard>닉네임</NicknameinCard>
+      <TitleinCard to="/comm/diaryId">{diary[1].title}</TitleinCard>
+      <NicknameinCard>{diary[1].nickname}</NicknameinCard>
       <PictureinCard />
-      <ContentinCard>글</ContentinCard>
+      <ContentinCard>{diary[1].content}</ContentinCard>
     </CommunityCard>
   );
 };
