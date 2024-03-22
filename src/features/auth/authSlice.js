@@ -15,10 +15,8 @@ export const authSlice = createSlice({
   reducers: {
     signUp: {
       reducer(state, action) {
-        console.log(action.payload);
         const { accessToken, refreshToken } = action.payload;
         state.token = { accessToken, refreshToken };
-        state.token = action.payload;
       },
     },
     logIn: {
@@ -26,7 +24,6 @@ export const authSlice = createSlice({
         const { tokenResponse, userResponse } = action.payload;
         state.userInfo = userResponse;
         state.token = tokenResponse.accessToken; //accessToken
-        console.log(action.payload);
         setCookie(tokenResponse.refreshToken);
       },
     },

@@ -14,7 +14,7 @@ import { useDispatch } from "react-redux";
 import { useOutletContext } from "react-router-dom";
 
 const LoginPage = () => {
-  const { isLoggedIn, token } = useOutletContext();
+  const { isLoggedIn } = useOutletContext();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();

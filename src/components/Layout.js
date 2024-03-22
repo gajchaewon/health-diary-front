@@ -6,6 +6,7 @@ import { jwtDecode } from "jwt-decode";
 
 const Layout = () => {
   const token = useSelector(selectCurrentToken);
+  console.log(token);
 
   // 토큰이 유효한지 검증하는 함수
   const isValidToken = (token) => {
@@ -22,8 +23,6 @@ const Layout = () => {
 
   // 토큰이 존재하고 유효한지를 확인하는 함수
   const isLoggedIn = token && isValidToken(token);
-  console.log(token);
-  console.log(isLoggedIn);
 
   return (
     <>
