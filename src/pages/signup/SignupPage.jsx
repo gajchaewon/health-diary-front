@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSignupMutation } from "../../features/auth/authApiSlice";
 import { signUp } from "../../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
@@ -13,8 +13,10 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Divider from "@mui/material/Divider";
 import Chip from "@mui/material/Chip";
 import { useDispatch } from "react-redux";
+import { useOutletContext } from "react-router-dom";
 
 const SignUpPage = () => {
+  const { isLoggedIn } = useOutletContext();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -41,6 +43,12 @@ const SignUpPage = () => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/");
+    }
+  }, []);
 
   const emailValid = (e) => {
     setEmail(e.target.value); // 이메일 상태 업데이트

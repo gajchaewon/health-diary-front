@@ -12,7 +12,8 @@ import DiaryCard from "../../components/DiaryCard.main";
 import { useOutletContext } from "react-router-dom";
 
 const Homepage = () => {
-  const { token } = useOutletContext();
+  const { isLoggedIn } = useOutletContext();
+  console.log(isLoggedIn);
   return (
     <div>
       {/* 로그인, 운동일지 X */}
@@ -20,7 +21,7 @@ const Homepage = () => {
         <S.MyDiaryLink to="mydiary">나의 운동일지</S.MyDiaryLink>
         <S.CalendarDiaryContainer>
           <S.CalendarWrapper> 달력 </S.CalendarWrapper>
-          {!token ? (
+          {!isLoggedIn ? (
             <S.DiaryWrapper>
               {/* <S.AddDiaryBtn to="adddiary">
                 <AddCircleRoundedIcon sx={{ fontSize: "90px" }} />
