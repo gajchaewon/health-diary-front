@@ -57,7 +57,6 @@ export const TextBtnContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 30px;
   margin-top: 30px;
 `;
 
@@ -71,7 +70,11 @@ export const Btn = styled.button`
   border: 1px solid grey;
   cursor: pointer;
   &:hover {
-    border: 1.5px solid black;
-    font-weight: bold;
+    border: 2px solid black;
+  }
+  &:disabled {
+    cursor: default;
+    border: 1.5px solid lightgrey;
+    font-weight: normal;
   }
 `;
