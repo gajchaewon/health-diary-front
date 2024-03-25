@@ -23,8 +23,24 @@ export const authApiSlice = apiSlice.injectEndpoints({
         },
       }),
     }),
+    emailCheck: builder.query({
+      query: (email) => ({
+        url: "/auth/check-email",
+        method: "GET",
+        params: { email },
+      }),
+    }),
+    nicknameCheck: builder.query({
+      query: (nickname) => ({
+        url: "/auth/check-nickname",
+        method: "GET",
+        params: { nickname },
+      }),
+    }),
   }),
 });
 
 export const { useLoginMutation } = authApiSlice;
 export const { useSignupMutation } = authApiSlice;
+export const { useLazyEmailCheckQuery } = authApiSlice;
+export const { useLazyNicknameCheckQuery } = authApiSlice;
