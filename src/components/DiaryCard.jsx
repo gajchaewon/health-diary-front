@@ -42,10 +42,10 @@ const DiaryCard = ({ diary, key }) => {
   console.log(diary);
   return (
     <CommunityCard>
-      <TitleinCard to="/comm/diaryId">{diary[1].title}</TitleinCard>
-      <NicknameinCard>{diary[1].nickname}</NicknameinCard>
+      <TitleinCard to="/comm/diaryId">{diary.title}</TitleinCard>
+      <NicknameinCard>{diary.nickname}</NicknameinCard>
       <PictureinCard />
-      <ContentinCard>{diary[1].content}</ContentinCard>
+      <ContentinCard>{diary.content}</ContentinCard>
     </CommunityCard>
   );
 };
