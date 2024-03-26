@@ -8,7 +8,14 @@ export const diaryApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+    getMyDiaries: builder.query({
+      query: () => ({
+        url: "/diaries/my",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
 export const { useGetAllDiariesQuery } = diaryApiSlice;
+export const { useGetMyDiariesQuery } = diaryApiSlice;

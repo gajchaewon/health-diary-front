@@ -16,9 +16,16 @@ const diarySlice = createSlice({
         console.log(state.diaries);
       },
     },
+    getMyDiaries: {
+      reducer(state, action) {
+        const content = action.payload;
+        state.diaries = content;
+        console.log(state.diaries);
+      },
+    },
   },
 });
 
 export const selectCurrentDiaries = (state) => state.diary.diaries;
-export const { getAllDiaries } = diarySlice.actions;
+export const { getAllDiaries, getMyDiaries } = diarySlice.actions;
 export default diarySlice.reducer;
