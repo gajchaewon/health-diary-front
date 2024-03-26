@@ -14,8 +14,21 @@ export const diaryApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+    addDiary: builder.mutation({
+      query: (data) => ({
+        url: "/diaries",
+        method: "POST",
+        body: {
+          title: data.title,
+          content: data.content,
+          isPublic: data.isPublic,
+          hashtags: data.hashtags,
+        },
+      }),
+    }),
   }),
 });
 
 export const { useGetAllDiariesQuery } = diaryApiSlice;
 export const { useGetMyDiariesQuery } = diaryApiSlice;
+export const { useAddDiaryMutation } = diaryApiSlice;
