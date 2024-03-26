@@ -11,14 +11,28 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import TagInput from "../../../components/TagInput";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
+import { addDiary } from "../../../features/diaries/diarySlice";
+import { useAddDiaryMutation } from "../../../features/diaries/diaryApiSlice";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const AddDiaryPage = () => {
-  const [isPublic, setIsOpen] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [hashtags, setHashtags] = useState([]);
+  const [isPublic, setIsPublic] = useState(false);
   const [images, setImages] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
+  const [adding, { isLoading }] = useAddDiaryMutation();
+
+  const onTitleChange = (e) => setTitle(e.target.value);
+  const onContentChange = (e) => setContent(e.target.value);
+  const onHashTagsChange = (value) => setHashtags(value);
 
   const onLockClicked = () => {
-    setIsOpen(!isPublic);
+    setIsPublic(!isPublic);
   };
 
   const handleImageUpload = (event) => {
@@ -43,11 +57,42 @@ const AddDiaryPage = () => {
     setCurrentPage((prevPage) => prevPage - 1);
   };
 
+  const onSaveBtnClick = async (e) => {
+    e.preventDefault();
+    if (!isLoading) {
+      try {
+        const diaryData = await adding({
+          title,
+          content,
+          isPublic,
+          hashtags,
+        }).unwrap();
+        dispatch(addDiary({ ...diaryData }));
+        setTitle("");
+        setContent("");
+        setIsPublic(false);
+        setHashtags([]);
+        navigate("/");
+
+        console.log(diaryData);
+      } catch (err) {
+        console.log("posting failed");
+        navigate("/adddiary");
+      }
+    }
+  };
+
   return (
     <S.InputContainer>
       <h1>일지 작성하기🏋️</h1>
       <S.TitleWrapper>
-        <TextField id="outlined-multiline-flexible" label="제목" fullWidth />
+        <TextField
+          id="outlined-multiline-flexible"
+          label="제목"
+          fullWidth
+          onChange={onTitleChange}
+          value={title}
+        />
       </S.TitleWrapper>
       <S.ContentWrapper>
         <TextField
@@ -57,12 +102,14 @@ const AddDiaryPage = () => {
           rows={15}
           fullWidth
           color="grey"
+          onChange={onContentChange}
+          value={content}
         />
       </S.ContentWrapper>
       <S.TagnIconsContainer>
         <S.TagWrapper>
           태그
-          <TagInput />
+          <TagInput onValueChange={onHashTagsChange} />
         </S.TagWrapper>
         <S.IconsContainer>
           {isPublic ? (
@@ -97,7 +144,7 @@ const AddDiaryPage = () => {
           />
         </S.IconsContainer>
         <S.SubmitBtnWrapper>
-          <Button variant="outlined" href="/">
+          <Button variant="outlined" onClick={onSaveBtnClick}>
             작성
           </Button>
         </S.SubmitBtnWrapper>

@@ -29,7 +29,7 @@ const CommPage = () => {
           <S.CommunityCardContainer>
             {Object.entries(diaries).map((diary) => (
               <div key={diary.id}>
-                <Diarycard diary={diary} />
+                <Diarycard diary={diary[1]} />
               </div>
             ))}
           </S.CommunityCardContainer>

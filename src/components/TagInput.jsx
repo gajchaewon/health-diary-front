@@ -41,21 +41,24 @@ const Input = styled.input`
   font-size: 16px;
 `;
 
-function TagInput() {
+function TagInput({ onValueChange }) {
   const [tags, setTags] = useState([]);
   const [input, setInput] = useState("");
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && input) {
       setTags([...tags, input]);
+      onValueChange([...tags, input]);
       setInput("");
     } else if (e.key === "Backspace" && !input) {
       setTags(tags.slice(0, tags.length - 1));
+      onValueChange(tags.slice(0, tags.length - 1));
     }
   };
 
   const handleDelete = (index) => {
     setTags([...tags.slice(0, index), ...tags.slice(index + 1)]);
+    onValueChange([...tags.slice(0, index), ...tags.slice(index + 1)]);
   };
 
   return (
