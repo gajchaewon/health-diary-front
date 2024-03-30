@@ -32,7 +32,7 @@ const Homepage = () => {
     <div>
       {/* 로그인, 운동일지 X */}
       <S.MyDiaryContainer>
-        <S.MyDiaryLink to="mydiary">나의 운동일지</S.MyDiaryLink>
+        <S.MyDiaryLink to="my">나의 운동일지</S.MyDiaryLink>
         <S.CalendarDiaryContainer>
           <S.CalendarWrapper> 달력 </S.CalendarWrapper>
           {!isLoggedIn ? (

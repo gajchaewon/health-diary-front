@@ -26,7 +26,7 @@ function App() {
           <Route path="like" element={<ProfilePageLike />} />
           <Route path="comment" element={<ProfilePageComment />} />
         </Route>
-        <Route path="mydiary" element={<MyDiaryPage />} />
+        <Route path="my" element={<MyDiaryPage />} />
         <Route path="adddiary" element={<AddDiaryPage />} />
         <Route path="comm">
           <Route index element={<CommPage />} />

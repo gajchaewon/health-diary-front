@@ -57,9 +57,10 @@ const AddDiaryPage = () => {
     setCurrentPage((prevPage) => prevPage - 1);
   };
 
-  const onSaveBtnClick = async (e) => {
-    e.preventDefault();
-    if (!isLoading) {
+  const saveCheck = [title, content].every(Boolean) === true;
+
+  const onSaveBtnClick = async () => {
+    if (saveCheck) {
       try {
         const diaryData = await adding({
           title,
@@ -76,6 +77,7 @@ const AddDiaryPage = () => {
 
         console.log(diaryData);
       } catch (err) {
+        console.log(err);
         console.log("posting failed");
         navigate("/adddiary");
       }

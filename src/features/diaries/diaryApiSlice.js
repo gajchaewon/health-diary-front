@@ -9,9 +9,13 @@ export const diaryApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     getMyDiaries: builder.query({
-      query: () => ({
-        url: "/diaries/my",
+      query: ({ option, searchValue }) => ({
+        url: `/diaries/my`,
         method: "GET",
+        params: {
+          searchType: option,
+          searchValue: searchValue,
+        },
       }),
     }),
     addDiary: builder.mutation({
@@ -30,5 +34,6 @@ export const diaryApiSlice = apiSlice.injectEndpoints({
 });
 
 export const { useGetAllDiariesQuery } = diaryApiSlice;
+export const { useLazyGetMyDiariesQuery } = diaryApiSlice;
 export const { useGetMyDiariesQuery } = diaryApiSlice;
 export const { useAddDiaryMutation } = diaryApiSlice;
