@@ -18,13 +18,12 @@ const diarySlice = createSlice({
     },
     getMyDiaries: {
       reducer(state, action) {
-        const content = action.payload;
-        state.diaries = content;
+        state.diaries = action.payload;
       },
     },
     addDiary: {
       reducer(state, action) {
-        state.diaries = action.payload;
+        state.diaries = [...state, action.payload];
         console.log(state.diaries);
       },
     },

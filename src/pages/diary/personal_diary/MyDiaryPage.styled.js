@@ -62,3 +62,37 @@ export const DiaryCardSortBtn = styled.button`
   align-self: flex-start;
   font-size: 20px;
 `;
+
+export const SearchbardWrapper = styled.div`
+  display: flex;
+  position: relative;
+  justify-content: flex-end;
+  width: 82%;
+  height: 40px;
+  font-size: 45px;
+`;
+
+export const SearchbarImg = styled.button`
+  display: flex;
+  position: absolute;
+  padding: 8px;
+  height: 40px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+`;
+
+export const Searchbar = styled.input`
+  display: flex;
+  position: relative;
+  width: 25%;
+  padding-left: 10px;
+  margin-left: 5px;
+`;
+
+export const CommunityCardContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+`;
