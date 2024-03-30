@@ -38,8 +38,7 @@ export const ContentinCard = styled.div`
   font-size: 15px;
 `;
 
-const DiaryCard = ({ diary, key }) => {
-  console.log(diary);
+const DiaryCard = ({ diary }) => {
   return (
     <CommunityCard>
       <TitleinCard to="/comm/diaryId">{diary.title}</TitleinCard>
