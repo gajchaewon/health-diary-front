@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import Homepage from "./pages/home/Homepage";
 import Profile from "./components/Profile";
-import AddDiaryPage from "./pages/diary/add_diary/AddDiaryPage";
+import AddEditDiaryPage from "./pages/diary/add_edit_diary/AddEditDiaryPage";
 import LoginPage from "./pages/login/LoginPage";
 import CommPage from "./pages/community/CommPage";
 import CommDetailPage from "./pages/community/detail/CommDetailPage";
@@ -27,7 +27,8 @@ function App() {
           <Route path="comment" element={<ProfilePageComment />} />
         </Route>
         <Route path="my" element={<MyDiaryPage />} />
-        <Route path="adddiary" element={<AddDiaryPage />} />
+        <Route path="adddiary" element={<AddEditDiaryPage />} />
+        <Route path="editdiary/:diaryId" element={<AddEditDiaryPage />} />
         <Route path="comm">
           <Route index element={<CommPage />} />
           <Route path="diaryId" element={<CommDetailPage />} />

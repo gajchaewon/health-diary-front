@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
 
@@ -41,9 +41,20 @@ const Input = styled.input`
   font-size: 16px;
 `;
 
-function TagInput({ onValueChange }) {
+function TagInput({ onValueChange, hashtags }) {
   const [tags, setTags] = useState([]);
   const [input, setInput] = useState("");
+
+  useEffect(() => {
+    if (hashtags && hashtags.length > 0) {
+      const extractedTags = hashtags
+        .filter(
+          (tag) => typeof tag === "object" && tag.hasOwnProperty("hashtag")
+        )
+        .map((tag) => tag.hashtag);
+      setTags(extractedTags);
+    }
+  }, [hashtags]);
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && input) {

@@ -30,6 +30,24 @@ export const diaryApiSlice = apiSlice.injectEndpoints({
         },
       }),
     }),
+    deleteDiary: builder.mutation({
+      query: (diaryId) => ({
+        url: `/diaries/${diaryId}`,
+        method: "DELETE",
+      }),
+    }),
+    editDiary: builder.mutation({
+      query: ({ diaryId, ...data }) => ({
+        url: `/diaries/${diaryId}`,
+        method: "PUT",
+        body: {
+          title: data.title,
+          content: data.content,
+          isPublic: data.isPublic,
+          hashtags: data.hashtags,
+        },
+      }),
+    }),
   }),
 });
 
@@ -37,3 +55,5 @@ export const { useGetAllDiariesQuery } = diaryApiSlice;
 export const { useLazyGetMyDiariesQuery } = diaryApiSlice;
 export const { useGetMyDiariesQuery } = diaryApiSlice;
 export const { useAddDiaryMutation } = diaryApiSlice;
+export const { useDeleteDiaryMutation } = diaryApiSlice;
+export const { useEditDiaryMutation } = diaryApiSlice;

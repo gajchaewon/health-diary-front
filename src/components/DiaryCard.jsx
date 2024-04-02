@@ -1,10 +1,16 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import DeleteTwoToneIcon from "@mui/icons-material/DeleteTwoTone";
+import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
+import { deleteDiary } from "../features/diaries/diarySlice";
+import { useDeleteDiaryMutation } from "../features/diaries/diaryApiSlice";
+import { useDispatch } from "react-redux";
 
 export const CommunityCard = styled.div`
   display: flex;
-  flex-direction: column;
   position: relative;
+  flex-direction: column;
   width: 500px;
   height: 600px;
   box-sizing: border-box;
@@ -37,15 +43,69 @@ export const NicknameinCard = styled.div`
 export const ContentinCard = styled.div`
   font-size: 15px;
 `;
+export const BtnContainer = styled.div`
+  position: absolute;
+  width: fit-content;
+  display: flex;
+  justify-content: flex-end;
+  right: 3%;
+  bottom: 2%;
+`;
+export const Btn = styled.button`
+  margin: 4px;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+  font-size: 16px;
+  font-weight: 500;
+`;
 
 const DiaryCard = ({ diary }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [deletion, { isLoading }] = useDeleteDiaryMutation();
+  const isMyPage = location.pathname === "/my";
+
+  const onDeleteBtnClick = async () => {
+    if (window.confirm("다이어리를 삭제 하시겠습니까?")) {
+      try {
+        await deletion(diary.id).unwrap();
+        dispatch(deleteDiary(diary.id));
+        alert("다이어리가 삭제되었습니다.");
+      } catch (err) {
+        console.error("다이어리 삭제에 실패했습니다.", err);
+      }
+    }
+  };
+
+  const onEditBtnClick = async () => {
+    if (window.confirm("다이어리를 수정 하시겠습니까?")) {
+      navigate(`/editdiary/${diary.id}`, { state: { diary: diary } });
+    }
+  };
+
   return (
-    <CommunityCard>
-      <TitleinCard to="/comm/diaryId">{diary.title}</TitleinCard>
-      <NicknameinCard>{diary.nickname}</NicknameinCard>
-      <PictureinCard />
-      <ContentinCard>{diary.content}</ContentinCard>
-    </CommunityCard>
+    <>
+      <CommunityCard>
+        <TitleinCard to="/comm/diaryId">{diary.title}</TitleinCard>
+        <NicknameinCard>{diary.nickname}</NicknameinCard>
+        <PictureinCard />
+        <ContentinCard>{diary.content}</ContentinCard>
+        {isMyPage ? (
+          <BtnContainer>
+            <Btn onClick={onEditBtnClick}>
+              <EditTwoToneIcon />
+            </Btn>
+            <Btn onClick={onDeleteBtnClick}>
+              <DeleteTwoToneIcon />
+            </Btn>
+          </BtnContainer>
+        ) : (
+          <div></div>
+        )}
+      </CommunityCard>
+    </>
   );
 };
 
