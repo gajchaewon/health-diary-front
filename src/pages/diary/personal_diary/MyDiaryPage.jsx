@@ -8,11 +8,12 @@ import {
 } from "../../../features/diaries/diarySlice";
 import { useDispatch, useSelector } from "react-redux";
 import SearchIcon from "@mui/icons-material/Search";
+import { Link } from "react-router-dom";
 
 const MyDiaryPage = () => {
   const dispatch = useDispatch();
   const diaries = useSelector(selectCurrentDiaries);
-  console.log(diaries);
+
   const [resultMsg, setResultMsg] = useState("");
   const [searchTrigger, { data: searchData, isLoading }] =
     useLazyGetMyDiariesQuery();
@@ -33,13 +34,18 @@ const MyDiaryPage = () => {
       dispatch(getMyDiaries(searchData.content));
     } else if (isLoading) {
       setResultMsg("loading...");
+      if (!searchData) {
+        setResultMsg("다이어리가 없습니다. 다이어리를 작성해주세요.");
+      }
     }
+    console.log(searchData);
   }, [isLoading, searchData]);
 
   const onSearchBtnClick = async () => {
     if (option && searchValue) {
       console.log(option, searchValue);
       const res = await searchTrigger({ option, searchValue }); // trigger의 결과를 기다림
+      console.log(res.data);
       // 여기서 바로 response를 사용하여 조건 처리
       if (res.data.content.length !== 0) {
         dispatch(getMyDiaries(res.content));
@@ -80,6 +86,7 @@ const MyDiaryPage = () => {
         </S.SearchbarImg>
       </S.SearchbardWrapper>
       <S.DiaryCardSortBtn>날짜순 ▼</S.DiaryCardSortBtn>
+      <Link to="/adddiary">작성하기</Link>
       <S.DiaryCardContainer>
         {diaries && diaries.length ? (
           Object.entries(diaries).map((diary) => (
