@@ -4,7 +4,7 @@ export const diaryApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getAllDiaries: builder.query({
       query: () => ({
-        url: "/diaries",
+        url: "/community",
         method: "GET",
       }),
     }),
@@ -48,6 +48,12 @@ export const diaryApiSlice = apiSlice.injectEndpoints({
         },
       }),
     }),
+    getADiary: builder.query({
+      query: (diaryId) => ({
+        url: `/diaries/${diaryId}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -57,3 +63,4 @@ export const { useGetMyDiariesQuery } = diaryApiSlice;
 export const { useAddDiaryMutation } = diaryApiSlice;
 export const { useDeleteDiaryMutation } = diaryApiSlice;
 export const { useEditDiaryMutation } = diaryApiSlice;
+export const { useGetADiaryQuery } = diaryApiSlice;

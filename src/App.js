@@ -5,7 +5,7 @@ import Profile from "./components/Profile";
 import AddEditDiaryPage from "./pages/diary/add_edit_diary/AddEditDiaryPage";
 import LoginPage from "./pages/login/LoginPage";
 import CommPage from "./pages/community/CommPage";
-import CommDetailPage from "./pages/community/detail/CommDetailPage";
+import DiaryDetailPage from "./pages/diary/detail/DiaryDetailPage";
 import MyDiaryPage from "./pages/diary/personal_diary/MyDiaryPage";
 import ProfilePageLike from "./pages/profile/profile_like/ProfilePage_Like";
 import ProfilePageEdit from "./pages/profile/profile_edit/ProfilePage_Edit";
@@ -29,10 +29,8 @@ function App() {
         <Route path="my" element={<MyDiaryPage />} />
         <Route path="adddiary" element={<AddEditDiaryPage />} />
         <Route path="editdiary/:diaryId" element={<AddEditDiaryPage />} />
-        <Route path="comm">
-          <Route index element={<CommPage />} />
-          <Route path="diaryId" element={<CommDetailPage />} />
-        </Route>
+        <Route path="comm" element={<CommPage />} />
+        <Route path="diary/:diaryId" element={<DiaryDetailPage />} />
       </Route>
     </Routes>
   );
