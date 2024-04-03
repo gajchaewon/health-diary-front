@@ -88,7 +88,9 @@ const DiaryCard = ({ diary }) => {
   return (
     <>
       <CommunityCard>
-        <TitleinCard to="/comm/diaryId">{diary.title}</TitleinCard>
+        <TitleinCard to={`/diary/${diary.id}`} state={{ diary: diary }}>
+          {diary.title}
+        </TitleinCard>
         <NicknameinCard>{diary.nickname}</NicknameinCard>
         <PictureinCard />
         <ContentinCard>{diary.content}</ContentinCard>

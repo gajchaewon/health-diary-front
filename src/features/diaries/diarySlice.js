@@ -21,6 +21,11 @@ const diarySlice = createSlice({
         state.diaries = action.payload;
       },
     },
+    getDiary: {
+      reducer(state, action) {
+        state.diaries = action.payload;
+      },
+    },
     addDiary: {
       reducer(state, action) {
         //state.diaries = [...state, action.payload];
@@ -52,6 +57,12 @@ const diarySlice = createSlice({
 
 export const selectCurrentDiaries = (state) => state.diary.diaries;
 export const selectMyDiaries = (state) => state.diary.myDiaries;
-export const { getAllDiaries, getMyDiaries, addDiary, deleteDiary, editDiary } =
-  diarySlice.actions;
+export const {
+  getAllDiaries,
+  getMyDiaries,
+  addDiary,
+  deleteDiary,
+  editDiary,
+  getDiary,
+} = diarySlice.actions;
 export default diarySlice.reducer;

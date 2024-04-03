@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import * as S from "./Homepage.styled";
-import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
@@ -11,15 +10,17 @@ import Typography from "@mui/material/Typography";
 import DiaryCard from "../../components/DiaryCard.main";
 import { useOutletContext } from "react-router-dom";
 import { useGetAllDiariesQuery } from "../../features/diaries/diaryApiSlice";
-import { getAllDiaries } from "../../features/diaries/diarySlice";
-import { useDispatch } from "react-redux";
+import {
+  getAllDiaries,
+  selectCurrentDiaries,
+} from "../../features/diaries/diarySlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Homepage = () => {
   const { isLoggedIn } = useOutletContext();
-  const [diaries, setDiaries] = useState([]);
+  const [diaries, setDiaries] = useState([useSelector(selectCurrentDiaries)]);
+  const { data, isLoading } = useGetAllDiariesQuery();
   const dispatch = useDispatch();
-
-  const { data, error, isLoading } = useGetAllDiariesQuery();
 
   useEffect(() => {
     if (!isLoading && data) {
@@ -66,7 +67,14 @@ const Homepage = () => {
                       />
                     </ListItemAvatar>
                     <ListItemText
-                      primary={<S.DiaryTitle>{diary.title}</S.DiaryTitle>}
+                      primary={
+                        <S.DiaryTitle
+                          to={`/diary/${diary.id}`}
+                          state={{ diary: diary }}
+                        >
+                          {diary.title}
+                        </S.DiaryTitle>
+                      }
                       secondary={
                         <React.Fragment>
                           <Typography
