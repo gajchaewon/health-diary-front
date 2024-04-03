@@ -2,17 +2,28 @@ import React, { useEffect, useState } from "react";
 import * as S from "./CommPage.styled";
 import SearchIcon from "@mui/icons-material/Search";
 import Diarycard from "../../components/DiaryCard";
-import { selectCurrentDiaries } from "../../features/diaries/diarySlice";
-import { useSelector } from "react-redux";
+import {
+  selectCurrentDiaries,
+  getAllDiaries,
+} from "../../features/diaries/diarySlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useGetAllDiariesQuery } from "../../features/diaries/diaryApiSlice";
 
 const CommPage = () => {
-  const res = useSelector(selectCurrentDiaries);
-  const [diaries, setDiaries] = useState([]);
+  const [diaries, setDiaries] = useState(useSelector(selectCurrentDiaries));
+  const { data, isLoading } = useGetAllDiariesQuery();
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    setDiaries(res);
-  }, []);
+    if (!isLoading && data) {
+      console.log(data);
+      dispatch(getAllDiaries({ ...data.content }));
+      setDiaries(data.content);
+    }
+  }, [data, isLoading, dispatch]);
 
   console.log(diaries);
+
   return (
     <>
       {!diaries || Object.keys(diaries).length === 0 ? (
