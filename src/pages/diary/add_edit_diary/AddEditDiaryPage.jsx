@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
 import * as S from "./AddEditDiaryPage.styled";
@@ -19,10 +19,15 @@ import {
 import { useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 
-const AddDiaryPage = () => {
+const AddEditDiaryPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+
+  const isAddPage = location.pathname === "/adddiary";
+  const { state } = useLocation(); //card에서 보내준 값
+  const { diary } = state || {};
+
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [hashtags, setHashtags] = useState([]);
@@ -33,13 +38,18 @@ const AddDiaryPage = () => {
   const [adding, { isLoading: isAddLoading }] = useAddDiaryMutation();
   const [editing, { isLoading: isEditLoading }] = useEditDiaryMutation();
 
-  const isAddPage = location.pathname === "/adddiary";
-  const { state } = useLocation(); //card에서 보내준 값
-  const { diary } = state || {};
-
   const onTitleChange = (e) => setTitle(e.target.value);
   const onContentChange = (e) => setContent(e.target.value);
   const onHashTagsChange = (value) => setHashtags(value);
+
+  useEffect(() => {
+    if (diary) {
+      setTitle(diary.title);
+      setContent(diary.content);
+      setIsPublic(diary.isPublic);
+      setHashtags(diary.hashtags.map((index) => index.hashtag));
+    }
+  }, [diary]);
 
   const onLockClicked = () => {
     setIsPublic(!isPublic);
@@ -95,7 +105,7 @@ const AddDiaryPage = () => {
   };
 
   const onEditBtnClick = async () => {
-    if (saveCheck) {
+    if (!isEditLoading) {
       try {
         const diaryData = await editing({
           diaryId: diary.id,
@@ -105,10 +115,6 @@ const AddDiaryPage = () => {
           hashtags,
         }).unwrap();
         dispatch(editDiary(diary.id, { ...diaryData }));
-        setTitle("");
-        setContent("");
-        setIsPublic(false);
-        setHashtags([]);
         navigate("/my");
 
         console.log(diaryData);
@@ -285,4 +291,4 @@ const AddDiaryPage = () => {
   );
 };
 
-export default AddDiaryPage;
+export default AddEditDiaryPage;
