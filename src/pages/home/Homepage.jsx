@@ -9,25 +9,40 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import DiaryCard from "../../components/DiaryCard.main";
 import { useOutletContext } from "react-router-dom";
-import { useGetAllDiariesQuery } from "../../features/diaries/diaryApiSlice";
+import {
+  useGetAllDiariesQuery,
+  useGetMyDiariesQuery,
+} from "../../features/diaries/diaryApiSlice";
 import {
   getAllDiaries,
+  getMyDiaries,
   selectCurrentDiaries,
+  selectMyDiaries,
 } from "../../features/diaries/diarySlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const Homepage = () => {
   const { isLoggedIn } = useOutletContext();
   const [diaries, setDiaries] = useState([useSelector(selectCurrentDiaries)]);
+  const [myDiaries, setMyDiaries] = useState([useSelector(selectMyDiaries)]);
+  const option = "TITLE";
+  const searchValue = "";
   const { data, isLoading } = useGetAllDiariesQuery();
+  const { data: myDiary, isLoading: myDiaryLoading } = useGetMyDiariesQuery({
+    option,
+    searchValue,
+  });
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!isLoading && data) {
+    if (!isLoading && !myDiaryLoading && data) {
       dispatch(getAllDiaries({ ...data.content }));
       setDiaries(data.content);
+      console.log(diaries);
+      //dispatch(getMyDiaries({ ...myDiary }));
+      //setMyDiaries(myDiary)
     }
-  }, [data, isLoading, dispatch]);
+  }, [data, isLoading, myDiaryLoading, dispatch]);
 
   return (
     <div>

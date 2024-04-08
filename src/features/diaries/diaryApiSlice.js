@@ -27,6 +27,7 @@ export const diaryApiSlice = apiSlice.injectEndpoints({
           content: data.content,
           isPublic: data.isPublic,
           hashtags: data.hashtags,
+          imageIds: data.imageIds,
         },
       }),
     }),
@@ -45,6 +46,7 @@ export const diaryApiSlice = apiSlice.injectEndpoints({
           content: data.content,
           isPublic: data.isPublic,
           hashtags: data.hashtags,
+          imageIds: data.imageIds,
         },
       }),
     }),
@@ -52,6 +54,23 @@ export const diaryApiSlice = apiSlice.injectEndpoints({
       query: (diaryId) => ({
         url: `/diaries/${diaryId}`,
         method: "GET",
+      }),
+    }),
+    likeDiary: builder.mutation({
+      query: (diaryId) => ({
+        url: `/diaries/${diaryId}/like`,
+        method: "POST",
+      }),
+    }),
+    uploadImage: builder.mutation({
+      query: (file) => ({
+        url: "/diaries/images",
+        method: "POST",
+        body: file,
+        formdata: true,
+        // headers: {
+        //   "Content-Type": "multipart/form-data",
+        // },
       }),
     }),
   }),
@@ -64,3 +83,5 @@ export const { useAddDiaryMutation } = diaryApiSlice;
 export const { useDeleteDiaryMutation } = diaryApiSlice;
 export const { useEditDiaryMutation } = diaryApiSlice;
 export const { useGetADiaryQuery } = diaryApiSlice;
+export const { useLikeDiaryMutation } = diaryApiSlice;
+export const { useUploadImageMutation } = diaryApiSlice;

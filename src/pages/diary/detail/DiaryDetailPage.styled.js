@@ -26,9 +26,9 @@ export const Nickname = styled.div`
   width: 30%;
 `;
 
-export const Picture = styled.div`
+export const Picture = styled.img`
   width: 43vw;
-  height: 35vh;
+  height: 45vh;
   margin: 20px 0;
   background-color: pink;
 `;
