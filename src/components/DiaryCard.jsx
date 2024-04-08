@@ -20,11 +20,10 @@ export const CommunityCard = styled.div`
   border-radius: 0.6rem;
 `;
 
-export const PictureinCard = styled.div`
+export const PictureinCard = styled.img`
   width: 400px;
   height: 250px;
   margin: 20px 0;
-  background-color: white;
 `;
 
 export const TitleinCard = styled(Link)`
@@ -92,7 +91,7 @@ const DiaryCard = ({ diary }) => {
           {diary.title}
         </TitleinCard>
         <NicknameinCard>{diary.nickname}</NicknameinCard>
-        <PictureinCard />
+        <PictureinCard src={diary.imageUrls[0]} alt="pic" />
         <ContentinCard>{diary.content}</ContentinCard>
         {isMyPage ? (
           <BtnContainer>

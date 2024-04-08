@@ -15,6 +15,7 @@ import { addDiary, editDiary } from "../../../features/diaries/diarySlice";
 import {
   useAddDiaryMutation,
   useEditDiaryMutation,
+  useUploadImageMutation,
 } from "../../../features/diaries/diaryApiSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -34,9 +35,10 @@ const AddEditDiaryPage = () => {
   const [isPublic, setIsPublic] = useState(false);
   const [images, setImages] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
-
   const [adding, { isLoading: isAddLoading }] = useAddDiaryMutation();
   const [editing, { isLoading: isEditLoading }] = useEditDiaryMutation();
+  const [uploading, { isLoading: isUploadLoading, data: imgData }] =
+    useUploadImageMutation();
 
   const onTitleChange = (e) => setTitle(e.target.value);
   const onContentChange = (e) => setContent(e.target.value);
@@ -55,10 +57,22 @@ const AddEditDiaryPage = () => {
     setIsPublic(!isPublic);
   };
 
-  const handleImageUpload = (event) => {
-    const files = Array.from(event.target.files);
-    const urlList = files.map((file) => URL.createObjectURL(file));
-    setImages([...images, ...urlList]);
+  const handleImageUpload = async (event) => {
+    const formData = new FormData();
+    if (event.target.files !== null && !isUploadLoading) {
+      try {
+        formData.append("file", event.target.files[0]);
+        console.log(event.target.files[0]);
+        const res = await uploading(formData).unwrap();
+        console.log(res);
+        setImages([...images, res]);
+        // const files = Array.from(event.target.files);
+        // const urlList = files.map((file) => URL.createObjectURL(file));
+        // setImages([...images, ...urlList]);
+      } catch (err) {
+        console.log(err);
+      }
+    }
   };
 
   const handleImageDelete = () => {
@@ -80,6 +94,8 @@ const AddEditDiaryPage = () => {
   const saveCheck = [title, content].every(Boolean) === true;
 
   const onSaveBtnClick = async () => {
+    console.log(images);
+    const imageIds = images.map((image) => image.imageId);
     if (saveCheck) {
       try {
         const diaryData = await adding({
@@ -87,12 +103,14 @@ const AddEditDiaryPage = () => {
           content,
           isPublic,
           hashtags,
+          imageIds,
         }).unwrap();
         dispatch(addDiary({ ...diaryData }));
         setTitle("");
         setContent("");
         setIsPublic(false);
         setHashtags([]);
+        setImages([]);
         navigate("/my");
 
         console.log(diaryData);
@@ -134,24 +152,68 @@ const AddEditDiaryPage = () => {
             <TextField
               id="outlined-multiline-flexible"
               label="제목"
-              fullWidth
               onChange={onTitleChange}
               value={title}
+              fullWidth
             />
           </S.TitleWrapper>
-          <S.ContentWrapper>
-            <TextField
-              id="outlined-multiline-static"
-              label="내용"
-              multiline
-              rows={15}
-              fullWidth
-              color="grey"
-              onChange={onContentChange}
-              value={content}
-            />
-          </S.ContentWrapper>
-          <S.TagnIconsContainer>
+          {console.log(images)}
+
+          {images.length === 0 ? (
+            <S.ContentWrapper>
+              <TextField
+                id="outlined-multiline-static"
+                label="내용"
+                multiline
+                rows={15}
+                fullWidth
+                style={{ backgroundColor: "aliceblue" }}
+                onChange={onContentChange}
+                value={content}
+              />
+            </S.ContentWrapper>
+          ) : (
+            <S.ContentWrapper style={{ width: "100%" }}>
+              <TextField
+                id="outlined-multiline-static"
+                label="내용"
+                multiline
+                rows={15}
+                style={{ width: "50%", backgroundColor: "aliceblue" }}
+                onChange={onContentChange}
+                value={content}
+              />
+              {images.length > 0 && (
+                <S.PreviewnBtnContainer>
+                  <S.PreviewContainer>
+                    <S.PrevButton
+                      onClick={prevPage}
+                      disabled={currentPage === 0}
+                    >
+                      <ArrowBackIosNewRoundedIcon sx={{ fontSize: 40 }} />
+                    </S.PrevButton>
+                    <S.ImagePreview
+                      src={images[currentPage].url}
+                      alt="preview"
+                    />
+                    <S.DeleteButton onClick={handleImageDelete}>
+                      <DeleteIcon />
+                    </S.DeleteButton>
+                    <S.NextButton
+                      onClick={nextPage}
+                      disabled={currentPage === images.length - 1}
+                    >
+                      <ArrowForwardIosRoundedIcon sx={{ fontSize: 40 }} />
+                    </S.NextButton>
+                  </S.PreviewContainer>
+                </S.PreviewnBtnContainer>
+              )}
+            </S.ContentWrapper>
+          )}
+
+          <S.TagnIconsContainer
+            style={{ width: images.length === 0 ? "" : "49.5%" }}
+          >
             <S.TagWrapper>
               태그
               <TagInput onValueChange={onHashTagsChange} />
@@ -184,9 +246,6 @@ const AddEditDiaryPage = () => {
                   sx={{ fontSize: 40, color: "##212121", cursor: "pointer" }}
                 />
               </label>
-              <SmartDisplayRoundedIcon
-                sx={{ fontSize: 40, color: "##212121", cursor: "pointer" }}
-              />
             </S.IconsContainer>
             <S.SubmitBtnWrapper>
               <Button variant="outlined" onClick={onSaveBtnClick}>
@@ -196,6 +255,7 @@ const AddEditDiaryPage = () => {
           </S.TagnIconsContainer>
         </>
       ) : (
+        // 수정하기
         <>
           <S.TitleWrapper>
             <TextField
@@ -213,10 +273,33 @@ const AddEditDiaryPage = () => {
               multiline
               rows={15}
               fullWidth
-              color="grey"
+              style={{ backgroundColor: "aliceblue" }}
               onChange={onContentChange}
               defaultValue={diary.content}
             />
+            {console.log(diary)}
+            {diary.imageUrls.length > 0 && (
+              <S.PreviewnBtnContainer>
+                <S.PreviewContainer>
+                  <S.PrevButton onClick={prevPage} disabled={currentPage === 0}>
+                    <ArrowBackIosNewRoundedIcon sx={{ fontSize: 40 }} />
+                  </S.PrevButton>
+                  <S.ImagePreview
+                    src={diary.imageUrls[currentPage]}
+                    alt="preview"
+                  />
+                  <S.DeleteButton onClick={handleImageDelete}>
+                    <DeleteIcon />
+                  </S.DeleteButton>
+                  <S.NextButton
+                    onClick={nextPage}
+                    disabled={currentPage === diary.imageUrls.length - 1}
+                  >
+                    <ArrowForwardIosRoundedIcon sx={{ fontSize: 40 }} />
+                  </S.NextButton>
+                </S.PreviewContainer>
+              </S.PreviewnBtnContainer>
+            )}
           </S.ContentWrapper>
           <S.TagnIconsContainer>
             <S.TagWrapper>
@@ -254,9 +337,6 @@ const AddEditDiaryPage = () => {
                   sx={{ fontSize: 40, color: "##212121", cursor: "pointer" }}
                 />
               </label>
-              <SmartDisplayRoundedIcon
-                sx={{ fontSize: 40, color: "##212121", cursor: "pointer" }}
-              />
             </S.IconsContainer>
             <S.SubmitBtnWrapper>
               <Button variant="outlined" onClick={onEditBtnClick}>
@@ -265,27 +345,6 @@ const AddEditDiaryPage = () => {
             </S.SubmitBtnWrapper>
           </S.TagnIconsContainer>
         </>
-      )}
-
-      {images.length > 0 && (
-        <S.PreviewnBtnContainer>
-          업로드된 사진 미리보기
-          <S.PreviewContainer>
-            <S.PrevButton onClick={prevPage} disabled={currentPage === 0}>
-              <ArrowBackIosNewRoundedIcon sx={{ fontSize: 40 }} />
-            </S.PrevButton>
-            <S.ImagePreview src={images[currentPage]} alt="preview" />
-            <S.DeleteButton onClick={handleImageDelete}>
-              <DeleteIcon />
-            </S.DeleteButton>
-            <S.NextButton
-              onClick={nextPage}
-              disabled={currentPage === images.length - 1}
-            >
-              <ArrowForwardIosRoundedIcon sx={{ fontSize: 40 }} />
-            </S.NextButton>
-          </S.PreviewContainer>
-        </S.PreviewnBtnContainer>
       )}
     </S.InputContainer>
   );
