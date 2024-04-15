@@ -4,7 +4,7 @@ import Diarycard from "../../../components/DiaryCard";
 import { useLazyGetMyDiariesQuery } from "../../../features/diaries/diaryApiSlice";
 import {
   getMyDiaries,
-  selectCurrentDiaries,
+  selectMyDiaries,
 } from "../../../features/diaries/diarySlice";
 import { useDispatch, useSelector } from "react-redux";
 import SearchIcon from "@mui/icons-material/Search";
@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 
 const MyDiaryPage = () => {
   const dispatch = useDispatch();
-  const diaries = useSelector(selectCurrentDiaries);
+  const diaries = useSelector(selectMyDiaries);
 
   const [resultMsg, setResultMsg] = useState("");
   const [searchTrigger, { data: searchData, isLoading }] =
