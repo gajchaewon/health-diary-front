@@ -73,6 +73,16 @@ export const diaryApiSlice = apiSlice.injectEndpoints({
         // },
       }),
     }),
+    addComment: builder.mutation({
+      qurey: () => ({
+        url: "/comment/new",
+      }),
+    }),
+    deleteComment: builder.mutation({
+      qurey: () => ({
+        url: "/comment/delete",
+      }),
+    }),
   }),
 });
 

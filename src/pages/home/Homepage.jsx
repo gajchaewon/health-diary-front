@@ -6,6 +6,7 @@ import Divider from "@mui/material/Divider";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
+import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import Typography from "@mui/material/Typography";
 import DiaryCard from "../../components/DiaryCard.main";
 import { useOutletContext } from "react-router-dom";
@@ -23,45 +24,72 @@ import { useDispatch, useSelector } from "react-redux";
 
 const Homepage = () => {
   const { isLoggedIn } = useOutletContext();
-  const [diaries, setDiaries] = useState([useSelector(selectCurrentDiaries)]);
-  const [myDiaries, setMyDiaries] = useState([useSelector(selectMyDiaries)]);
-  const option = "TITLE";
-  const searchValue = "";
-  const { data, isLoading } = useGetAllDiariesQuery();
-  const { data: myDiary, isLoading: myDiaryLoading } = useGetMyDiariesQuery({
-    option,
-    searchValue,
-  });
+  const diaries = useSelector(selectCurrentDiaries);
+  const myDiaries = useSelector(selectMyDiaries);
+  const today = new Date().toISOString().slice(0, 10); // 오늘 날짜를 YYYY-MM-DD 형식으로 가져옵니다.
+  const option = "DATE";
+  const searchValue = today;
+  const [page, setPage] = useState(0);
+
+  const { data: allDiary, isLoading } = useGetAllDiariesQuery();
+  const { data: todayDiary, isLoading: todayDiaryLoading } =
+    useGetMyDiariesQuery({
+      option,
+      searchValue,
+    });
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!isLoading && !myDiaryLoading && data) {
-      dispatch(getAllDiaries({ ...data.content }));
-      setDiaries(data.content);
-      console.log(diaries);
-      //dispatch(getMyDiaries({ ...myDiary }));
-      //setMyDiaries(myDiary)
+    if (!isLoading && !todayDiaryLoading && allDiary) {
+      if (todayDiary) {
+        dispatch(getMyDiaries([...todayDiary.content]));
+      }
+      dispatch(getAllDiaries([...allDiary.content]));
     }
-  }, [data, isLoading, myDiaryLoading, dispatch]);
+  }, [allDiary, todayDiary, isLoading, todayDiaryLoading, dispatch]);
 
   return (
     <div>
       {/* 로그인, 운동일지 X */}
+      {console.log(myDiaries)}
       <S.MyDiaryContainer>
         <S.MyDiaryLink to="my">나의 운동일지</S.MyDiaryLink>
         <S.CalendarDiaryContainer>
           <S.CalendarWrapper> 달력 </S.CalendarWrapper>
           {!isLoggedIn ? (
             <S.DiaryWrapper>
-              {/* <S.AddDiaryBtn to="adddiary">
-                <AddCircleRoundedIcon sx={{ fontSize: "90px" }} />
-              </S.AddDiaryBtn> */}
               <S.LoginBtn to="login">로그인</S.LoginBtn>
             </S.DiaryWrapper>
           ) : (
             <S.DiaryWrapper>
-              {/* 운동일지 O */}
-              <DiaryCard title={"제목"} content={"내용"} />
+              {myDiaries && myDiaries.length !== 0 ? (
+                <>
+                  <DiaryCard
+                    title={myDiaries[page].title}
+                    content={myDiaries[page].content}
+                  />
+                  <S.PaginationContainer>
+                    <S.PaginationButton
+                      onClick={() => setPage(Math.max(page - 1, 0))}
+                      disabled={page === 0}
+                    >
+                      이전
+                    </S.PaginationButton>
+                    <S.PaginationButton
+                      onClick={() =>
+                        setPage(Math.min(page + 1, myDiaries.length - 1))
+                      }
+                      disabled={page === myDiaries.length - 1}
+                    >
+                      다음
+                    </S.PaginationButton>
+                  </S.PaginationContainer>
+                </>
+              ) : (
+                <S.AddDiaryBtn to="adddiary">
+                  <AddCircleRoundedIcon sx={{ fontSize: "90px" }} />
+                </S.AddDiaryBtn>
+              )}
             </S.DiaryWrapper>
           )}
         </S.CalendarDiaryContainer>

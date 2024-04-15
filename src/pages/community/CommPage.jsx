@@ -10,15 +10,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useGetAllDiariesQuery } from "../../features/diaries/diaryApiSlice";
 
 const CommPage = () => {
-  const [diaries, setDiaries] = useState(useSelector(selectCurrentDiaries));
+  const diaries = useSelector(selectCurrentDiaries);
   const { data, isLoading } = useGetAllDiariesQuery();
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (!isLoading && data) {
       console.log(data);
-      dispatch(getAllDiaries({ ...data.content }));
-      setDiaries(data.content);
+      dispatch(getAllDiaries([...data.content]));
     }
   }, [data, isLoading, dispatch]);
 

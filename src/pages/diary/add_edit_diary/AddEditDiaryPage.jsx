@@ -123,6 +123,7 @@ const AddEditDiaryPage = () => {
   };
 
   const onEditBtnClick = async () => {
+    const imageIds = images.map((image) => image.imageId);
     if (!isEditLoading) {
       try {
         const diaryData = await editing({
@@ -131,6 +132,7 @@ const AddEditDiaryPage = () => {
           content,
           isPublic,
           hashtags,
+          imageIds,
         }).unwrap();
         dispatch(editDiary(diary.id, { ...diaryData }));
         navigate("/my");
