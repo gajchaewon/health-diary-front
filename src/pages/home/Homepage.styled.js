@@ -33,7 +33,8 @@ export const DiaryWrapper = styled.div`
   height: 600px;
   padding: 50px;
   box-sizing: border-box;
-  text-overflow: ellipsis;
+  overflow-y: auto;
+  max-height: 600px;
 `;
 
 export const AddDiaryBtn = styled(Link)`
@@ -92,4 +93,19 @@ export const DiaryTitle = styled(Link)`
   color: #212121;
   font-size: 24px;
   font-weight: 500;
+`;
+
+export const PaginationContainer = styled.div`
+  display: flex;
+`;
+
+export const PaginationButton = styled.button`
+  width: fit-content;
+  color: black;
+  padding: 10px 20px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 0 10px;
 `;
