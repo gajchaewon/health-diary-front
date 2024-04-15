@@ -19,12 +19,16 @@ const diarySlice = createSlice({
     },
     getMyDiaries: {
       reducer(state, action) {
-        state.diaries = action.payload;
+        state.myDiaries = action.payload;
       },
     },
     getDiary: {
       reducer(state, action) {
-        state.diaries = action.payload;
+        const newDiary = action.payload;
+        console.log(newDiary);
+        state.diaries = state.diaries.filter(
+          (diary) => diary.id === newDiary.id
+        );
       },
     },
     addDiary: {
@@ -53,16 +57,12 @@ const diarySlice = createSlice({
         }
       },
     },
+
     likeDiary: {
       reducer(state, action) {
-        const index = state.diaries.findIndex(
-          (diary) => diary.id === action.payload.id
-        );
-        if (index === -1) {
-          state.diaries.push(action.payload); // 좋아요를 누르지 않은 경우, 다이어리 객체를 배열에 추가
-        } else {
-          state.diaries.splice(index, 1); // 이미 좋아요를 누른 경우, 다이어리 객체를 배열에서 제거
-        }
+        console.log("좋아요 리듀서 : ", state.diaries);
+        console.log("좋아요 리듀서 action.payload : ", action.payload);
+        state.diaries[0].likeCount = action.payload.likeCount;
       },
     },
 

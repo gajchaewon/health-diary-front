@@ -16,32 +16,27 @@ const DiaryDetailPage = () => {
   const location = useLocation();
   const diaryId = location.state.diary.id;
   const dispatch = useDispatch();
-  const { data: diary, isLoading } = useGetADiaryQuery(diaryId);
-  const [diaryData, setDiaryData] = useState(useSelector(selectCurrentDiaries));
+  const { data: fetchDiary, isLoading } = useGetADiaryQuery(diaryId);
+  const currentDiary = useSelector(selectCurrentDiaries);
+  const singleDiary = currentDiary[0];
+
   const [like, { isLoading: isLikeLoading }] = useLikeDiaryMutation();
-  const [isLike, setIsLike] = useState(true);
+  const [isLike, setIsLike] = useState(false);
 
   useEffect(() => {
-    if (diary && !isLoading) {
-      dispatch(getDiary(diary));
-      setDiaryData(diary);
+    if (fetchDiary && !isLoading) {
+      dispatch(getDiary(fetchDiary));
     }
-  }, [diary, dispatch, isLoading, diaryData.likeCount]);
+  }, [fetchDiary, dispatch, isLoading]);
 
   const onLikeClick = async () => {
-    if (!isLike && !isLikeLoading) {
+    if (!isLikeLoading) {
       try {
-        await like(diary.id).unwrap();
-        dispatch(likeDiary(diary.id));
-        setIsLike(true);
-      } catch (err) {
-        console.log(err);
-      }
-    } else {
-      try {
-        await like(diary.id).unwrap();
-        dispatch(likeDiary(diary.id));
-        setIsLike(false);
+        const response = await like(diaryId).unwrap();
+        console.log(response);
+        const likeCount = response; // 응답에서 likeCount를 가져옵니다.
+        dispatch(likeDiary({ diaryId, likeCount }));
+        setIsLike(!isLike);
       } catch (err) {
         console.log(err);
       }
@@ -50,15 +45,14 @@ const DiaryDetailPage = () => {
 
   return (
     <div>
-      {console.log(diaryData)}
-      {diaryData && (
+      {currentDiary && (
         <S.Container>
-          <S.Title>{diaryData.title}</S.Title>
-          <S.Nickname>{diaryData.nickname}</S.Nickname>
-          {diaryData.imageUrls && diaryData.imageUrls.length > 0 && (
-            <S.Picture src={diaryData.imageUrls[0]} alt="pic" />
+          <S.Title>{singleDiary.title}</S.Title>
+          <S.Nickname>{singleDiary.nickname}</S.Nickname>
+          {singleDiary.imageUrls && singleDiary.imageUrls.length > 0 && (
+            <S.Picture src={singleDiary.imageUrls[0]} alt="pic" />
           )}
-          <S.Content>{diaryData.content}</S.Content>
+          <S.Content>{singleDiary.content}</S.Content>
           <button
             onClick={onLikeClick}
             style={{
@@ -67,16 +61,16 @@ const DiaryDetailPage = () => {
               cursor: "pointer",
             }}
           >
-            {isLike ? (
+            {!isLike ? (
               <SentimentNeutralRoundedIcon sx={{ fontSize: 50 }} />
             ) : (
               <SentimentVerySatisfiedRoundedIcon sx={{ fontSize: 50 }} />
             )}
           </button>
-          {diaryData.likeCount}
+          {singleDiary.likeCount}
           <S.Divider></S.Divider>
           <S.CommentContainer>
-            comment({diaryData.comments && diaryData.comments.length})
+            comment({singleDiary.comments && singleDiary.comments.length})
             <S.CommentTextarea>
               <TextField
                 id="outlined-textarea"
@@ -88,8 +82,8 @@ const DiaryDetailPage = () => {
               />
               <S.CommentTextareaBtn>작성</S.CommentTextareaBtn>
             </S.CommentTextarea>
-            {diaryData.comments &&
-              diaryData.comments.map((comment) => (
+            {singleDiary.comments &&
+              singleDiary.comments.map((comment) => (
                 <S.Comments>
                   <S.CommentsUser>{comment.nickname}</S.CommentsUser>
                   {comment.content}
