@@ -15,9 +15,12 @@ const baseQuery = fetchBaseQuery({
 
 const baseQueryWithReAuth = async (args, api) => {
   let result = await baseQuery(args, api);
-  // backend 수정 후 수정하기(3.30)
-  // if (result?.error) {
-  //   const refreshResult = await baseQuery("/refresh-token", api);
+  // console.log(result.meta);
+  // const isAuthenticated = result.meta.response.headers.get(
+  //   "Authenticationfailed"
+  // );
+  // if (!isAuthenticated) {
+  //   const refreshResult = await baseQuery("/auth/refresh-token", api);
   //   console.log(refreshResult);
   //   if (refreshResult?.data) {
   //     const userInfo = api.getState().auth.userInfo;
