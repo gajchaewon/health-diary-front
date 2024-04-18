@@ -15,21 +15,31 @@ const baseQuery = fetchBaseQuery({
 
 const baseQueryWithReAuth = async (args, api) => {
   let result = await baseQuery(args, api);
-  // console.log(result.meta);
-  // const isAuthenticated = result.meta.response.headers.get(
-  //   "Authenticationfailed"
-  // );
-  // if (!isAuthenticated) {
-  //   const refreshResult = await baseQuery("/auth/refresh-token", api);
-  //   console.log(refreshResult);
-  //   if (refreshResult?.data) {
-  //     const userInfo = api.getState().auth.userInfo;
-  //     api.dispatch(logIn({ ...refreshResult.data, userInfo }));
-  //     result = await baseQuery(args, api);
-  //   } else {
-  //     api.dispatch(logOut());
-  //   }
-  // }
+  console.log(result);
+  if (result?.error?.data !== null) {
+    if (result?.error?.data.error === "EXPIRED_TOKEN") {
+      const refreshResult = await baseQuery("/auth/refresh-token", api);
+      const userResponse = api.getState().auth.userInfo;
+
+      const tokenResponse = {
+        accessToken: refreshResult.data?.accessToken,
+        refreshToken: null,
+      };
+
+      api.dispatch(logIn({ tokenResponse, userResponse }));
+      result = await baseQuery(args, api);
+    } else if (
+      [
+        "WRONG_TYPE_TOKEN",
+        "UNSUPPORTED_TOKEN",
+        "UNKNOWN_ERROR",
+        "ACCESS_DENIED",
+      ].includes(result?.error?.data.error)
+    ) {
+      alert("오류로 인해 로그아웃됩니다.");
+      api.dispatch(logOut());
+    }
+  }
   return result;
 };
 

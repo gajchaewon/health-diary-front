@@ -22,10 +22,11 @@ export const authSlice = createSlice({
     logIn: {
       reducer(state, action) {
         const { tokenResponse, userResponse } = action.payload;
-        console.log(tokenResponse);
         state.userInfo = userResponse;
         state.token = tokenResponse.accessToken; //accessToken
-        setCookie(tokenResponse.refreshToken);
+        if (tokenResponse.refreshToken !== null) {
+          setCookie(tokenResponse.refreshToken);
+        }
       },
     },
     logOut: {

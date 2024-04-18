@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
 export const MyProfile = styled.div`
@@ -50,4 +51,32 @@ export const ExerciseInfo = styled.div`
   width: fit-content;
   font-size: 30px;
   font-weight: 600;
+`;
+
+export const FollowContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const FollowWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  font-size: 18px;
+  margin: 20px;
+`;
+
+export const FollowBtn = styled(NavLink)`
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  font-size: 24px;
+  font-weight: 500;
+  font-weight: 500;
+  margin: 5px;
+  text-decoration: none;
+  color: #212121;
 `;
