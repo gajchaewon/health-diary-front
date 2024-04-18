@@ -23,9 +23,15 @@ function App() {
         <Route path="mprof" element={<Profile />}>
           <Route path="view" element={<ProfilePage />} />
           <Route path="edit" element={<ProfilePageEdit />} />
+          <Route path="follow" element={<ProfilePage />} />
           <Route path="like" element={<ProfilePageLike />} />
           <Route path="comment" element={<ProfilePageComment />} />
         </Route>
+        <Route path="user/:userId" element={<Profile />}>
+          <Route path="view" element={<ProfilePage />} />
+          <Route path="follow" element={<ProfilePage />} />
+        </Route>
+
         <Route path="my" element={<MyDiaryPage />} />
         <Route path="adddiary" element={<AddEditDiaryPage />} />
         <Route path="editdiary/:diaryId" element={<AddEditDiaryPage />} />
