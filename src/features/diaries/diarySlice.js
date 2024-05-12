@@ -1,8 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  diaries: [],
+  diaries: [
+    {
+      comments: [],
+    },
+  ],
   myDiaries: [],
+  singleDiary: [],
   error: null,
 };
 
@@ -12,8 +17,7 @@ const diarySlice = createSlice({
   reducers: {
     getAllDiaries: {
       reducer(state, action) {
-        const content = action.payload;
-        state.diaries = content;
+        state.diaries = action.payload;
         console.log(state.diaries);
       },
     },
@@ -24,11 +28,7 @@ const diarySlice = createSlice({
     },
     getDiary: {
       reducer(state, action) {
-        const newDiary = action.payload;
-        console.log(newDiary);
-        state.diaries = state.diaries.filter(
-          (diary) => diary.id === newDiary.id
-        );
+        state.singleDiary = action.payload;
       },
     },
     addDiary: {
@@ -57,19 +57,33 @@ const diarySlice = createSlice({
         }
       },
     },
-
     likeDiary: {
       reducer(state, action) {
-        console.log("좋아요 리듀서 : ", state.diaries);
-        console.log("좋아요 리듀서 action.payload : ", action.payload);
+        // console.log("좋아요 리듀서 : ", state.diaries);
+        // console.log("좋아요 리듀서 action.payload : ", action.payload);
         state.diaries[0].likeCount = action.payload.likeCount;
       },
     },
-
     uploadImg: {
       reducer(state, action) {
         state.diaries = [...state, action.payload];
         console.log(state);
+      },
+    },
+    addComment: {
+      reducer(state, action) {
+        console.log(action.payload);
+        state.diaries.comments = [...state, action.payload];
+      },
+    },
+    deleteComment: {
+      reducer(state, action) {
+        const index = state.diaries.comments.findIndex(
+          (comment) => comment.id === action.payload
+        );
+        if (index !== -1) {
+          state.diaries.comments.splice(index, 1);
+        }
       },
     },
   },
@@ -77,6 +91,7 @@ const diarySlice = createSlice({
 
 export const selectCurrentDiaries = (state) => state.diary.diaries;
 export const selectMyDiaries = (state) => state.diary.myDiaries;
+export const selectSingleDiary = (state) => state.diary.singleDiary;
 export const {
   getAllDiaries,
   getMyDiaries,
@@ -86,5 +101,7 @@ export const {
   getDiary,
   likeDiary,
   uploadImg,
+  addComment,
+  deleteComment,
 } = diarySlice.actions;
 export default diarySlice.reducer;

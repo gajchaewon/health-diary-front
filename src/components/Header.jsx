@@ -3,12 +3,16 @@ import * as S from "./Header.styled";
 import { useDispatch } from "react-redux";
 import { logOut } from "../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
+import { useLazyLogoutQuery } from "../features/auth/authApiSlice";
 
 const Header = ({ isLoggedIn }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const onLogoutBtnClick = () => {
+  const [logoutTrigger, { isLoading }] = useLazyLogoutQuery();
+
+  const onLogoutBtnClick = async () => {
     if (window.confirm("로그아웃하시겠습니까?")) {
+      await logoutTrigger();
       dispatch(logOut());
       window.alert("로그아웃 되었습니다.");
       navigate("/");

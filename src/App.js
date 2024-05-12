@@ -12,6 +12,7 @@ import ProfilePageEdit from "./pages/profile/profile_edit/ProfilePage_Edit";
 import ProfilePageComment from "./pages/profile/profile_comment/ProfilePage_Comments";
 import ProfilePage from "./pages/profile/ProfilePage";
 import SignupPage from "./pages/signup/SignupPage";
+import PrivateRoute from "./PrivateRoute";
 
 function App() {
   return (
@@ -20,7 +21,14 @@ function App() {
         <Route index element={<Homepage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="signup" element={<SignupPage />} />
-        <Route path="mprof" element={<Profile />}>
+        <Route
+          path="mprof"
+          element={
+            <PrivateRoute>
+              <Profile />
+            </PrivateRoute>
+          }
+        >
           <Route path="view" element={<ProfilePage />} />
           <Route path="edit" element={<ProfilePageEdit />} />
           <Route path="follow" element={<ProfilePage />} />
@@ -32,9 +40,30 @@ function App() {
           <Route path="follow" element={<ProfilePage />} />
         </Route>
 
-        <Route path="my" element={<MyDiaryPage />} />
-        <Route path="adddiary" element={<AddEditDiaryPage />} />
-        <Route path="editdiary/:diaryId" element={<AddEditDiaryPage />} />
+        <Route
+          path="my"
+          element={
+            <PrivateRoute>
+              <MyDiaryPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="adddiary"
+          element={
+            <PrivateRoute>
+              <AddEditDiaryPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="editdiary/:diaryId"
+          element={
+            <PrivateRoute>
+              <AddEditDiaryPage />
+            </PrivateRoute>
+          }
+        />
         <Route path="comm" element={<CommPage />} />
         <Route path="diary/:diaryId" element={<DiaryDetailPage />} />
       </Route>

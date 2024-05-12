@@ -23,6 +23,12 @@ export const authApiSlice = apiSlice.injectEndpoints({
         },
       }),
     }),
+    logout: builder.query({
+      query: () => ({
+        url: "/auth/logout",
+        method: "GET",
+      }),
+    }),
     emailCheck: builder.query({
       query: (email) => ({
         url: "/auth/check-email",
@@ -41,6 +47,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
 });
 
 export const { useLoginMutation } = authApiSlice;
+export const { useLazyLogoutQuery } = authApiSlice;
 export const { useSignupMutation } = authApiSlice;
 export const { useLazyEmailCheckQuery } = authApiSlice;
 export const { useLazyNicknameCheckQuery } = authApiSlice;

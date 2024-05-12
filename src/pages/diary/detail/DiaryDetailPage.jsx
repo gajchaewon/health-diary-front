@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import * as S from "./DiaryDetailPage.styled";
-import { TextField } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { selectCurrentDiaries } from "../../../features/diaries/diarySlice";
@@ -11,6 +10,7 @@ import {
 import { getDiary, likeDiary } from "../../../features/diaries/diarySlice";
 import SentimentNeutralRoundedIcon from "@mui/icons-material/SentimentNeutralRounded";
 import SentimentVerySatisfiedRoundedIcon from "@mui/icons-material/SentimentVerySatisfiedRounded";
+import Comments from "../../../components/Comments";
 
 const DiaryDetailPage = () => {
   const location = useLocation();
@@ -69,27 +69,7 @@ const DiaryDetailPage = () => {
           </button>
           {singleDiary.likeCount}
           <S.Divider></S.Divider>
-          <S.CommentContainer>
-            comment({singleDiary.comments && singleDiary.comments.length})
-            <S.CommentTextarea>
-              <TextField
-                id="outlined-textarea"
-                label="comment"
-                placeholder="댓글을 적어주세요"
-                multiline
-                fullWidth
-                color="grey"
-              />
-              <S.CommentTextareaBtn>작성</S.CommentTextareaBtn>
-            </S.CommentTextarea>
-            {singleDiary.comments &&
-              singleDiary.comments.map((comment) => (
-                <S.Comments>
-                  <S.CommentsUser>{comment.nickname}</S.CommentsUser>
-                  {comment.content}
-                </S.Comments>
-              ))}
-          </S.CommentContainer>
+          <Comments />
         </S.Container>
       )}
     </div>

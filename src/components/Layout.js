@@ -26,8 +26,8 @@ const Layout = () => {
   return (
     <>
       <div>
-        <Header token={token} isLoggedIn={isLoggedIn} />
         <main className="App">
+          <Header token={token} isLoggedIn={isLoggedIn} />
           {/* 아웃렛에서는 props 전달을 context로 함 */}
           <Outlet context={{ isLoggedIn, token }} />
         </main>
