@@ -3,21 +3,21 @@ import { useSelector } from "react-redux";
 import { selectCurrentToken } from "./features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 
-function PrivateRoute({ children }) {
+const PrivateRoute = ({ children }) => {
   const isTokenExist = useSelector(selectCurrentToken);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isTokenExist) {
-      navigate("/login");
+    if (isTokenExist === null) {
       alert("로그인이 필요합니다.");
+      navigate("/login");
     }
-  }, [isTokenExist, navigate]);
+  }, []);
 
   if (!isTokenExist) {
     return null;
   }
 
   return <>{children}</>;
-}
+};
 export default PrivateRoute;

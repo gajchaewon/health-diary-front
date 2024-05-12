@@ -11,14 +11,9 @@ const Header = ({ isLoggedIn }) => {
   const [logoutTrigger, { isLoading }] = useLazyLogoutQuery();
 
   const onLogoutBtnClick = async () => {
-    if (window.confirm("로그아웃하시겠습니까?")) {
-      await logoutTrigger();
-      dispatch(logOut());
-      window.alert("로그아웃 되었습니다.");
-      navigate("/");
-    } else {
-      window.alert("로그아웃을 취소합니다.");
-    }
+    await logoutTrigger();
+    dispatch(logOut());
+    navigate("/");
   };
 
   return isLoggedIn ? (
