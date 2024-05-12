@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import * as S from "./DiaryDetailPage.styled";
 import { useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { selectCurrentDiaries } from "../../../features/diaries/diarySlice";
+import { selectSingleDiary } from "../../../features/diaries/diarySlice";
 import {
   useGetADiaryQuery,
   useLikeDiaryMutation,
@@ -14,11 +14,11 @@ import Comments from "../../../components/Comments";
 
 const DiaryDetailPage = () => {
   const location = useLocation();
-  const diaryId = location.state.diary.id;
   const dispatch = useDispatch();
+  const diaryId = location.state.diary.id;
   const { data: fetchDiary, isLoading } = useGetADiaryQuery(diaryId);
-  const currentDiary = useSelector(selectCurrentDiaries);
-  const singleDiary = currentDiary[0];
+  const singleDiary = useSelector(selectSingleDiary);
+  console.log(diaryId);
 
   const [like, { isLoading: isLikeLoading }] = useLikeDiaryMutation();
   const [isLike, setIsLike] = useState(false);
@@ -27,7 +27,7 @@ const DiaryDetailPage = () => {
     if (fetchDiary && !isLoading) {
       dispatch(getDiary(fetchDiary));
     }
-  }, [fetchDiary, dispatch, isLoading]);
+  }, [fetchDiary, isLoading]);
 
   const onLikeClick = async () => {
     if (!isLikeLoading) {
@@ -45,33 +45,31 @@ const DiaryDetailPage = () => {
 
   return (
     <div>
-      {currentDiary && (
-        <S.Container>
-          <S.Title>{singleDiary.title}</S.Title>
-          <S.Nickname>{singleDiary.nickname}</S.Nickname>
-          {singleDiary.imageUrls && singleDiary.imageUrls.length > 0 && (
-            <S.Picture src={singleDiary.imageUrls[0]} alt="pic" />
+      <S.Container>
+        <S.Title>{singleDiary.title}</S.Title>
+        <S.Nickname>{singleDiary.nickname}</S.Nickname>
+        {singleDiary?.imageUrls && singleDiary?.imageUrls.length > 0 && (
+          <S.Picture src={singleDiary?.imageUrls[0]} alt="pic" />
+        )}
+        <S.Content>{singleDiary.content}</S.Content>
+        <button
+          onClick={onLikeClick}
+          style={{
+            border: "none",
+            backgroundColor: "transparent",
+            cursor: "pointer",
+          }}
+        >
+          {!isLike ? (
+            <SentimentNeutralRoundedIcon sx={{ fontSize: 50 }} />
+          ) : (
+            <SentimentVerySatisfiedRoundedIcon sx={{ fontSize: 50 }} />
           )}
-          <S.Content>{singleDiary.content}</S.Content>
-          <button
-            onClick={onLikeClick}
-            style={{
-              border: "none",
-              backgroundColor: "transparent",
-              cursor: "pointer",
-            }}
-          >
-            {!isLike ? (
-              <SentimentNeutralRoundedIcon sx={{ fontSize: 50 }} />
-            ) : (
-              <SentimentVerySatisfiedRoundedIcon sx={{ fontSize: 50 }} />
-            )}
-          </button>
-          {singleDiary.likeCount}
-          <S.Divider></S.Divider>
-          <Comments />
-        </S.Container>
-      )}
+        </button>
+        {singleDiary?.likeCount}
+        <S.Divider></S.Divider>
+        <Comments diaryId={diaryId} />
+      </S.Container>
     </div>
   );
 };

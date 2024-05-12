@@ -68,7 +68,6 @@ const MyDiaryPage = () => {
         <select
           onChange={(e) => setOption(e.target.value)}
           value={option}
-          defaultValue="TITLE"
           style={{ padding: "5px" }}
         >
           {Object.entries(types).map(([key, value]) => (
