@@ -1,22 +1,25 @@
 import { apiSlice } from "../../api/apiSlice";
 
 export const diaryApiSlice = apiSlice.injectEndpoints({
+  tagTypes: ["Diary", "Comment"],
   endpoints: (builder) => ({
     getAllDiaries: builder.query({
       query: () => ({
         url: "/community",
         method: "GET",
       }),
+      providesTags: ["Diary"],
     }),
     getMyDiaries: builder.query({
-      query: ({ option, searchValue }) => ({
+      query: ({ commOption, commSearchValue }) => ({
         url: `/diaries/my`,
         method: "GET",
         params: {
-          searchType: option,
-          searchValue: searchValue,
+          searchType: commOption,
+          searchValue: commSearchValue,
         },
       }),
+      providesTags: ["Diary"],
     }),
     addDiary: builder.mutation({
       query: (data) => ({
@@ -30,12 +33,14 @@ export const diaryApiSlice = apiSlice.injectEndpoints({
           imageIds: data.imageIds,
         },
       }),
+      invalidatesTags: ["Diary"],
     }),
     deleteDiary: builder.mutation({
       query: (diaryId) => ({
         url: `/diaries/${diaryId}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["Diary"],
     }),
     editDiary: builder.mutation({
       query: ({ diaryId, ...data }) => ({
@@ -49,22 +54,25 @@ export const diaryApiSlice = apiSlice.injectEndpoints({
           imageIds: data.imageIds,
         },
       }),
+      invalidatesTags: ["Diary"],
     }),
     getADiary: builder.query({
       query: (diaryId) => ({
         url: `/diaries/${diaryId}`,
         method: "GET",
       }),
+      providesTags: ["Diary", "Comment"],
     }),
     likeDiary: builder.mutation({
       query: (diaryId) => ({
         url: `/diaries/${diaryId}/like`,
         method: "POST",
       }),
+      invalidatesTags: ["Diary"],
     }),
     uploadImage: builder.mutation({
       query: (file) => ({
-        url: "/diaries/images",
+        url: "/diaries/images/s3",
         method: "POST",
         body: file,
         formdata: true,
@@ -74,14 +82,22 @@ export const diaryApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     addComment: builder.mutation({
-      qurey: () => ({
+      query: (data) => ({
         url: "/comment/new",
+        method: "POST",
+        body: {
+          diaryId: data.diaryId,
+          content: data.content,
+        },
       }),
+      invalidatesTags: ["Comment"],
     }),
     deleteComment: builder.mutation({
-      qurey: () => ({
-        url: "/comment/delete",
+      query: (commentId) => ({
+        url: `/comment/${commentId}`,
+        method: "DELETE",
       }),
+      invalidatesTags: ["Comment"],
     }),
   }),
 });
@@ -95,3 +111,5 @@ export const { useEditDiaryMutation } = diaryApiSlice;
 export const { useGetADiaryQuery } = diaryApiSlice;
 export const { useLikeDiaryMutation } = diaryApiSlice;
 export const { useUploadImageMutation } = diaryApiSlice;
+export const { useAddCommentMutation } = diaryApiSlice;
+export const { useDeleteCommentMutation } = diaryApiSlice;

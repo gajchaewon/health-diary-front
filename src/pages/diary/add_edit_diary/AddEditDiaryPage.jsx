@@ -140,7 +140,7 @@ const AddEditDiaryPage = () => {
         console.log(diaryData);
       } catch (err) {
         console.log(err);
-        console.log("posting failed");
+        console.log("failed");
       }
     }
   };
@@ -159,7 +159,6 @@ const AddEditDiaryPage = () => {
               fullWidth
             />
           </S.TitleWrapper>
-          {console.log(images)}
 
           {images.length === 0 ? (
             <S.ContentWrapper>
@@ -279,8 +278,7 @@ const AddEditDiaryPage = () => {
               onChange={onContentChange}
               defaultValue={diary.content}
             />
-            {console.log(diary)}
-            {diary.imageUrls.length > 0 && (
+            {diary.imageUrls?.length > 0 && (
               <S.PreviewnBtnContainer>
                 <S.PreviewContainer>
                   <S.PrevButton onClick={prevPage} disabled={currentPage === 0}>

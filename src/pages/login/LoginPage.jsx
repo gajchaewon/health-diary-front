@@ -63,6 +63,13 @@ const LoginPage = () => {
     }
   };
 
+  const enterkey = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      onLoginBtnClick(e);
+    }
+  };
+
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
@@ -78,6 +85,8 @@ const LoginPage = () => {
             label="이메일"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            autoFocus
+            onKeyUp={enterkey}
           />
         </FormControl>
         <FormControl fullWidth color="grey" sx={{ m: 1 }} variant="outlined">
@@ -89,6 +98,7 @@ const LoginPage = () => {
             type={showPassword ? "text" : "password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            onKeyUp={enterkey}
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
