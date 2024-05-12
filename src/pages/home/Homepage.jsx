@@ -23,30 +23,39 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 
 const Homepage = () => {
+  const dispatch = useDispatch();
   const { isLoggedIn } = useOutletContext();
-  const diaries = useSelector(selectCurrentDiaries);
-  const myDiaries = useSelector(selectMyDiaries);
+  //const myDiaries = useSelector(selectMyDiaries);
   const today = new Date().toISOString().slice(0, 10); // 오늘 날짜를 YYYY-MM-DD 형식으로 가져옵니다.
   const option = "DATE";
   const searchValue = today;
   const [page, setPage] = useState(0);
 
-  const { data: allDiary, isLoading } = useGetAllDiariesQuery();
-  const { data: todayDiary, isLoading: todayDiaryLoading } =
+  const { data: fetchAllDiary, isLoading } = useGetAllDiariesQuery();
+  const { data: fetchTodayDiary, isLoading: todayDiaryLoading } =
     useGetMyDiariesQuery({
       option,
       searchValue,
     });
-  const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (!isLoading && !todayDiaryLoading && allDiary) {
-      if (todayDiary) {
-        dispatch(getMyDiaries([...todayDiary.content]));
-      }
-      dispatch(getAllDiaries([...allDiary.content]));
-    }
-  }, [allDiary, todayDiary, isLoading, todayDiaryLoading, dispatch]);
+  const allDiary = fetchAllDiary?.content;
+  const ToadyDiary = fetchTodayDiary?.content;
+
+  console.log(allDiary);
+
+  // const fetchItems = () => async () => {
+  //   try {
+  //     dispatch(getMyDiaries([...todayDiary.content]));
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (!isLoading && !todayDiaryLoading) {
+  //     fetchItems();
+  //   }
+  // }, [isLoading, todayDiaryLoading]);
 
   return (
     <div>
@@ -60,11 +69,11 @@ const Homepage = () => {
             </S.DiaryWrapper>
           ) : (
             <S.DiaryWrapper>
-              {myDiaries && myDiaries.length !== 0 ? (
+              {ToadyDiary && ToadyDiary?.length !== 0 ? (
                 <>
                   <DiaryCard
-                    title={myDiaries[page].title}
-                    content={myDiaries[page].content}
+                    title={ToadyDiary[page].title}
+                    content={ToadyDiary[page].content}
                   />
                   <S.PaginationContainer>
                     <S.PaginationButton
@@ -75,9 +84,9 @@ const Homepage = () => {
                     </S.PaginationButton>
                     <S.PaginationButton
                       onClick={() =>
-                        setPage(Math.min(page + 1, myDiaries.length - 1))
+                        setPage(Math.min(page + 1, ToadyDiary.length - 1))
                       }
-                      disabled={page === myDiaries.length - 1}
+                      disabled={page === ToadyDiary.length - 1}
                     >
                       다음
                     </S.PaginationButton>
@@ -97,15 +106,12 @@ const Homepage = () => {
         <S.CommunityLink to="comm">커뮤니티</S.CommunityLink>
         <S.ListContainer>
           <List sx={{ width: "80%", margin: "30px 0" }}>
-            {diaries &&
-              diaries.slice(0, 6).map((diary) => (
+            {allDiary &&
+              allDiary.slice(0, 6).map((diary) => (
                 <div key={diary.id}>
                   <ListItem alignItems="flex-start">
                     <ListItemAvatar sx={{ margin: "10px 18px 15px 0" }}>
-                      <Avatar
-                        alt="Remy Sharp"
-                        src="/static/images/avatar/1.jpg"
-                      />
+                      <Avatar alt="Remy Sharp" />
                     </ListItemAvatar>
                     <ListItemText
                       primary={

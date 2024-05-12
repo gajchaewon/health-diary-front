@@ -10,22 +10,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useGetAllDiariesQuery } from "../../features/diaries/diaryApiSlice";
 
 const CommPage = () => {
-  const diaries = useSelector(selectCurrentDiaries);
   const { data, isLoading } = useGetAllDiariesQuery();
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (!isLoading && data) {
-      console.log(data);
-      dispatch(getAllDiaries([...data.content]));
-    }
-  }, [data, isLoading, dispatch]);
-
+  const diaries = data?.content;
   console.log(diaries);
 
   return (
     <>
-      {!diaries || Object.keys(diaries).length === 0 ? (
+      {!data || data.length === 0 ? (
         <S.DiaryContainers>Loading...</S.DiaryContainers>
       ) : (
         <S.DiaryContainers>
@@ -38,7 +29,7 @@ const CommPage = () => {
           </S.SearchbardWrapper>
           <S.CommunityCardContainer>
             {Object.entries(diaries).map((diary) => (
-              <div key={diary.id}>
+              <div key={diary[1].id}>
                 <Diarycard diary={diary[1]} />
               </div>
             ))}
