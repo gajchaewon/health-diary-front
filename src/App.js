@@ -1,11 +1,12 @@
 import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import Homepage from "./pages/home/Homepage";
-import Profile from "./components/Profile";
+import Profile from "./components/profile/MyProfile";
 import AddEditDiaryPage from "./pages/diary/add_edit_diary/AddEditDiaryPage";
 import LoginPage from "./pages/login/LoginPage";
 import CommPage from "./pages/community/CommPage";
 import DiaryDetailPage from "./pages/diary/detail/DiaryDetailPage";
+import MyDiaryRoutine from "./components/my/MyDiaryRoutine";
 import MyDiaryPage from "./pages/diary/personal_diary/MyDiaryPage";
 import ProfilePageLike from "./pages/profile/profile_like/ProfilePage_Like";
 import ProfilePageEdit from "./pages/profile/profile_edit/ProfilePage_Edit";
@@ -13,6 +14,13 @@ import ProfilePageComment from "./pages/profile/profile_comment/ProfilePage_Comm
 import ProfilePage from "./pages/profile/ProfilePage";
 import SignupPage from "./pages/signup/SignupPage";
 import PrivateRoute from "./PrivateRoute";
+import FollowNavigation from "./components/follow/FollowNavigation";
+import ProfilePageFollower from "./pages/profile/profile_follow/ProfilePage_Follower";
+import ProfilePageFollowing from "./pages/profile/profile_follow/ProfilePage_Following";
+import UserProfile from "./components/profile/UserProfile";
+import UProfilePageView from "./pages/user_profile/user_view/UProfilePage_view";
+import UProfilePageFollower from "./pages/user_profile/user_follow/UProfilePage_follower";
+import UProfilePageFollowing from "./pages/user_profile/user_follow/UProfilePage_following";
 
 function App() {
   return (
@@ -31,23 +39,32 @@ function App() {
         >
           <Route path="view" element={<ProfilePage />} />
           <Route path="edit" element={<ProfilePageEdit />} />
-          <Route path="follow" element={<ProfilePage />} />
+          <Route path="follow" element={<FollowNavigation />}>
+            <Route path="follower" element={<ProfilePageFollower />} />
+            <Route path="following" element={<ProfilePageFollowing />} />
+          </Route>
           <Route path="like" element={<ProfilePageLike />} />
           <Route path="comment" element={<ProfilePageComment />} />
         </Route>
-        <Route path="user/:userId" element={<Profile />}>
-          <Route path="view" element={<ProfilePage />} />
-          <Route path="follow" element={<ProfilePage />} />
+        <Route path="user/:userId" element={<UserProfile />}>
+          <Route path="view" element={<UProfilePageView />} />
+          <Route path="follow" element={<FollowNavigation />}>
+            <Route path="follower" element={<UProfilePageFollower />} />
+            <Route path="following" element={<UProfilePageFollowing />} />
+          </Route>
         </Route>
 
         <Route
           path="my"
           element={
             <PrivateRoute>
-              <MyDiaryPage />
+              <MyDiaryRoutine />
             </PrivateRoute>
           }
-        />
+        >
+          <Route path="diaries" element={<MyDiaryPage />} />
+          <Route path="routine" element={<MyDiaryPage />} />
+        </Route>
         <Route
           path="adddiary"
           element={
