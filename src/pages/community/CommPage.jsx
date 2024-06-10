@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import * as S from "./CommPage.styled";
 import SearchIcon from "@mui/icons-material/Search";
-import Diarycard from "../../components/DiaryCard";
+import Diarycard from "../../components/diaryCard/DiaryCard";
 import {
   selectCurrentDiaries,
   getAllDiaries,

@@ -8,7 +8,7 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import Typography from "@mui/material/Typography";
-import DiaryCard from "../../components/DiaryCard.main";
+import DiaryCard from "../../components/diaryCard/DiaryCard.main";
 import { useOutletContext, NavLink } from "react-router-dom";
 import {
   useGetAllDiariesQuery,
@@ -60,7 +60,7 @@ const Homepage = () => {
   return (
     <div>
       <S.MyDiaryContainer>
-        <S.MyDiaryLink to="my">나의 운동일지</S.MyDiaryLink>
+        <S.MyDiaryLink to="my/diaries">나의 운동일지·루틴</S.MyDiaryLink>
         <S.CalendarDiaryContainer>
           <S.CalendarWrapper> 달력 </S.CalendarWrapper>
           {!isLoggedIn ? (

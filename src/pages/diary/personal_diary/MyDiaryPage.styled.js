@@ -8,12 +8,18 @@ export const MyDiaryContainer = styled.div`
   align-items: center;
 `;
 
-export const MyDiary = styled.div`
-  padding: 0 16%;
+export const MyDaRContainer = styled.div`
+  display: flex;
+  //align-self: flex-start;
   color: #212121;
-  font-size: 45px;
+  font-size: 36px;
   font-weight: 700;
-  align-self: flex-start;
+`;
+
+export const MyDiary = styled.div`
+  margin: 0 40px 0 0;
+  width: fit-content;
+  color: #212121;
 `;
 
 export const CalendarContainer = styled.div`

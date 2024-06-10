@@ -10,7 +10,7 @@ import {
 import { getDiary, likeDiary } from "../../../features/diaries/diarySlice";
 import SentimentNeutralRoundedIcon from "@mui/icons-material/SentimentNeutralRounded";
 import SentimentVerySatisfiedRoundedIcon from "@mui/icons-material/SentimentVerySatisfiedRounded";
-import Comments from "../../../components/Comments";
+import Comments from "../../../components/comment/Comments";
 
 const DiaryDetailPage = () => {
   const location = useLocation();

@@ -1,9 +1,9 @@
 import React from "react";
 import * as S from "./Header.styled";
 import { useDispatch } from "react-redux";
-import { logOut } from "../features/auth/authSlice";
+import { logOut } from "../../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
-import { useLazyLogoutQuery } from "../features/auth/authApiSlice";
+import { useLazyLogoutQuery } from "../../features/auth/authApiSlice";
 
 const Header = ({ isLoggedIn }) => {
   const dispatch = useDispatch();
