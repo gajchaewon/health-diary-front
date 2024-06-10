@@ -1,7 +1,7 @@
 import React from "react";
 import * as S from "./Comment.styled";
-import { useDeleteCommentMutation } from "../features/diaries/diaryApiSlice";
-import { deleteComment } from "../features/diaries/diarySlice";
+import { useDeleteCommentMutation } from "../../features/diaries/diaryApiSlice";
+import { deleteComment } from "../../features/diaries/diarySlice";
 import { useDispatch } from "react-redux";
 
 const Comment = ({ comment }) => {

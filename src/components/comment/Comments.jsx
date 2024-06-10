@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import * as S from "./Comments.styled";
 import { TextField } from "@mui/material";
 import { useSelector } from "react-redux";
-import { selectSingleDiary } from "../features/diaries/diarySlice";
-import { addComment } from "../features/diaries/diarySlice";
-import { useAddCommentMutation } from "../features/diaries/diaryApiSlice";
+import { selectSingleDiary } from "../../features/diaries/diarySlice";
+import { addComment } from "../../features/diaries/diarySlice";
+import { useAddCommentMutation } from "../../features/diaries/diaryApiSlice";
 import { useDispatch } from "react-redux";
 import Comment from "./Comment";
 
