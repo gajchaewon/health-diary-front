@@ -9,6 +9,7 @@ const ProfilePageEdit = () => {
   };
   return (
     <div>
+      {console.log("수정페이지")}
       <S.Edit>프로필 수정</S.Edit>
       <S.EditContainer>
         <S.EditTitle>• 닉네임 수정</S.EditTitle>
