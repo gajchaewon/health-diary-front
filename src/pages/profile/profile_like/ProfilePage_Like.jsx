@@ -1,6 +1,6 @@
 import React from "react";
 import * as S from "./ProfilePage_Like.styled";
-import SDiaryCard from "../../../components/DiaryCard.S";
+import SDiaryCard from "../../../components/diaryCard/DiaryCard.S";
 
 const ProfilePageLike = () => {
   return (

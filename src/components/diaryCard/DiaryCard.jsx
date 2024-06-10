@@ -3,9 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import DeleteTwoToneIcon from "@mui/icons-material/DeleteTwoTone";
 import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
-import { deleteDiary } from "../features/diaries/diarySlice";
-import { useDeleteDiaryMutation } from "../features/diaries/diaryApiSlice";
+import { useDeleteDiaryMutation } from "../../features/diaries/diaryApiSlice";
 import { useDispatch } from "react-redux";
+import { deleteDiary } from "../../features/diaries/diarySlice";
 
 export const CommunityCard = styled.div`
   display: flex;
@@ -64,7 +64,7 @@ const DiaryCard = ({ diary }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [deletion, { isLoading }] = useDeleteDiaryMutation();
-  const isMyPage = location.pathname === "/my";
+  const isMyPage = location.pathname === "/my/diaries";
 
   const onDeleteBtnClick = async () => {
     if (window.confirm("다이어리를 삭제 하시겠습니까?")) {
@@ -94,8 +94,8 @@ const DiaryCard = ({ diary }) => {
             {diary.title}
           </TitleinCard>
           <NicknameinCard>{diary.nickname}</NicknameinCard>
-          {diary.imageUrls ? (
-            <PictureinCard src={diary.imageUrls[0]} alt="pic" />
+          {diary?.images ? (
+            <PictureinCard src={diary?.images[0]?.url} alt="pic" />
           ) : (
             <PictureinCard />
           )}

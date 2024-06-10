@@ -8,7 +8,7 @@ import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import LockOpenRoundedIcon from "@mui/icons-material/LockOpenRounded";
 import PhotoRoundedIcon from "@mui/icons-material/PhotoRounded";
 import DeleteIcon from "@mui/icons-material/Delete";
-import TagInput from "../../../components/TagInput";
+import TagInput from "../../../components/tag/TagInput";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import { addDiary, editDiary } from "../../../features/diaries/diarySlice";
@@ -278,14 +278,14 @@ const AddEditDiaryPage = () => {
               onChange={onContentChange}
               defaultValue={diary.content}
             />
-            {diary.imageUrls?.length > 0 && (
+            {diary.images?.length > 0 && (
               <S.PreviewnBtnContainer>
                 <S.PreviewContainer>
                   <S.PrevButton onClick={prevPage} disabled={currentPage === 0}>
                     <ArrowBackIosNewRoundedIcon sx={{ fontSize: 40 }} />
                   </S.PrevButton>
                   <S.ImagePreview
-                    src={diary.imageUrls[currentPage]}
+                    src={diary.images[currentPage]}
                     alt="preview"
                   />
                   <S.DeleteButton onClick={handleImageDelete}>
@@ -293,7 +293,7 @@ const AddEditDiaryPage = () => {
                   </S.DeleteButton>
                   <S.NextButton
                     onClick={nextPage}
-                    disabled={currentPage === diary.imageUrls.length - 1}
+                    disabled={currentPage === diary.images.length - 1}
                   >
                     <ArrowForwardIosRoundedIcon sx={{ fontSize: 40 }} />
                   </S.NextButton>

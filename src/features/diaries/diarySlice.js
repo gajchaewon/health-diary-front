@@ -18,7 +18,6 @@ const diarySlice = createSlice({
     getAllDiaries: {
       reducer(state, action) {
         state.diaries = action.payload;
-        console.log(state.diaries);
       },
     },
     getMyDiaries: {

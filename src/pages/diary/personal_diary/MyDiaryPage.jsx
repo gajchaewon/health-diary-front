@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import * as S from "./MyDiaryPage.styled";
-import Diarycard from "../../../components/DiaryCard";
+import Diarycard from "../../../components/diaryCard/DiaryCard";
 import { useLazyGetMyDiariesQuery } from "../../../features/diaries/diaryApiSlice";
 import {
   getMyDiaries,
@@ -57,7 +57,6 @@ const MyDiaryPage = () => {
 
   return (
     <S.MyDiaryContainer>
-      <S.MyDiary>나의 운동일지</S.MyDiary>
       <S.CalendarContainer>
         <S.CalendarBtn>지난달</S.CalendarBtn>
         <S.CalendarWrapper>달력</S.CalendarWrapper>
