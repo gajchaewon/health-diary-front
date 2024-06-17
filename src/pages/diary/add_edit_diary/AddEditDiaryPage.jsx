@@ -111,7 +111,7 @@ const AddEditDiaryPage = () => {
         setIsPublic(false);
         setHashtags([]);
         setImages([]);
-        navigate("/my");
+        navigate("/my/diaries");
 
         console.log(diaryData);
       } catch (err) {

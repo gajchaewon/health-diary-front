@@ -7,11 +7,12 @@ export const MyDiaryContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  top: 0px;
+  position: sticky;
 `;
 
 export const MyDaRContainer = styled.div`
   display: flex;
-  //align-self: flex-start;
   color: #212121;
   font-size: 36px;
   font-weight: 700;
