@@ -11,12 +11,12 @@ export const diaryApiSlice = apiSlice.injectEndpoints({
       providesTags: ["Diary"],
     }),
     getMyDiaries: builder.query({
-      query: ({ commOption, commSearchValue }) => ({
+      query: ({ searchType, searchValue }) => ({
         url: `/diaries/my`,
         method: "GET",
         params: {
-          searchType: commOption,
-          searchValue: commSearchValue,
+          searchType: searchType,
+          searchValue: searchValue,
         },
       }),
       providesTags: ["Diary"],

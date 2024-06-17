@@ -12,85 +12,120 @@ import DiaryCard from "../../components/diaryCard/DiaryCard.main";
 import { useOutletContext, NavLink } from "react-router-dom";
 import {
   useGetAllDiariesQuery,
-  useGetMyDiariesQuery,
+  useLazyGetMyDiariesQuery,
 } from "../../features/diaries/diaryApiSlice";
-import {
-  getAllDiaries,
-  getMyDiaries,
-  selectCurrentDiaries,
-  selectMyDiaries,
-} from "../../features/diaries/diarySlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import WorkoutCalendar from "../../components/calendar/WorkoutCalendar";
+import FitnessCenterRoundedIcon from "@mui/icons-material/FitnessCenterRounded";
+import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
+import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
+import moment from "moment";
 
 const Homepage = () => {
   const dispatch = useDispatch();
   const { isLoggedIn } = useOutletContext();
   //const myDiaries = useSelector(selectMyDiaries);
   const today = new Date().toISOString().slice(0, 10); // 오늘 날짜를 YYYY-MM-DD 형식으로 가져옵니다.
-  const option = "DATE";
-  const searchValue = today;
+  const searchType = "DATE";
+  const [searchValue, setSearchValue] = useState(today);
   const [page, setPage] = useState(0);
+  const [selectedDate, setSelectedDate] = useState(null); // 초기값을 오늘 날짜로 설정
 
-  const { data: fetchAllDiary, isLoading } = useGetAllDiariesQuery();
-  const { data: fetchTodayDiary, isLoading: todayDiaryLoading } =
-    useGetMyDiariesQuery({
-      option,
-      searchValue,
-    });
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+    setSearchValue(date);
+  };
+
+  const { data: fetchAllDiary, isLoading: allDiaryLoading } =
+    useGetAllDiariesQuery({ size: "", page: "" });
+  const [
+    selectedDateTrigger,
+    { data: fetchDatedDiary, isLoading: myDiaryLoading },
+  ] = useLazyGetMyDiariesQuery();
+
+  const [
+    fetchDatesTrigger,
+    { data: fetchDiaryDates, isLoading: diaryDatesLoading },
+  ] = useLazyGetMyDiariesQuery();
+
+  useEffect(() => {
+    selectedDateTrigger({ searchType: searchType, searchValue: searchValue });
+    fetchDatesTrigger({ searchType: searchType, searchValue: "" });
+  }, [myDiaryLoading, fetchDatedDiary, searchType, searchValue]);
 
   const allDiary = fetchAllDiary?.content;
-  const ToadyDiary = fetchTodayDiary?.content;
+  const datedDiary = fetchDatedDiary?.content;
 
-  console.log(allDiary);
+  const dayList = fetchDiaryDates?.content?.map((diary) =>
+    moment(diary.createAt).format("YYYY-MM-DD")
+  );
 
-  // const fetchItems = () => async () => {
-  //   try {
-  //     dispatch(getMyDiaries([...todayDiary.content]));
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  //각 날짜 타일에 컨텐츠 추가
+  const addContent = ({ date }) => {
+    // 해당 날짜(하루)에 추가할 컨텐츠의 배열
+    const contents = [];
 
-  // useEffect(() => {
-  //   if (!isLoading && !todayDiaryLoading) {
-  //     fetchItems();
-  //   }
-  // }, [isLoading, todayDiaryLoading]);
+    // date(각 날짜)가  리스트의 날짜와 일치하면 해당 컨텐츠(이모티콘) 추가
+    if (dayList?.find((day) => day === moment(date).format("YYYY-MM-DD"))) {
+      contents.push(
+        <>
+          <FitnessCenterRoundedIcon sx={{ fontSize: "large" }} />
+        </>
+      );
+    }
+    return <div>{contents}</div>; // 각 날짜마다 해당 요소가 들어감
+  };
 
   return (
     <div>
       <S.MyDiaryContainer>
         <S.MyDiaryLink to="my/diaries">나의 운동일지·루틴</S.MyDiaryLink>
         <S.CalendarDiaryContainer>
-          <S.CalendarWrapper> 달력 </S.CalendarWrapper>
+          <S.CalendarWrapper>
+            <WorkoutCalendar
+              onDateChange={handleDateChange}
+              addContent={addContent}
+            />
+          </S.CalendarWrapper>
           {!isLoggedIn ? (
             <S.DiaryWrapper>
               <S.LoginBtn to="login">로그인</S.LoginBtn>
             </S.DiaryWrapper>
           ) : (
             <S.DiaryWrapper>
-              {ToadyDiary && ToadyDiary?.length !== 0 ? (
+              {datedDiary && datedDiary?.length !== 0 ? (
                 <>
                   <DiaryCard
-                    title={ToadyDiary[page].title}
-                    content={ToadyDiary[page].content}
+                    title={datedDiary[page]?.title}
+                    content={datedDiary[page]?.content}
+                    diaryId={datedDiary[page]?.id}
                   />
-                  <S.PaginationContainer>
-                    <S.PaginationButton
-                      onClick={() => setPage(Math.max(page - 1, 0))}
-                      disabled={page === 0}
-                    >
-                      이전
-                    </S.PaginationButton>
-                    <S.PaginationButton
-                      onClick={() =>
-                        setPage(Math.min(page + 1, ToadyDiary.length - 1))
-                      }
-                      disabled={page === ToadyDiary.length - 1}
-                    >
-                      다음
-                    </S.PaginationButton>
-                  </S.PaginationContainer>
+                  {fetchDatedDiary?.numberOfElements <= 1 ? (
+                    <></>
+                  ) : (
+                    <>
+                      <S.PaginationContainer>
+                        <S.PaginationButton
+                          onClick={() => setPage(Math.max(page - 1, 0))}
+                          disabled={page === 0}
+                        >
+                          <ArrowBackIosNewRoundedIcon
+                            sx={{ fontSize: "large" }}
+                          />
+                        </S.PaginationButton>
+                        <S.PaginationButton
+                          onClick={() =>
+                            setPage(Math.min(page + 1, datedDiary.length - 1))
+                          }
+                          disabled={page === datedDiary.length - 1}
+                        >
+                          <ArrowForwardIosRoundedIcon
+                            sx={{ fontSize: "large" }}
+                          />
+                        </S.PaginationButton>
+                      </S.PaginationContainer>
+                    </>
+                  )}
                 </>
               ) : (
                 <S.AddDiaryBtn to="adddiary">
@@ -101,7 +136,6 @@ const Homepage = () => {
           )}
         </S.CalendarDiaryContainer>
       </S.MyDiaryContainer>
-
       <S.CommunityContainer>
         <S.CommunityLink to="comm">커뮤니티</S.CommunityLink>
         <S.ListContainer>
@@ -134,6 +168,10 @@ const Homepage = () => {
                             <NavLink
                               to={`/user/${diary.userId}/view`}
                               state={{ diary: diary }}
+                              style={{
+                                textDecoration: "none",
+                                color: "#444648",
+                              }}
                             >
                               {diary.nickname}
                             </NavLink>
