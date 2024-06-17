@@ -4,9 +4,13 @@ export const diaryApiSlice = apiSlice.injectEndpoints({
   tagTypes: ["Diary", "Comment"],
   endpoints: (builder) => ({
     getAllDiaries: builder.query({
-      query: () => ({
+      query: ({ page, size }) => ({
         url: "/community",
         method: "GET",
+        params: {
+          page: page,
+          size: size,
+        },
       }),
       providesTags: ["Diary"],
     }),

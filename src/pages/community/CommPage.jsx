@@ -8,11 +8,25 @@ import {
 } from "../../features/diaries/diarySlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetAllDiariesQuery } from "../../features/diaries/diaryApiSlice";
-
+import Pagination from "../../components/pagination/Pagination";
 const CommPage = () => {
-  const { data, isLoading } = useGetAllDiariesQuery();
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const pageSize = 10;
+  const { data, isLoading } = useGetAllDiariesQuery({
+    page: currentPage,
+    size: pageSize,
+  });
   const diaries = data?.content;
-  console.log(diaries);
+  console.log(data);
+
+  useEffect(() => {
+    setTotalPages(data?.totalPages);
+  }, [currentPage]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   return (
     <>
@@ -34,6 +48,11 @@ const CommPage = () => {
               </div>
             ))}
           </S.CommunityCardContainer>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
         </S.DiaryContainers>
       )}
     </>
