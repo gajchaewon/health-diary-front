@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import * as S from "./DiaryDetailPage.styled";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { selectSingleDiary } from "../../../features/diaries/diarySlice";
 import {
@@ -13,12 +13,10 @@ import SentimentVerySatisfiedRoundedIcon from "@mui/icons-material/SentimentVery
 import Comments from "../../../components/comment/Comments";
 
 const DiaryDetailPage = () => {
-  const location = useLocation();
   const dispatch = useDispatch();
-  const diaryId = location.state.diary.id;
+  const diaryId = useParams().diaryId;
   const { data: fetchDiary, isLoading } = useGetADiaryQuery(diaryId);
   const singleDiary = useSelector(selectSingleDiary);
-  console.log(diaryId);
 
   const [like, { isLoading: isLikeLoading }] = useLikeDiaryMutation();
   const [isLike, setIsLike] = useState(false);

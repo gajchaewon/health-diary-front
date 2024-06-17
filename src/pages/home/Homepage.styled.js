@@ -104,6 +104,10 @@ export const PaginationButton = styled.button`
   color: black;
   padding: 10px 20px;
   border: none;
+  color: ${(props) => (props.disabled ? "gray" : "inherit")};
+  &:disabled {
+    cursor: not-allowed;
+  }
   background-color: transparent;
   cursor: pointer;
   font-size: 16px;

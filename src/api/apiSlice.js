@@ -6,7 +6,7 @@ const baseQuery = fetchBaseQuery({
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const accessToken = getState().auth.token;
-    if (accessToken) {
+    if (accessToken && typeof accessToken === "string") {
       headers.set("authorization", `Bearer ${accessToken}`);
     }
     return headers;
@@ -15,7 +15,6 @@ const baseQuery = fetchBaseQuery({
 
 const baseQueryWithReAuth = async (args, api) => {
   let result = await baseQuery(args, api);
-  console.log(result);
   if (result?.error?.data !== null) {
     if (result?.error?.data.error === "EXPIRED_TOKEN") {
       const refreshResult = await baseQuery("/auth/refresh-token", api);

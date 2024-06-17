@@ -43,7 +43,7 @@ const DiaryCard = (props) => {
   return (
     <>
       <SmallDiaryCard>
-        <TitleinCard to="/comm/diaryId">{props.title}</TitleinCard>
+        <TitleinCard to={`/diary/${props.diaryId}`}>{props.title}</TitleinCard>
         <PictureinCard />
         <ContentinCard>{props.content}</ContentinCard>
       </SmallDiaryCard>

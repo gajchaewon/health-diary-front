@@ -9,6 +9,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import SearchIcon from "@mui/icons-material/Search";
 import { Link } from "react-router-dom";
+import WorkoutCalendar from "../../../components/calendar/WorkoutCalendar";
 
 const MyDiaryPage = () => {
   const dispatch = useDispatch();
@@ -23,13 +24,13 @@ const MyDiaryPage = () => {
     CONTENT: "본문",
     DATE: "날짜",
   };
-  const [option, setOption] = useState("TITLE");
+  const [searchType, setSearchType] = useState("TITLE");
   const [searchValue, setSearchValue] = useState("");
 
   const onSearchVauleChange = (e) => setSearchValue(e.target.value);
 
   useEffect(() => {
-    searchTrigger({ option, searchValue });
+    searchTrigger({ searchType, searchValue });
     if (!isLoading && searchData) {
       dispatch(getMyDiaries(searchData.content));
     } else if (isLoading) {
@@ -42,9 +43,9 @@ const MyDiaryPage = () => {
   }, [isLoading, searchData]);
 
   const onSearchBtnClick = async () => {
-    if (option && searchValue) {
-      console.log(option, searchValue);
-      const res = await searchTrigger({ option, searchValue }); // trigger의 결과를 기다림
+    if (searchType && searchValue) {
+      console.log(searchType, searchValue);
+      const res = await searchTrigger({ searchType, searchValue }); // trigger의 결과를 기다림
       console.log(res.data);
       // 여기서 바로 response를 사용하여 조건 처리
       if (res.data.content.length !== 0) {
@@ -58,45 +59,49 @@ const MyDiaryPage = () => {
   return (
     <S.MyDiaryContainer>
       <S.CalendarContainer>
-        <S.CalendarBtn>지난달</S.CalendarBtn>
-        <S.CalendarWrapper>달력</S.CalendarWrapper>
-        <S.CalendarBtn>다음달</S.CalendarBtn>
+        <S.CalendarWrapper>
+          <WorkoutCalendar />
+        </S.CalendarWrapper>
+        {/* <S.CalendarBtn>지난달</S.CalendarBtn>
+        <S.CalendarBtn>다음달</S.CalendarBtn> */}
       </S.CalendarContainer>
 
-      <S.SearchbardWrapper>
-        <select
-          onChange={(e) => setOption(e.target.value)}
-          value={option}
-          style={{ padding: "5px" }}
-        >
-          {Object.entries(types).map(([key, value]) => (
-            <option key={key} value={key}>
-              {value}
-            </option>
-          ))}
-        </select>
-        <S.Searchbar
-          placeholder="검색"
-          onChange={onSearchVauleChange}
-        ></S.Searchbar>
-        <S.SearchbarImg>
-          <SearchIcon onClick={onSearchBtnClick} />
-        </S.SearchbarImg>
-      </S.SearchbardWrapper>
-      <S.DiaryCardSortBtn>날짜순 ▼</S.DiaryCardSortBtn>
-      <Link to="/adddiary">작성하기</Link>
       <S.DiaryCardContainer>
-        {diaries && diaries.length ? (
-          Object.entries(diaries).map((diary) => (
-            <div key={diary}>
-              <Diarycard diary={diary[1]} />
-            </div>
-          ))
-        ) : (
-          <>
-            <div style={{ margin: "15%" }}>{resultMsg}</div>
-          </>
-        )}
+        <S.SearchbardWrapper>
+          <select
+            onChange={(e) => setSearchType(e.target.value)}
+            value={searchType}
+            // style={{ position }}
+          >
+            {Object.entries(types).map(([key, value]) => (
+              <option key={key} value={key}>
+                {value}
+              </option>
+            ))}
+          </select>
+          <S.Searchbar
+            placeholder="검색"
+            onChange={onSearchVauleChange}
+          ></S.Searchbar>
+          <S.SearchbarImg>
+            <SearchIcon onClick={onSearchBtnClick} />
+          </S.SearchbarImg>
+        </S.SearchbardWrapper>
+        <S.DiaryCardSortBtn>날짜순 ▼</S.DiaryCardSortBtn>
+        {/* <Link to="/adddiary">작성하기</Link> */}
+        <S.CommunityCardContainer>
+          {diaries && diaries.length ? (
+            Object.entries(diaries).map((diary) => (
+              <div key={diary}>
+                <Diarycard diary={diary[1]} />
+              </div>
+            ))
+          ) : (
+            <>
+              <div style={{ margin: "15%" }}>{resultMsg}</div>
+            </>
+          )}
+        </S.CommunityCardContainer>
       </S.DiaryCardContainer>
     </S.MyDiaryContainer>
   );
