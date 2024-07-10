@@ -21,6 +21,7 @@ import UserProfile from "./components/profile/UserProfile";
 import UProfilePageView from "./pages/user_profile/user_view/UProfilePage_view";
 import UProfilePageFollower from "./pages/user_profile/user_follow/UProfilePage_follower";
 import UProfilePageFollowing from "./pages/user_profile/user_follow/UProfilePage_following";
+import RoutinePage from "./pages/routines/RoutinePage";
 
 function App() {
   return (
@@ -63,7 +64,7 @@ function App() {
           }
         >
           <Route path="diaries" element={<MyDiaryPage />} />
-          <Route path="routine" element={<MyDiaryPage />} />
+          <Route path="routine" element={<RoutinePage />} />
         </Route>
         <Route
           path="adddiary"

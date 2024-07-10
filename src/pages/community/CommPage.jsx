@@ -22,7 +22,7 @@ const CommPage = () => {
 
   useEffect(() => {
     setTotalPages(data?.totalPages);
-  }, [currentPage]);
+  }, [currentPage, data?.totalPages]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
