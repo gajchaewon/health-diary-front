@@ -36,22 +36,26 @@ const Homepage = () => {
     setSearchValue(date);
   };
 
-  const { data: fetchAllDiary, isLoading: allDiaryLoading } =
-    useGetAllDiariesQuery({ size: "", page: "" });
+  const {
+    data: fetchAllDiary,
+    isLoading: allDiaryLoading,
+    error,
+  } = useGetAllDiariesQuery({ size: "", page: "" });
+
   const [
     selectedDateTrigger,
-    { data: fetchDatedDiary, isLoading: myDiaryLoading },
+    { data: fetchDatedDiary, isLoading: myDiaryLoading, error: triggerError },
   ] = useLazyGetMyDiariesQuery();
 
   const [
     fetchDatesTrigger,
-    { data: fetchDiaryDates, isLoading: diaryDatesLoading },
+    { data: fetchDiaryDates, isLoading: diaryDatesLoading, error: dataError },
   ] = useLazyGetMyDiariesQuery();
 
   useEffect(() => {
     selectedDateTrigger({ searchType: searchType, searchValue: searchValue });
     fetchDatesTrigger({ searchType: searchType, searchValue: "" });
-  }, [myDiaryLoading, fetchDatedDiary, searchType, searchValue]);
+  }, [fetchDatedDiary, searchType, searchValue]);
 
   const allDiary = fetchAllDiary?.content;
   const datedDiary = fetchDatedDiary?.content;
@@ -66,11 +70,13 @@ const Homepage = () => {
     const contents = [];
 
     // date(각 날짜)가  리스트의 날짜와 일치하면 해당 컨텐츠(이모티콘) 추가
-    if (dayList?.find((day) => day === moment(date).format("YYYY-MM-DD"))) {
+    if (
+      dayList?.find((day, index) => day === moment(date).format("YYYY-MM-DD"))
+    ) {
       contents.push(
-        <>
+        <div key={String(date)}>
           <FitnessCenterRoundedIcon sx={{ fontSize: "large" }} />
-        </>
+        </div>
       );
     }
     return <div>{contents}</div>; // 각 날짜마다 해당 요소가 들어감

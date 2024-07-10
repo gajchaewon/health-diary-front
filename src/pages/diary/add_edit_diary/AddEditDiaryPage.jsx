@@ -112,8 +112,6 @@ const AddEditDiaryPage = () => {
         setHashtags([]);
         setImages([]);
         navigate("/my/diaries");
-
-        console.log(diaryData);
       } catch (err) {
         console.log(err);
         console.log("posting failed");
