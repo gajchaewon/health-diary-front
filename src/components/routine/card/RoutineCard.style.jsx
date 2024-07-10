@@ -28,7 +28,7 @@ export const Card = styled.div`
 export const RoutineInput = styled.textarea`
   width: 100%;
   box-sizing: border-box;
-  margin-bottom: 5px;
+  margin-bottom: 1px;
   padding: 5px;
   height: fit-content;
   border: 0;
@@ -45,7 +45,7 @@ export const RoutineInput = styled.textarea`
 `;
 
 export const RoutineNameInput = styled(RoutineInput)`
-  font-size: 30px;
+  font-size: 28px;
   height: 50px;
 `;
 
@@ -70,12 +70,6 @@ export const CardLink = styled.a`
   }
 `;
 
-export const CardExit = styled.a`
-  justify-self: end;
-  text-decoration: none;
-  color: rgba(255, 255, 255, 0.9);
-`;
-
 export const CardTitle = styled.h2`
   font-weight: 600;
   color: #ffffff;
@@ -83,7 +77,7 @@ export const CardTitle = styled.h2`
 `;
 
 export const CardApply = styled.div`
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 500;
 `;
 

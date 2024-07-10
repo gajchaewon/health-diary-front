@@ -25,11 +25,10 @@ export const routineApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: ["Routine"],
     }),
     addExercise: builder.mutation({
-      query: (routineId, exerciseName, description) => ({
-        url: "/routines/exercise",
+      query: ({ routineId, exerciseName, description }) => ({
+        url: `/routines/${routineId}/exercise`,
         method: "POST",
         body: {
-          routineId: routineId,
           exerciseName: exerciseName,
           description: description,
         },
@@ -55,7 +54,7 @@ export const routineApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: ["Routine"],
     }),
     deleteExercise: builder.mutation({
-      query: (routineId, exerciseId) => ({
+      query: ({ routineId, exerciseId }) => ({
         url: `/routines/${routineId}/exercise/${exerciseId}`,
         method: "DELETE",
       }),

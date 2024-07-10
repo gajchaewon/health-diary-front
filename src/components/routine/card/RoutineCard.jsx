@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from "react";
 import * as S from "./RoutineCard.style";
-import TextField from "@mui/material/TextField";
-import IconButton from "@mui/material/IconButton";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import {
   useAddRoutineMutation,
   useDeleteRoutineMutation,
@@ -17,86 +12,91 @@ import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
 import { useDispatch } from "react-redux";
 import {
-  addNewExercise,
-  addNewRoutine,
+  addRoutine,
+  deleteRoutine,
+  editRoutine,
+  newExercise,
 } from "../../../features/routine/routineSlice";
+import ExerciseList from "../list/ExerciseList";
 
 const RoutineCard = ({ routine }) => {
+  const dispatch = useDispatch();
+
   const [randomCard, setRandomCard] = useState(null);
   const [isEditing, setIsEditing] = useState(!routine.routineName);
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [isExpand, setIsExpand] = useState(false);
   const [routineName, setRoutineName] = useState(routine.routineName || "");
   const [memo, setMemo] = useState(routine.memo || "");
-  const [addingRoutine, { isLoading: addRoutineLoading }] =
-    useAddRoutineMutation();
-  const [deletionRoutine, { isLoading: deleteRoutineLoding }] =
-    useDeleteRoutineMutation();
-  const [editingRoutine, { isLoading: editingRoutineLoading }] =
-    useEditRoutineMutation();
 
-  const dispatch = useDispatch();
+  const [addingRoutine] = useAddRoutineMutation();
+  const [deletionRoutine] = useDeleteRoutineMutation();
+  const [editingRoutine] = useEditRoutineMutation();
 
   const onRoutineNameChange = (e) => setRoutineName(e.target.value);
   const onMemoChange = (e) => setMemo(e.target.value);
 
   const handleKeyPress = async (e) => {
     if (e.key === "Enter") {
-      if (window.confirm("루틴을 등록하시겠습니까?") === false) {
-        setIsEditing(true);
-      } else {
-        try {
-          const routineData = await addingRoutine({
-            routineName,
-            memo,
-          }).unwrap();
-          dispatch(addNewRoutine({ ...routineData }));
-          setIsEditing(false);
-        } catch (err) {
+      if (isEditing && !routine.id) {
+        if (window.confirm("루틴을 등록하시겠습니까?")) {
+          try {
+            const routineData = await addingRoutine({
+              routineName,
+              memo,
+            }).unwrap();
+            dispatch(addRoutine({ ...routineData }));
+            setIsEditing(false);
+          } catch (err) {
+            setIsEditing(true);
+            console.log(err);
+          }
+        } else {
           setIsEditing(true);
-          console.log(err);
+        }
+      } else if (isEditing && routine.id) {
+        if (window.confirm("루틴을 수정하시겠습니까?")) {
+          try {
+            await editingRoutine({
+              routineId: routine.id,
+              routineName,
+              memo,
+            }).unwrap();
+            dispatch(editRoutine({ routineId: routine.id, routineName, memo }));
+            setIsEditing(false);
+          } catch (err) {
+            console.log(err);
+            setIsEditing(true);
+          }
         }
       }
     }
   };
 
-  const handleMoreClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMoreClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleEdit = async (e) => {
+  const handleEditButtonClick = () => {
     setIsEditing(true);
-    if (e.key === "Enter") {
-      if (window.confirm("루틴을 수정하시겠습니까?") === false) {
-        setIsEditing(true);
-      } else {
-        try {
-          await addingRoutine({ routineName, memo }).unwrap();
-          setIsEditing(false);
-        } catch (err) {
-          setIsEditing(true);
-          console.log(err);
-        }
-      }
-    }
-    handleMoreClose();
+    dispatch(editRoutine(routine.id));
   };
 
   const handleDelete = () => {
     deletionRoutine(routine.id);
-    handleMoreClose();
+    dispatch(deleteRoutine(routine.id));
   };
 
-  const newExercise = (routineId) => {
-    dispatch(
-      addNewExercise({
-        routineId,
-        exercise: { exerciseName: "", description: "" },
-      })
-    );
+  const addNewExercise = () => {
+    if (isExpand === true) {
+      dispatch(newExercise({ routineId: routine.id }));
+    } else {
+      setIsExpand(true);
+      dispatch(newExercise({ routineId: routine.id }));
+    }
+  };
+
+  const ExBtnClick = () => {
+    if (!isExpand) {
+      setIsExpand(true);
+    } else if (isExpand) {
+      setIsExpand(false);
+    }
   };
 
   useEffect(() => {
@@ -105,53 +105,49 @@ const RoutineCard = ({ routine }) => {
   }, []);
 
   const renderCardContent = () => (
-    <>
+    <div key={routine.id}>
       {isEditing ? (
         <>
-          <S.RoutineInput
+          <S.RoutineNameInput
             value={routineName}
             onChange={onRoutineNameChange}
-            onKeyPress={handleKeyPress}
-            fullWidth
+            onKeyDown={handleKeyPress}
             placeholder="루틴이름"
+            maxLength={20}
           />
           <S.RoutineInput
             value={memo}
             onChange={onMemoChange}
-            onKeyPress={handleKeyPress}
-            fullWidth
-            multiline
+            onKeyDown={handleKeyPress}
             placeholder="메모"
+            maxLength={70}
           />
         </>
       ) : (
-        <>
+        <div>
           <S.IconBtnWrapper>
             {routine.exercises?.length ? (
-              <S.IconBtn>
+              <S.IconBtn onClick={ExBtnClick}>
                 <Badge badgeContent={routine.exercises?.length} color="primary">
                   <RunCircleRoundedIcon color="action" />
                 </Badge>
               </S.IconBtn>
-            ) : (
-              <></>
-            )}
-            <S.IconBtn>
-              <AddRoundedIcon onClick={newExercise} />
+            ) : null}
+            <S.IconBtn onClick={addNewExercise}>
+              <AddRoundedIcon />
             </S.IconBtn>
-            <S.IconBtn>
+            <S.IconBtn onClick={handleEditButtonClick}>
               <EditRoundedIcon />
             </S.IconBtn>
-            <S.IconBtn>
-              <ClearRoundedIcon onClick={deletionRoutine} />
+            <S.IconBtn onClick={handleDelete}>
+              <ClearRoundedIcon />
             </S.IconBtn>
           </S.IconBtnWrapper>
-
           <S.CardTitle>{routine.routineName}</S.CardTitle>
           <S.CardApply>{routine.memo}</S.CardApply>
-        </>
+        </div>
       )}
-    </>
+    </div>
   );
 
   return (
@@ -161,6 +157,11 @@ const RoutineCard = ({ routine }) => {
       {randomCard === 3 && <S.Card3>{renderCardContent()}</S.Card3>}
       {randomCard === 4 && <S.Card4>{renderCardContent()}</S.Card4>}
       {randomCard === 5 && <S.Card5>{renderCardContent()}</S.Card5>}
+      {isExpand && (
+        <div>
+          <ExerciseList exercises={routine.exercises} routineId={routine.id} />
+        </div>
+      )}
     </>
   );
 };

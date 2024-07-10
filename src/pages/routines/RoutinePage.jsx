@@ -74,14 +74,14 @@ import React from "react";
 import * as S from "./RoutinePage.styled";
 import { useDispatch } from "react-redux";
 import RoutineList from "../../components/routine/list/RoutineList";
-import { addNewRoutine } from "../../features/routine/routineSlice";
+import { newRoutine } from "../../features/routine/routineSlice";
 import Add from "@mui/icons-material/Add";
 import Button from "@mui/joy/Button";
 
 const RoutinePage = () => {
   const dispatch = useDispatch();
 
-  const newRoutine = () => {
+  const addNewRoutine = () => {
     dispatch(newRoutine());
   };
 
@@ -92,7 +92,7 @@ const RoutinePage = () => {
         color="neutral"
         startDecorator={<Add />}
         sx={{ height: "fit-content" }}
-        onClick={newRoutine}
+        onClick={addNewRoutine}
       >
         루틴추가
       </Button>

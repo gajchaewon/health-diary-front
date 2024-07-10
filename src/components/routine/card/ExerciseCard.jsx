@@ -1,76 +1,89 @@
 import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
-import IconButton from "@mui/material/IconButton";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import * as S from "./ExerciseCard.style";
+import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
+import {
+  addExercise,
+  deleteExercise,
+} from "../../../features/routine/routineSlice";
+import {
+  useAddExerciseMutation,
+  useDeleteExerciseMutation,
+} from "../../../features/routine/routineApiSlice";
+import { useDispatch } from "react-redux";
+import IconButton from "@mui/material/IconButton";
 
-const ExerciseCard = ({ exercise }) => {
+const ExerciseCard = ({ exercise, routineId }) => {
+  const dispatch = useDispatch();
   const [exerciseName, setExerciseName] = useState(
     exercise?.exerciseName || ""
   );
   const [description, setDescription] = useState(exercise?.description || "");
 
-  const [isEditing, setIsEditing] = useState(!exerciseName);
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [addingExercise, { isLoading: addExerciseLoading }] =
+    useAddExerciseMutation();
+  const [deletionRoutine, { isLoading: deleteExerciseLoding }] =
+    useDeleteExerciseMutation();
 
-  const handleKeyPress = (e) => {
+  const [isEditing, setIsEditing] = useState(!exerciseName);
+
+  const handleKeyPress = async (e) => {
     if (e.key === "Enter") {
-      setIsEditing(false);
+      try {
+        const exerciseData = await addingExercise({
+          routineId,
+          exerciseName,
+          description,
+        }).unwrap();
+        dispatch(addExercise({ ...exerciseData }));
+        setIsEditing(false);
+      } catch (err) {
+        setIsEditing(true);
+        console.log(err);
+      }
     }
   };
 
-  const handleMoreClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMoreClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleEdit = () => {
-    setIsEditing(true);
-    handleMoreClose();
+  const handleDelete = async () => {
+    try {
+      await deletionRoutine({
+        routineId,
+        exerciseId: exercise.id,
+      }).unwrap();
+      dispatch(deleteExercise({ routineId, exerciseId: exercise.id }));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
     <S.ExerciseCardContainer>
       {isEditing ? (
         <>
-          <TextField
-            label="Exercise Name"
+          <S.ExerciseInput
+            label="운동이름"
             value={exerciseName}
             onChange={(e) => setExerciseName(e.target.value)}
-            onKeyPress={handleKeyPress}
-            fullWidth
+            onKeyDown={handleKeyPress}
           />
-          <TextField
-            label="Description"
+          <S.ExerciseInput
+            label="운동설명"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            onKeyPress={handleKeyPress}
-            fullWidth
-            multiline
+            onKeyDown={handleKeyPress}
           />
         </>
       ) : (
         <>
-          <div>{exerciseName}</div>
-          <div>{description}</div>
+          <S.IconBtnWrapper>
+            <IconButton onClick={handleDelete}>
+              <ClearRoundedIcon />
+            </IconButton>
+          </S.IconBtnWrapper>
+          <S.ExerciseName>{exerciseName}</S.ExerciseName>
+          <S.ExerciseDesc>{description}</S.ExerciseDesc>
         </>
       )}
-      <IconButton onClick={handleMoreClick}>
-        <MoreVertIcon />
-      </IconButton>
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleMoreClose}
-      >
-        <MenuItem onClick={handleEdit}>Edit</MenuItem>
-        <MenuItem>Delete</MenuItem>
-      </Menu>
     </S.ExerciseCardContainer>
   );
 };
