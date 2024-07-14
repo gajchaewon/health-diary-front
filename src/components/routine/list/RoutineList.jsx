@@ -21,7 +21,7 @@ const RoutineList = () => {
   }, [fetchRoutines, dispatch, getRoutinesLoading]);
 
   return (
-    <div key={routines.id}>
+    <div>
       {routines?.length > 0 ? (
         routines
           ?.slice(0)

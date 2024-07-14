@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import * as S from "./ExerciseCard.style";
 import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
@@ -15,17 +15,16 @@ import IconButton from "@mui/material/IconButton";
 
 const ExerciseCard = ({ exercise, routineId }) => {
   const dispatch = useDispatch();
-  const [exerciseName, setExerciseName] = useState(
-    exercise?.exerciseName || ""
-  );
-  const [description, setDescription] = useState(exercise?.description || "");
+
+  const [exerciseName, setExerciseName] = useState("");
+  const [description, setDescription] = useState("");
 
   const [addingExercise, { isLoading: addExerciseLoading }] =
     useAddExerciseMutation();
-  const [deletionRoutine, { isLoading: deleteExerciseLoding }] =
+  const [deletionRoutineExercise, { isLoading: deleteExerciseLoding }] =
     useDeleteExerciseMutation();
 
-  const [isEditing, setIsEditing] = useState(!exerciseName);
+  const [isEditing, setIsEditing] = useState(false);
 
   const handleKeyPress = async (e) => {
     if (e.key === "Enter") {
@@ -35,8 +34,8 @@ const ExerciseCard = ({ exercise, routineId }) => {
           exerciseName,
           description,
         }).unwrap();
+        console.log(exerciseData);
         dispatch(addExercise({ ...exerciseData }));
-        setIsEditing(false);
       } catch (err) {
         setIsEditing(true);
         console.log(err);
@@ -46,7 +45,7 @@ const ExerciseCard = ({ exercise, routineId }) => {
 
   const handleDelete = async () => {
     try {
-      await deletionRoutine({
+      await deletionRoutineExercise({
         routineId,
         exerciseId: exercise.id,
       }).unwrap();
@@ -55,6 +54,18 @@ const ExerciseCard = ({ exercise, routineId }) => {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    if (exercise.exerciseName === "") {
+      setIsEditing(true);
+      setExerciseName("");
+      setDescription("");
+    } else {
+      setIsEditing(false);
+      setExerciseName(exercise.exerciseName);
+      setDescription(exercise.description);
+    }
+  }, [exercise]);
 
   return (
     <S.ExerciseCardContainer>
