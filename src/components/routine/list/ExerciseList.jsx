@@ -4,6 +4,7 @@ import * as S from "../card/ExerciseCard.style";
 import AddIcon from "@mui/icons-material/Add";
 import { useDispatch } from "react-redux";
 import { newExercise } from "../../../features/routine/routineSlice";
+import Button from "@mui/joy/Button";
 
 const ExerciseList = ({ exercises, routineId }) => {
   const dispatch = useDispatch();
@@ -14,10 +15,15 @@ const ExerciseList = ({ exercises, routineId }) => {
 
   return (
     <div>
-      <S.AddExerciseButton onClick={addNewExercise}>
+      <Button
+        variant="soft"
+        color="neutral"
+        sx={{ width: "100%" }}
+        onClick={addNewExercise}
+      >
         <AddIcon />
-      </S.AddExerciseButton>
-      {exercises?.length > 0 ? (
+      </Button>
+      {exercises && exercises?.length > 0 ? (
         exercises
           ?.slice(0)
           .reverse()

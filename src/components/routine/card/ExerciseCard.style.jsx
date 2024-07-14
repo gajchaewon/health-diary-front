@@ -1,4 +1,4 @@
-import { Fab, TextField, Typography } from "@mui/material";
+import { Fab, Typography } from "@mui/material";
 import styled from "styled-components";
 
 export const ExerciseCardContainer = styled.div`
@@ -12,11 +12,9 @@ export const ExerciseCardContainer = styled.div`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
-export const ExerciseInput = styled(TextField)`
-  font-size: 18px;
-  font-family: "Noto Sans KR";
-  margin: 10px;
-  min-width: 200px; /* 원하는 최소 폭 설정 */
+export const ExerciseInputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 export const ExerciseName = styled.div`

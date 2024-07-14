@@ -22,7 +22,7 @@ const RoutineList = () => {
 
   return (
     <div>
-      {routines?.length > 0 ? (
+      {routines && routines?.length > 0 ? (
         routines
           ?.slice(0)
           .reverse()

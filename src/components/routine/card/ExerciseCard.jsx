@@ -12,6 +12,10 @@ import {
 } from "../../../features/routine/routineApiSlice";
 import { useDispatch } from "react-redux";
 import IconButton from "@mui/material/IconButton";
+import Input from "@mui/joy/Input";
+import FormHelperText from "@mui/joy/FormHelperText";
+import InfoOutlined from "@mui/icons-material/InfoOutlined";
+import { render } from "@testing-library/react";
 
 const ExerciseCard = ({ exercise, routineId }) => {
   const dispatch = useDispatch();
@@ -70,20 +74,48 @@ const ExerciseCard = ({ exercise, routineId }) => {
   return (
     <S.ExerciseCardContainer>
       {isEditing ? (
-        <>
-          <S.ExerciseInput
-            label="운동이름"
+        <S.ExerciseInputContainer>
+          <Input
             value={exerciseName}
             onChange={(e) => setExerciseName(e.target.value)}
             onKeyDown={handleKeyPress}
+            placeholder="운동이름"
+            sx={{
+              margin: "3px",
+              "&::before": {
+                display: "none",
+              },
+              "&:focus-within": {
+                outline: "0.5px solid lightBlue",
+              },
+            }}
           />
-          <S.ExerciseInput
-            label="운동설명"
+          <Input
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             onKeyDown={handleKeyPress}
+            placeholder="운동설명"
+            sx={{
+              margin: "3px",
+              "&::before": {
+                display: "none",
+              },
+              "&:focus-within": {
+                outline: "0.5px solid lightBlue",
+              },
+            }}
           />
-        </>
+          {!exerciseName ? (
+            <>
+              <FormHelperText>
+                <InfoOutlined />
+                운동이름을 적어주세요!
+              </FormHelperText>
+            </>
+          ) : (
+            <></>
+          )}
+        </S.ExerciseInputContainer>
       ) : (
         <>
           <S.IconBtnWrapper>

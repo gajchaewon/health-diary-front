@@ -123,17 +123,21 @@ const RoutineCard = ({ routine }) => {
         <div>
           <S.IconBtnWrapper>
             <S.IconBtn onClick={ExBtnClick}>
-              <Badge badgeContent={routine.exercises?.length} color="primary">
+              <Badge
+                badgeContent={routine.exercises?.length}
+                color="primary"
+                title="운동"
+              >
                 <RunCircleRoundedIcon color="action" />
               </Badge>
             </S.IconBtn>
             {/* <S.IconBtn onClick={addNewExercise}>
               <AddRoundedIcon />
             </S.IconBtn> */}
-            <S.IconBtn onClick={handleEditButtonClick}>
+            <S.IconBtn title="수정" onClick={handleEditButtonClick}>
               <EditRoundedIcon />
             </S.IconBtn>
-            <S.IconBtn onClick={handleDelete}>
+            <S.IconBtn title="삭제" onClick={handleDelete}>
               <ClearRoundedIcon />
             </S.IconBtn>
           </S.IconBtnWrapper>
