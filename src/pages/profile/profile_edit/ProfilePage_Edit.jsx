@@ -22,7 +22,7 @@ const ProfilePageEdit = () => {
               fullWidth
             />
           </S.TextfieldWrapper>
-          <Button variant="outlined">변경하기</Button>
+          <Button variant="outlined">변경</Button>
         </S.NicknameContainer>
         <br></br>
         <S.EditTitle>• 자기소개 수정</S.EditTitle>
