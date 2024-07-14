@@ -82,14 +82,10 @@ const RoutineCard = ({ routine }) => {
     dispatch(deleteRoutine(routine.id));
   };
 
-  const addNewExercise = () => {
-    if (isExpand === true) {
-      dispatch(newExercise({ routineId: routine.id }));
-    } else {
-      setIsExpand(true);
-      dispatch(newExercise({ routineId: routine.id }));
-    }
-  };
+  // const addNewExercise = () => {
+  //   setIsExpand(true);
+  //   dispatch(newExercise({ routineId: routine.id }));
+  // };
 
   const ExBtnClick = () => {
     if (!isExpand) {
@@ -126,20 +122,22 @@ const RoutineCard = ({ routine }) => {
       ) : (
         <div>
           <S.IconBtnWrapper>
-            {routine.exercises?.length ? (
-              <S.IconBtn onClick={ExBtnClick}>
-                <Badge badgeContent={routine.exercises?.length} color="primary">
-                  <RunCircleRoundedIcon color="action" />
-                </Badge>
-              </S.IconBtn>
-            ) : null}
-            <S.IconBtn onClick={addNewExercise}>
-              <AddRoundedIcon />
+            <S.IconBtn onClick={ExBtnClick}>
+              <Badge
+                badgeContent={routine.exercises?.length}
+                color="primary"
+                title="운동"
+              >
+                <RunCircleRoundedIcon color="action" />
+              </Badge>
             </S.IconBtn>
-            <S.IconBtn onClick={handleEditButtonClick}>
+            {/* <S.IconBtn onClick={addNewExercise}>
+              <AddRoundedIcon />
+            </S.IconBtn> */}
+            <S.IconBtn title="수정" onClick={handleEditButtonClick}>
               <EditRoundedIcon />
             </S.IconBtn>
-            <S.IconBtn onClick={handleDelete}>
+            <S.IconBtn title="삭제" onClick={handleDelete}>
               <ClearRoundedIcon />
             </S.IconBtn>
           </S.IconBtnWrapper>
@@ -158,9 +156,7 @@ const RoutineCard = ({ routine }) => {
       {randomCard === 4 && <S.Card4>{renderCardContent()}</S.Card4>}
       {randomCard === 5 && <S.Card5>{renderCardContent()}</S.Card5>}
       {isExpand && (
-        <div>
-          <ExerciseList exercises={routine.exercises} routineId={routine.id} />
-        </div>
+        <ExerciseList exercises={routine.exercises} routineId={routine.id} />
       )}
     </>
   );

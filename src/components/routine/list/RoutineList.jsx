@@ -21,8 +21,8 @@ const RoutineList = () => {
   }, [fetchRoutines, dispatch, getRoutinesLoading]);
 
   return (
-    <div key={routines.id}>
-      {routines?.length > 0 ? (
+    <div>
+      {routines && routines?.length > 0 ? (
         routines
           ?.slice(0)
           .reverse()

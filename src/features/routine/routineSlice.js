@@ -23,21 +23,31 @@ const routineSlice = createSlice({
     },
     newExercise(state, action) {
       const { routineId } = action.payload;
-      const routine = state.routines.find(
+      const routineIndex = state.routines.findIndex(
         (routine) => routine.id === routineId
       );
-      if (routine) {
-        routine.exercises.push({ exerciseName: "", description: "" });
+
+      if (routineIndex !== -1) {
+        state.routines[routineIndex].exercises.push({
+          exerciseName: "",
+          description: "",
+          id: "",
+        });
       }
     },
     addExercise(state, action) {
-      const { routineId, exercise } = action.payload;
-      const routine = state.routines.find(
-        (routine) => routine.id === routineId
-      );
-      if (routine) {
-        routine.exercises.push(exercise);
-      }
+      const { id: routineId, exercises } = action.payload;
+      // const routine = state.routines.find(
+      //   (routine) => routine.id === routineId
+      // );
+      // if (routine) {
+      //   routine.exercises.push(exercise);
+      // }
+      state.routines.forEach((routine) => {
+        if (routine.id === routineId) {
+          routine.exercises = exercises;
+        }
+      });
     },
     deleteRoutine(state, action) {
       const index = state.routines.findIndex(
