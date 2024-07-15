@@ -1,6 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { logIn, logOut } from "../features/auth/authSlice";
-import { HttpStatusCode } from "axios";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: "http://localhost:8080",
@@ -17,13 +16,13 @@ const baseQuery = fetchBaseQuery({
 const baseQueryWithReAuth = async (args, api) => {
   let result = await baseQuery(args, api);
   if (result?.error?.data !== null) {
-    if (result?.error?.data.error === "EXPIRED_TOKEN") {
+    if (result?.error?.data.errorCode === "EXPIRED_TOKEN") {
       const refreshResult = await baseQuery("/auth/refresh-token", api);
       const userResponse = api.getState().auth.userInfo;
-
+      console.log(refreshResult);
       const tokenResponse = {
         accessToken: refreshResult.data?.accessToken,
-        refreshToken: null,
+        refreshToken: refreshResult.data?.refreshToken,
       };
 
       api.dispatch(logIn({ tokenResponse, userResponse }));
