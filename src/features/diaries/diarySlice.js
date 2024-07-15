@@ -71,17 +71,16 @@ const diarySlice = createSlice({
     },
     addComment: {
       reducer(state, action) {
-        console.log(action.payload);
-        state.diaries.comments = [...state, action.payload];
+        state.singleDiary.comments.push(action.payload);
       },
     },
     deleteComment: {
       reducer(state, action) {
-        const index = state.diaries.comments.findIndex(
+        const index = state.singleDiary.comments.findIndex(
           (comment) => comment.id === action.payload
         );
         if (index !== -1) {
-          state.diaries.comments.splice(index, 1);
+          state.singleDiary.comments.splice(index, 1);
         }
       },
     },

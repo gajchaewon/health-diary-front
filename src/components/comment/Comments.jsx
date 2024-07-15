@@ -27,7 +27,9 @@ const Comments = ({ diaryId }) => {
         setContent("");
       } catch (err) {
         console.log(err);
-        console.log("posting failed");
+        if (err.data?.statusCode === 400) {
+          alert(err.data?.validation?.content);
+        }
       }
     }
   };
@@ -51,7 +53,9 @@ const Comments = ({ diaryId }) => {
         </S.CommentTextareaBtn>
       </S.CommentTextarea>
       {currentDiary.comments &&
-        currentDiary.comments?.map((comment) => <Comment comment={comment} />)}
+        currentDiary.comments?.map((comment) => (
+          <Comment key={comment.id} comment={comment} />
+        ))}
     </S.CommentContainer>
   );
 };
