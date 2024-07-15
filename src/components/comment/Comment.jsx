@@ -15,7 +15,7 @@ const Comment = ({ comment }) => {
       try {
         await deletion(comment.id).unwrap();
         dispatch(deleteComment(comment.id));
-        alert("다이어리가 삭제되었습니다.");
+        alert("댓글이 삭제되었습니다.");
       } catch (err) {
         console.error("댓글 삭제에 실패했습니다.", err);
         alert("댓글 주인만 삭제할 수 있습니다.");

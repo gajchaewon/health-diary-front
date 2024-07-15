@@ -19,6 +19,7 @@ export const CommentsUser = styled.div`
 `;
 
 export const CommentContent = styled.div`
+  white-space: pre-wrap;
   margin-bottom: 12px;
   width: auto;
 `;
