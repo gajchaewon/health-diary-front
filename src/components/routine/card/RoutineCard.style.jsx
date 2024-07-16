@@ -9,16 +9,17 @@ export const MainContainer = styled.div`
 export const Card = styled.div`
   width: 500px;
   height: fit-content;
-  margin: 50px 0 20px 0;
+  margin: 20px;
   padding: 20px;
   position: relative;
   display: flex;
   flex-direction: column;
-  //grid-template-rows: 20px 50px 1fr 50px;
   border-radius: 10px;
   box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.25);
   transition: all 0.2s;
-
+  overflow: hidden;
+  word-wrap: break-word;
+  //box-sizing: border-box;
   &:hover {
     box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.4);
     transform: scale(1.01);
@@ -74,11 +75,13 @@ export const CardTitle = styled.h2`
   font-weight: 600;
   color: #ffffff;
   font-size: 28px;
+  margin: 20px 0 10px 0;
 `;
 
 export const CardApply = styled.div`
   font-size: 14px;
   font-weight: 500;
+  margin-bottom: 15px;
 `;
 
 export const IconBtnWrapper = styled.div`

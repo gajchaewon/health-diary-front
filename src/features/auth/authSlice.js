@@ -10,9 +10,11 @@ const setCookie = (token) => {
 };
 
 const deleteCookie = (name) => {
-  document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  console.log(name);
+  document.cookie = `${encodeURIComponent(
+    name
+  )}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
 };
-
 export const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -35,8 +37,7 @@ export const authSlice = createSlice({
     },
     logOut: {
       reducer(state, action) {
-        console.log(state);
-        //deleteCookie(state.token);
+        deleteCookie("refreshToken");
         state.userInfo = null;
         state.token = null;
       },

@@ -27,17 +27,26 @@ const Comments = ({ diaryId }) => {
         setContent("");
       } catch (err) {
         console.log(err);
-        console.log("posting failed");
+        if (err.data?.statusCode === 400) {
+          alert(err.data?.validation?.content);
+        }
       }
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      onAddBtnClick();
+    }
+  };
+
   return (
-    <S.CommentContainer>
+    <S.CommentsContainer>
       comment({comments?.length})
       <S.CommentTextarea>
         <TextField
           onChange={onContentChange}
+          onKeyDown={handleKeyDown}
           value={content}
           id="outlined-textarea"
           label="comment"
@@ -51,8 +60,10 @@ const Comments = ({ diaryId }) => {
         </S.CommentTextareaBtn>
       </S.CommentTextarea>
       {currentDiary.comments &&
-        currentDiary.comments?.map((comment) => <Comment comment={comment} />)}
-    </S.CommentContainer>
+        currentDiary.comments?.map((comment) => (
+          <Comment key={comment.id} comment={comment} />
+        ))}
+    </S.CommentsContainer>
   );
 };
 

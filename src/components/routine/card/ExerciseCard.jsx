@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import TextField from "@mui/material/TextField";
 import * as S from "./ExerciseCard.style";
 import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
 import {
@@ -15,7 +14,6 @@ import IconButton from "@mui/material/IconButton";
 import Input from "@mui/joy/Input";
 import FormHelperText from "@mui/joy/FormHelperText";
 import InfoOutlined from "@mui/icons-material/InfoOutlined";
-import { render } from "@testing-library/react";
 
 const ExerciseCard = ({ exercise, routineId }) => {
   const dispatch = useDispatch();
@@ -29,6 +27,12 @@ const ExerciseCard = ({ exercise, routineId }) => {
     useDeleteExerciseMutation();
 
   const [isEditing, setIsEditing] = useState(false);
+
+  const handleExNameChange = (e) => {
+    if (e.target.value.length <= 25) {
+      setExerciseName(e.target.value);
+    }
+  };
 
   const handleKeyPress = async (e) => {
     if (e.key === "Enter") {
@@ -76,10 +80,12 @@ const ExerciseCard = ({ exercise, routineId }) => {
       {isEditing ? (
         <S.ExerciseInputContainer>
           <Input
+            maxLength={10}
             value={exerciseName}
-            onChange={(e) => setExerciseName(e.target.value)}
+            onChange={handleExNameChange}
             onKeyDown={handleKeyPress}
             placeholder="운동이름"
+            inputProps={{ maxLength: 10 }}
             sx={{
               margin: "3px",
               "&::before": {

@@ -12,6 +12,7 @@ export const MyDiaryContainer = styled.div`
 `;
 
 export const MyDaRContainer = styled.div`
+  width: fit-content;
   display: flex;
   color: #212121;
   font-size: 36px;
@@ -19,7 +20,7 @@ export const MyDaRContainer = styled.div`
 `;
 
 export const MyDiary = styled(NavLink)`
-  margin: 0 40px 0 0;
+  margin: 0 30px 0 30px;
   width: fit-content;
   color: grey;
   text-decoration: none;

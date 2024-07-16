@@ -7,7 +7,6 @@ import {
 } from "../../../features/routine/routineApiSlice";
 import Badge from "@mui/material/Badge";
 import RunCircleRoundedIcon from "@mui/icons-material/RunCircleRounded";
-import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
 import { useDispatch } from "react-redux";
@@ -15,7 +14,6 @@ import {
   addRoutine,
   deleteRoutine,
   editRoutine,
-  newExercise,
 } from "../../../features/routine/routineSlice";
 import ExerciseList from "../list/ExerciseList";
 
@@ -82,11 +80,6 @@ const RoutineCard = ({ routine }) => {
     dispatch(deleteRoutine(routine.id));
   };
 
-  // const addNewExercise = () => {
-  //   setIsExpand(true);
-  //   dispatch(newExercise({ routineId: routine.id }));
-  // };
-
   const ExBtnClick = () => {
     if (!isExpand) {
       setIsExpand(true);
@@ -109,7 +102,7 @@ const RoutineCard = ({ routine }) => {
             onChange={onRoutineNameChange}
             onKeyDown={handleKeyPress}
             placeholder="루틴이름"
-            maxLength={20}
+            maxLength={15}
           />
           <S.RoutineInput
             value={memo}
@@ -149,7 +142,7 @@ const RoutineCard = ({ routine }) => {
   );
 
   return (
-    <>
+    <S.MainContainer>
       {randomCard === 1 && <S.Card1>{renderCardContent()}</S.Card1>}
       {randomCard === 2 && <S.Card2>{renderCardContent()}</S.Card2>}
       {randomCard === 3 && <S.Card3>{renderCardContent()}</S.Card3>}
@@ -158,7 +151,7 @@ const RoutineCard = ({ routine }) => {
       {isExpand && (
         <ExerciseList exercises={routine.exercises} routineId={routine.id} />
       )}
-    </>
+    </S.MainContainer>
   );
 };
 
