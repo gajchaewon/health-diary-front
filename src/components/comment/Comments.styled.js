@@ -1,5 +1,9 @@
 import styled from "styled-components";
 
+export const CommentsContainer = styled.div`
+  width: 100%;
+`;
+
 export const CommentTextarea = styled.div`
   display: flex;
   margin: 20px 0;
@@ -8,7 +12,7 @@ export const CommentTextarea = styled.div`
 `;
 
 export const CommentTextareaBtn = styled.button`
-  width: 10%;
+  width: 100px;
   height: auto;
   margin-left: 3px;
   background-color: lightgrey;
@@ -20,9 +24,4 @@ export const CommentTextareaBtn = styled.button`
     background-color: grey;
     color: white;
   }
-`;
-
-export const CommentContainer = styled.div`
-  margin: 30px 0px;
-  width: 100%;
 `;

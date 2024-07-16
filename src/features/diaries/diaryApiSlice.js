@@ -103,6 +103,16 @@ export const diaryApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Comment"],
     }),
+    editComment: builder.mutation({
+      query: ({ commentId, content }) => ({
+        url: `/comment/${commentId}`,
+        method: "PUT",
+        body: {
+          content,
+        },
+      }),
+      invalidatesTags: ["Comment"],
+    }),
   }),
 });
 
@@ -117,3 +127,4 @@ export const { useLikeDiaryMutation } = diaryApiSlice;
 export const { useUploadImageMutation } = diaryApiSlice;
 export const { useAddCommentMutation } = diaryApiSlice;
 export const { useDeleteCommentMutation } = diaryApiSlice;
+export const { useEditCommentMutation } = diaryApiSlice;

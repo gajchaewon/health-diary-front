@@ -84,6 +84,16 @@ const diarySlice = createSlice({
         }
       },
     },
+    editComment: {
+      reducer(state, action) {
+        const index = state.singleDiary.comments.findIndex(
+          (comment) => comment.id === action.payload
+        );
+        if (index !== -1) {
+          state.singleDiary.comments[index] = action.payload;
+        }
+      },
+    },
   },
 });
 
@@ -101,5 +111,6 @@ export const {
   uploadImg,
   addComment,
   deleteComment,
+  editComment,
 } = diarySlice.actions;
 export default diarySlice.reducer;
