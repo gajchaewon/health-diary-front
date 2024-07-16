@@ -18,7 +18,7 @@ const ExerciseList = ({ exercises, routineId }) => {
       <Button
         variant="soft"
         color="neutral"
-        sx={{ width: "100%" }}
+        sx={{ width: "500px" }}
         onClick={addNewExercise}
       >
         <AddIcon />
