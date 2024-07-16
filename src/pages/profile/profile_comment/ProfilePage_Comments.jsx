@@ -16,9 +16,17 @@ const ProfilePageComment = () => {
           <S.DeleteBtn>
             <DeleteIcon />
           </S.DeleteBtn>
-          <S.Comment>{comment.content}</S.Comment>
+          <S.Comment>
+            {comment?.content.length > 30 ? (
+              <>{comment.content.slice(0, 30)}...</>
+            ) : (
+              <>{comment.content}</>
+            )}
+          </S.Comment>
           <S.DiaryLinkWrapper>
-            <S.DiaryLink to="/comm/diaryId">{comment.diary.title}</S.DiaryLink>
+            <S.DiaryLink to={`/diary/${comment.diary.id}`}>
+              {comment.diary.title}
+            </S.DiaryLink>
             에 남긴 댓글
           </S.DiaryLinkWrapper>
           <S.Date>{moment(comment.modifiedAt).format("YYYY-MM-DD")}</S.Date>

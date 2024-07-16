@@ -16,6 +16,9 @@ export const CommentsContainer = styled.div`
   background-color: aliceblue;
   width: 80%;
   border-bottom: 0.5px solid gray;
+  overflow: hidden;
+  word-wrap: break-word;
+  box-sizing: border-box;
 `;
 
 export const DeleteBtn = styled.button`
@@ -40,6 +43,7 @@ export const DiaryLinkWrapper = styled.div`
 `;
 
 export const DiaryLink = styled(Link)`
+  color: black;
   font-weight: 500;
   text-decoration: none;
 `;
