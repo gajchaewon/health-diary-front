@@ -33,7 +33,7 @@ export default function CardDiary({ diary }) {
         title={
           <TitleinCard to={`/diary/${diary.id}`}>{diary.title}</TitleinCard>
         }
-        subheader={moment(diary.createAt).format("YYYY-MM-DD")}
+        subheader={moment(diary.createdAt).format("YYYY-MM-DD")}
       />
       <CardMedia component="img" height="194" image="" alt="img" />
       <CardContent>
