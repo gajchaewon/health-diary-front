@@ -133,9 +133,7 @@ const AddEditDiaryPage = () => {
           imageIds,
         }).unwrap();
         dispatch(editDiary(diary.id, { ...diaryData }));
-        navigate("/my");
-
-        console.log(diaryData);
+        navigate("/my/diaries");
       } catch (err) {
         console.log(err);
         console.log("failed");

@@ -61,7 +61,7 @@ const Homepage = () => {
   const datedDiary = fetchDatedDiary?.content;
 
   const dayList = fetchDiaryDates?.content?.map((diary) =>
-    moment(diary.createAt).format("YYYY-MM-DD")
+    moment(diary.createdAt).format("YYYY-MM-DD")
   );
 
   //각 날짜 타일에 컨텐츠 추가
