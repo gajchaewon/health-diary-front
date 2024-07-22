@@ -86,35 +86,31 @@ const DiaryCard = ({ diary }) => {
 
   return (
     <>
-      {!diary ? (
-        <>loading..</>
-      ) : (
-        <CommunityCard>
-          <TitleinCard to={`/diary/${diary.id}`} state={{ diary: diary }}>
-            {diary.title}
-          </TitleinCard>
-          <NicknameinCard>{diary.nickname}</NicknameinCard>
-          {diary?.images ? (
-            <PictureinCard src={diary?.images[0]?.url} alt="pic" />
-          ) : (
-            <PictureinCard />
-          )}
+      <CommunityCard>
+        <TitleinCard to={`/diary/${diary.id}`} state={{ diary: diary }}>
+          {diary.title}
+        </TitleinCard>
+        <NicknameinCard>{diary.nickname}</NicknameinCard>
+        {diary?.images ? (
+          <PictureinCard src={diary?.images[0]?.url} alt="pic" />
+        ) : (
+          <PictureinCard />
+        )}
 
-          <ContentinCard>{diary.content}</ContentinCard>
-          {isMyPage ? (
-            <BtnContainer>
-              <Btn onClick={onEditBtnClick}>
-                <EditTwoToneIcon />
-              </Btn>
-              <Btn onClick={onDeleteBtnClick}>
-                <DeleteTwoToneIcon />
-              </Btn>
-            </BtnContainer>
-          ) : (
-            <div></div>
-          )}
-        </CommunityCard>
-      )}
+        <ContentinCard>{diary.content}</ContentinCard>
+        {isMyPage ? (
+          <BtnContainer>
+            <Btn onClick={onEditBtnClick}>
+              <EditTwoToneIcon />
+            </Btn>
+            <Btn onClick={onDeleteBtnClick}>
+              <DeleteTwoToneIcon />
+            </Btn>
+          </BtnContainer>
+        ) : (
+          <div></div>
+        )}
+      </CommunityCard>
     </>
   );
 };

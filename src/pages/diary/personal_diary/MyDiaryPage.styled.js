@@ -58,22 +58,28 @@ export const SearchbardWrapper = styled.div`
   background-color: white;
   z-index: 1;
 `;
+export const SearchbarWrapper = styled.div`
+  width: 30%;
+  position: relative;
+  display: flex;
+  align-items: center;
+`;
 
 export const Searchbar = styled.input`
-  width: 30%;
-  height: 9;
-  display: flex;
+  width: 100%;
+  height: 40px;
   padding-left: 10px;
   margin-left: 5px;
-  top: 0;
+  padding-right: 40px; /* To make space for the button */
 `;
 
 export const SearchbarImg = styled.button`
-  display: flex;
   position: absolute;
-  justify-self: flex-end;
-  padding: 8px;
-  height: 40px;
+  right: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
   border: none;
   background-color: transparent;
   cursor: pointer;
@@ -99,4 +105,26 @@ export const CommunityCardContainer = styled.div`
   align-items: center;
   justify-content: center;
   /* position: relative; */
+`;
+
+export const NoneSearchDataCard = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 500px;
+  height: 300px;
+  box-sizing: border-box;
+  background-color: #f5f5f5;
+  margin: 50px 70px;
+  padding: 50px;
+  border-radius: 0.6rem;
+`;
+
+export const ResultMessage = styled.div`
+  text-decoration: none;
+  color: #212121;
+  font-size: 24px;
+  font-weight: 600;
+  width: fit-content;
 `;
