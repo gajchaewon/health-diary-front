@@ -10,7 +10,7 @@ import Typography from "@mui/material/Typography";
 import { red } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import moment from "moment";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import styled from "styled-components";
 
 export const TitleinCard = styled(Link)`
@@ -26,9 +26,18 @@ export default function CardDiary({ diary }) {
     <Card sx={{ width: "350px", height: "400px", margin: "50px" }}>
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: "#00aeff" }} aria-label="recipe">
-            {diary.userInfo.nickname.charAt(0)}
-          </Avatar>
+          <NavLink
+            to={`/user/${diary.userInfo.id}/view`}
+            state={{ diary: diary }}
+            style={{
+              textDecoration: "none",
+              color: "#444648",
+            }}
+          >
+            <Avatar sx={{ bgcolor: "#00aeff" }} title={diary.userInfo.nickname}>
+              {diary.userInfo.nickname.charAt(0)}
+            </Avatar>
+          </NavLink>
         }
         title={
           <TitleinCard to={`/diary/${diary.id}`}>{diary.title}</TitleinCard>

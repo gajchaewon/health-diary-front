@@ -3,13 +3,18 @@ import styled from "styled-components";
 
 // Main container
 export const MainContainer = styled.div`
+  display: flex;
+  flex-direction: column;
   padding: 30px;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const Card = styled.div`
   width: 500px;
   height: fit-content;
-  margin: 20px;
+  box-sizing: border-box;
+  margin-bottom: 15px;
   padding: 20px;
   position: relative;
   display: flex;
