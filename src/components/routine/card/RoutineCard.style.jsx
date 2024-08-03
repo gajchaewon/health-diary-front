@@ -55,6 +55,26 @@ export const RoutineNameInput = styled(RoutineInput)`
   height: 50px;
 `;
 
+export const RoutineMemoInput = styled(RoutineInput)`
+  margin-bottom: 15px;
+`;
+
+export const RoutineBtn = styled.button`
+  position: absolute;
+  right: 25px;
+  bottom: 10px;
+  width: fit-content;
+  border: none;
+  color: ${(props) => (props.disabled ? "gray" : "white")};
+  background-color: transparent;
+  font-size: 15px;
+  cursor: ${(props) => (props.disabled ? "default" : "pointer")};
+  &:hover {
+    color: ${(props) => (props.disabled ? "gray" : "black")};
+    transition: 0.3s;
+  }
+`;
+
 export const CardLink = styled.a`
   position: relative;
   text-decoration: none;

@@ -33,38 +33,40 @@ const RoutineCard = ({ routine }) => {
   const onRoutineNameChange = (e) => setRoutineName(e.target.value);
   const onMemoChange = (e) => setMemo(e.target.value);
 
-  const handleKeyPress = async (e) => {
-    if (e.key === "Enter") {
-      if (isEditing && !routine.id) {
-        if (window.confirm("루틴을 등록하시겠습니까?")) {
-          try {
-            const routineData = await addingRoutine({
-              routineName,
-              memo,
-            }).unwrap();
-            dispatch(addRoutine({ ...routineData }));
-            setIsEditing(false);
-          } catch (err) {
-            setIsEditing(true);
-            console.log(err);
-          }
-        } else {
+  const saveCheck = [routineName].every(Boolean) === true;
+  const [isDisabled, setIsDisabled] = useState(true);
+
+  const onRoutineBtnClick = async () => {
+    if (isEditing && !routine.id && saveCheck) {
+      if (window.confirm("루틴을 등록하시겠습니까?")) {
+        try {
+          const routineData = await addingRoutine({
+            routineName,
+            memo,
+          }).unwrap();
+
+          dispatch(addRoutine({ ...routineData }));
+          setIsEditing(false);
+        } catch (err) {
           setIsEditing(true);
+          console.log(err);
         }
-      } else if (isEditing && routine.id) {
-        if (window.confirm("루틴을 수정하시겠습니까?")) {
-          try {
-            await editingRoutine({
-              routineId: routine.id,
-              routineName,
-              memo,
-            }).unwrap();
-            dispatch(editRoutine({ routineId: routine.id, routineName, memo }));
-            setIsEditing(false);
-          } catch (err) {
-            console.log(err);
-            setIsEditing(true);
-          }
+      } else {
+        setIsEditing(true);
+      }
+    } else if (isEditing && routine.id && saveCheck) {
+      if (window.confirm("루틴을 수정하시겠습니까?")) {
+        try {
+          await editingRoutine({
+            routineId: routine.id,
+            routineName,
+            memo,
+          }).unwrap();
+          dispatch(editRoutine({ routineId: routine.id, routineName, memo }));
+          setIsEditing(false);
+        } catch (err) {
+          console.log(err);
+          setIsEditing(true);
         }
       }
     }
@@ -80,11 +82,17 @@ const RoutineCard = ({ routine }) => {
     dispatch(deleteRoutine(routine.id));
   };
 
-  const ExBtnClick = () => {
+  const exBtnClick = () => {
     if (!isExpand) {
       setIsExpand(true);
     } else if (isExpand) {
       setIsExpand(false);
+    }
+  };
+
+  const preventLineBreaks = (e) => {
+    if (e.key === "Enter" || e.keyCode === 13) {
+      e.preventDefault();
     }
   };
 
@@ -93,29 +101,39 @@ const RoutineCard = ({ routine }) => {
     setRandomCard(randomNumber);
   }, []);
 
-  const renderCardContent = () => (
+  const renderCardContent = (e) => (
     <div key={routine.id}>
       {isEditing ? (
         <>
           <S.RoutineNameInput
             value={routineName}
             onChange={onRoutineNameChange}
-            onKeyDown={handleKeyPress}
             placeholder="루틴이름"
             maxLength={15}
+            rows={1}
+            onKeyDown={preventLineBreaks}
           />
-          <S.RoutineInput
+          <S.RoutineMemoInput
             value={memo}
             onChange={onMemoChange}
-            onKeyDown={handleKeyPress}
             placeholder="메모"
             maxLength={70}
+            rows={2}
           />
+          {saveCheck === false ? (
+            <>
+              <S.RoutineBtn disabled={isDisabled}>루틴추가</S.RoutineBtn>
+            </>
+          ) : (
+            <>
+              <S.RoutineBtn onClick={onRoutineBtnClick}>루틴추가</S.RoutineBtn>
+            </>
+          )}
         </>
       ) : (
         <div>
           <S.IconBtnWrapper>
-            <S.IconBtn onClick={ExBtnClick}>
+            <S.IconBtn onClick={exBtnClick}>
               <Badge
                 badgeContent={routine.exercises?.length}
                 color="primary"
@@ -124,9 +142,7 @@ const RoutineCard = ({ routine }) => {
                 <RunCircleRoundedIcon color="action" />
               </Badge>
             </S.IconBtn>
-            {/* <S.IconBtn onClick={addNewExercise}>
-              <AddRoundedIcon />
-            </S.IconBtn> */}
+
             <S.IconBtn title="수정" onClick={handleEditButtonClick}>
               <EditRoundedIcon />
             </S.IconBtn>
