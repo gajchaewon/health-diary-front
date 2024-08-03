@@ -19,6 +19,7 @@ import ProfilePageFollower from "./pages/profile/profile_follow/ProfilePage_Foll
 import ProfilePageFollowing from "./pages/profile/profile_follow/ProfilePage_Following";
 import UserProfile from "./components/profile/UserProfile";
 import UProfilePageView from "./pages/user_profile/user_view/UProfilePage_view";
+import UProfilePageDiaries from "./pages/user_profile/user_diaries/UProfilePage_diaries";
 import UProfilePageFollower from "./pages/user_profile/user_follow/UProfilePage_follower";
 import UProfilePageFollowing from "./pages/user_profile/user_follow/UProfilePage_following";
 import RoutinePage from "./pages/routines/RoutinePage";
@@ -49,6 +50,7 @@ function App() {
         </Route>
         <Route path="user/:userId" element={<UserProfile />}>
           <Route path="view" element={<UProfilePageView />} />
+          <Route path="diaries" element={<UProfilePageDiaries />} />
           <Route path="follow" element={<FollowNavigation />}>
             <Route path="follower" element={<UProfilePageFollower />} />
             <Route path="following" element={<UProfilePageFollowing />} />

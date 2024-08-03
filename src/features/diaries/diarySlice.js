@@ -58,9 +58,9 @@ const diarySlice = createSlice({
     },
     likeDiary: {
       reducer(state, action) {
-        // console.log("좋아요 리듀서 : ", state.diaries);
-        // console.log("좋아요 리듀서 action.payload : ", action.payload);
-        state.diaries[0].likeCount = action.payload.likeCount;
+        console.log("좋아요 리듀서 : ", state.diaries);
+        console.log("좋아요 리듀서 action.payload : ", action.payload);
+        state.singleDiary.likeInfo.totalCount = action.payload.likeCount;
       },
     },
     uploadImg: {

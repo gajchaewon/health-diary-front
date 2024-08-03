@@ -12,7 +12,6 @@ export const MyProfileContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 100px 0;
 `;
 
 export const UserProfileContainer = styled.div`

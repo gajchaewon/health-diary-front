@@ -5,65 +5,95 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectSingleDiary } from "../../../features/diaries/diarySlice";
 import {
   useGetADiaryQuery,
+  useGetAllDiariesQuery,
   useLikeDiaryMutation,
 } from "../../../features/diaries/diaryApiSlice";
 import { getDiary, likeDiary } from "../../../features/diaries/diarySlice";
 import SentimentNeutralRoundedIcon from "@mui/icons-material/SentimentNeutralRounded";
 import SentimentVerySatisfiedRoundedIcon from "@mui/icons-material/SentimentVerySatisfiedRounded";
 import Comments from "../../../components/comment/Comments";
+import { selectCurrentUser } from "../../../features/auth/authSlice";
+import NicknameToProfile from "../../../components/profile/NicknameToProfile";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 const DiaryDetailPage = () => {
   const dispatch = useDispatch();
   const diaryId = useParams().diaryId;
   const { data: fetchDiary, isLoading } = useGetADiaryQuery(diaryId);
   const singleDiary = useSelector(selectSingleDiary);
-
+  const userId = useSelector(selectCurrentUser)?.id;
   const [like, { isLoading: isLikeLoading }] = useLikeDiaryMutation();
+
   const [isLike, setIsLike] = useState(false);
 
   useEffect(() => {
     if (fetchDiary && !isLoading) {
       dispatch(getDiary(fetchDiary));
+      setIsLike(() => fetchDiary.likeInfo.userIds.includes(userId));
     }
-  }, [fetchDiary, isLoading]);
+  }, [fetchDiary, isLoading, userId, dispatch]);
 
   const onLikeClick = async () => {
     if (!isLikeLoading) {
       try {
         const response = await like(diaryId).unwrap();
         console.log(response);
-        const likeCount = response; // 응답에서 likeCount를 가져옵니다.
+        const likeCount = response.likeCount; // 응답에서 likeCount를 가져옵니다.
         dispatch(likeDiary({ diaryId, likeCount }));
-        setIsLike(!isLike);
+        if (!isLike) {
+          setIsLike(true);
+        } else {
+          setIsLike(false);
+        }
       } catch (err) {
         console.log(err);
       }
     }
   };
 
+  const onTagClick = async () => {};
+
   return (
     <div>
+      {console.log(singleDiary)}
       <S.Container>
         <S.Title>{singleDiary.title}</S.Title>
-        <S.Nickname>{singleDiary.nickname}</S.Nickname>
+        <S.Nickname>
+          <NicknameToProfile
+            currentUserId={userId}
+            userInfo={singleDiary.userInfo}
+          />
+        </S.Nickname>
         {singleDiary?.imageUrls && singleDiary?.imageUrls.length > 0 && (
           <S.Picture src={singleDiary?.imageUrls[0]} alt="pic" />
         )}
         <S.Content>{singleDiary.content}</S.Content>
-        <button
-          onClick={onLikeClick}
-          style={{
-            border: "none",
-            backgroundColor: "transparent",
-            cursor: "pointer",
-          }}
-        >
-          {!isLike ? (
-            <SentimentNeutralRoundedIcon sx={{ fontSize: 50 }} />
-          ) : (
-            <SentimentVerySatisfiedRoundedIcon sx={{ fontSize: 50 }} />
-          )}
-        </button>
+        <S.TagsContainer>
+          {singleDiary?.hashtags.map((tag) => (
+            <S.TagChip>{tag.hashtag}</S.TagChip>
+          ))}
+        </S.TagsContainer>
+        <S.LikeContainer>
+          <button
+            onClick={onLikeClick}
+            style={{
+              border: "none",
+              backgroundColor: "transparent",
+              cursor: "pointer",
+            }}
+          >
+            {!isLike ? (
+              <SentimentNeutralRoundedIcon sx={{ fontSize: 50 }} />
+            ) : (
+              <>
+                <S.HeartWrapper>
+                  <FavoriteIcon />
+                </S.HeartWrapper>
+                <SentimentVerySatisfiedRoundedIcon sx={{ fontSize: 50 }} />
+              </>
+            )}
+          </button>
+        </S.LikeContainer>
         {singleDiary?.likeCount}
         <S.Divider></S.Divider>
         <Comments diaryId={diaryId} />

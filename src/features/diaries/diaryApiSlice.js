@@ -4,10 +4,12 @@ export const diaryApiSlice = apiSlice.injectEndpoints({
   tagTypes: ["Diary", "Comment"],
   endpoints: (builder) => ({
     getAllDiaries: builder.query({
-      query: ({ page, size }) => ({
+      query: ({ searchType, searchValue, page, size }) => ({
         url: "/community",
         method: "GET",
         params: {
+          searchType: searchType,
+          searchValue: searchValue,
           page: page,
           size: size,
         },
@@ -116,6 +118,7 @@ export const diaryApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
+export const { useLazyGetAllDiariesQuery } = diaryApiSlice;
 export const { useGetAllDiariesQuery } = diaryApiSlice;
 export const { useLazyGetMyDiariesQuery } = diaryApiSlice;
 export const { useGetMyDiariesQuery } = diaryApiSlice;

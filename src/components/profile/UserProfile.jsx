@@ -15,15 +15,6 @@ const UserProfile = () => {
   const { userId } = useParams();
   const { data: fetchUserData, isloading: userDataLoading } =
     useGetUserQuery(userId);
-  // const [follow, { isLoading: isFollowLoading }] = useFollowingMutation();
-  // const [unfollow, { isLoading: isFollowCancelLoading }] =
-  //   useUnfollowingMutation();
-  // const [followStat, setIsFollow] = useState(fetchUserData?.followStatus);
-
-  // const onFollowBtnClick = async () => {
-  //     if(followStat === FOLLOW_STATUS.NONE)
-
-  // };
 
   return (
     <S.UserProfileContainer>

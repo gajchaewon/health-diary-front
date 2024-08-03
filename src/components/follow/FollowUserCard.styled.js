@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 export const UserContainer = styled.div`
   display: flex;
+  position: relative;
   align-items: center;
   margin: 10px;
   width: 700px;
@@ -26,4 +27,9 @@ export const Nickname = styled(NavLink)`
   text-decoration: none;
   color: #212121;
   font-size: 28px;
+`;
+
+export const FollowBtnWrapper = styled.div`
+  position: absolute;
+  right: 1px;
 `;

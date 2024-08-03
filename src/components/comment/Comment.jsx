@@ -52,9 +52,19 @@ const Comment = ({ comment }) => {
 
   return (
     <S.CommentContainer>
-      <S.CommentsUser to={`/user/${comment.userInfo.id}/view`}>
-        {comment?.userInfo?.nickname}
-      </S.CommentsUser>
+      {userInfo?.id === comment.userInfo?.id ? (
+        <>
+          <S.CommentsUser to={`/mprof/view`}>
+            {comment?.userInfo?.nickname}
+          </S.CommentsUser>
+        </>
+      ) : (
+        <>
+          <S.CommentsUser to={`/user/${comment.userInfo.id}/view`}>
+            {comment?.userInfo?.nickname}
+          </S.CommentsUser>
+        </>
+      )}
       {!isEdit ? (
         <>
           <S.CommentContent>{comment?.content}</S.CommentContent>
