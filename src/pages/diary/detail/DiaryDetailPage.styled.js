@@ -20,10 +20,11 @@ export const Nickname = styled.div`
   display: flex;
   justify-content: flex-end;
   align-self: flex-end;
+  width: 30%;
+  margin-bottom: 30px;
   font-size: 25px;
   font-weight: 500;
   color: #212121;
-  width: 30%;
 `;
 
 export const Picture = styled.img`
@@ -44,4 +45,35 @@ export const Divider = styled.div`
   border-top: 1px solid #444444;
   margin: 30px 0px;
   width: 100%;
+`;
+
+export const TagsContainer = styled.div`
+  display: flex;
+  margin: 50px;
+`;
+
+export const TagChip = styled.div`
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid lightblue;
+  border-radius: 2rem;
+  font-size: 16px;
+  font-weight: 500;
+  color: #212121;
+  cursor: pointer;
+  &:hover {
+    background-color: lightblue;
+  }
+`;
+
+export const LikeContainer = styled.div`
+  width: fit-content;
+  display: flex;
+  position: relative;
+`;
+export const HeartWrapper = styled.div`
+  color: red;
+  position: absolute;
+  right: -5px;
+  top: 1px;
 `;

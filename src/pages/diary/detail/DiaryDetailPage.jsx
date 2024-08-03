@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectSingleDiary } from "../../../features/diaries/diarySlice";
 import {
   useGetADiaryQuery,
+  useGetAllDiariesQuery,
   useLikeDiaryMutation,
 } from "../../../features/diaries/diaryApiSlice";
 import { getDiary, likeDiary } from "../../../features/diaries/diarySlice";
@@ -12,6 +13,8 @@ import SentimentNeutralRoundedIcon from "@mui/icons-material/SentimentNeutralRou
 import SentimentVerySatisfiedRoundedIcon from "@mui/icons-material/SentimentVerySatisfiedRounded";
 import Comments from "../../../components/comment/Comments";
 import { selectCurrentUser } from "../../../features/auth/authSlice";
+import NicknameToProfile from "../../../components/profile/NicknameToProfile";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 const DiaryDetailPage = () => {
   const dispatch = useDispatch();
@@ -48,29 +51,49 @@ const DiaryDetailPage = () => {
     }
   };
 
+  const onTagClick = async () => {};
+
   return (
     <div>
+      {console.log(singleDiary)}
       <S.Container>
         <S.Title>{singleDiary.title}</S.Title>
-        <S.Nickname>{singleDiary.nickname}</S.Nickname>
+        <S.Nickname>
+          <NicknameToProfile
+            currentUserId={userId}
+            userInfo={singleDiary.userInfo}
+          />
+        </S.Nickname>
         {singleDiary?.imageUrls && singleDiary?.imageUrls.length > 0 && (
           <S.Picture src={singleDiary?.imageUrls[0]} alt="pic" />
         )}
         <S.Content>{singleDiary.content}</S.Content>
-        <button
-          onClick={onLikeClick}
-          style={{
-            border: "none",
-            backgroundColor: "transparent",
-            cursor: "pointer",
-          }}
-        >
-          {!isLike ? (
-            <SentimentNeutralRoundedIcon sx={{ fontSize: 50 }} />
-          ) : (
-            <SentimentVerySatisfiedRoundedIcon sx={{ fontSize: 50 }} />
-          )}
-        </button>
+        <S.TagsContainer>
+          {singleDiary?.hashtags.map((tag) => (
+            <S.TagChip>{tag.hashtag}</S.TagChip>
+          ))}
+        </S.TagsContainer>
+        <S.LikeContainer>
+          <button
+            onClick={onLikeClick}
+            style={{
+              border: "none",
+              backgroundColor: "transparent",
+              cursor: "pointer",
+            }}
+          >
+            {!isLike ? (
+              <SentimentNeutralRoundedIcon sx={{ fontSize: 50 }} />
+            ) : (
+              <>
+                <S.HeartWrapper>
+                  <FavoriteIcon />
+                </S.HeartWrapper>
+                <SentimentVerySatisfiedRoundedIcon sx={{ fontSize: 50 }} />
+              </>
+            )}
+          </button>
+        </S.LikeContainer>
         {singleDiary?.likeCount}
         <S.Divider></S.Divider>
         <Comments diaryId={diaryId} />
