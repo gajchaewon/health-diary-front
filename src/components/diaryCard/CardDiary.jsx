@@ -1,16 +1,13 @@
-import * as React from "react";
+import Avatar from "@mui/material/Avatar";
 import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { red } from "@mui/material/colors";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 import moment from "moment";
-import { Link, NavLink } from "react-router-dom";
+import * as React from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 export const TitleinCard = styled(Link)`
@@ -22,8 +19,38 @@ export const TitleinCard = styled(Link)`
 `;
 
 export default function CardDiary({ diary }) {
+  const location = useLocation();
+
+  // 경로에 따라 다른 스타일을 적용합니다.
+  const cardStyle =
+    location.pathname === `/user/${diary.userInfo.id}/diaries`
+      ? {
+          width: "300px",
+          height: "350px",
+          margin: "20px 15px",
+          overflow: "hidden",
+        }
+      : { width: "350px", height: "400px", margin: "50px" };
+
+  const textStyle =
+    location.pathname === `/user/${diary.userInfo.id}/diaries`
+      ? {
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          display: "-webkit-box",
+          WebkitBoxOrient: "vertical",
+          WebkitLineClamp: "2",
+        }
+      : {
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          display: "-webkit-box",
+          WebkitBoxOrient: "vertical",
+          WebkitLineClamp: "3",
+        };
+
   return (
-    <Card sx={{ width: "350px", height: "400px", margin: "50px" }}>
+    <Card sx={cardStyle}>
       <CardHeader
         avatar={
           <NavLink
@@ -45,13 +72,18 @@ export default function CardDiary({ diary }) {
         subheader={moment(diary.createdAt).format("YYYY-MM-DD")}
       />
       <CardMedia component="img" height="194" image="" alt="img" />
-      <CardContent>
-        <Typography variant="body2" color="text.secondary" length={10}>
-          {diary.content.length > 88 ? (
-            <>{diary.content.substr(0, 88) + "..."}</>
-          ) : (
-            <>{diary.content}</>
-          )}
+      <CardContent
+        sx={{
+          height: "60px",
+        }}
+      >
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          length={10}
+          sx={textStyle}
+        >
+          <>{diary.content}</>
         </Typography>
       </CardContent>
     </Card>

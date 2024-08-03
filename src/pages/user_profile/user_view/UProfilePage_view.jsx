@@ -1,5 +1,6 @@
 import React from "react";
 import * as S from "./UProfilePage_view.styled";
+import * as GlobalSytle from "../UserProfile.style";
 import { useParams } from "react-router-dom";
 import { useGetUserQuery } from "../../../features/users/userApiSlice";
 
@@ -8,7 +9,7 @@ const UProfilePage_view = () => {
   const { data: fetchUserData, isloading: userDataLoading } =
     useGetUserQuery(userId);
   return (
-    <div>
+    <GlobalSytle.Container>
       <S.ExerciseInfoContainer>
         <S.ExerciseInfo>기록한 운동일지📒</S.ExerciseInfo>
         🌟{fetchUserData?.diaryCount}개🌟
@@ -16,7 +17,7 @@ const UProfilePage_view = () => {
       <S.ExerciseInfoContainer>
         <S.ExerciseInfo>관심있는 운동❤️‍🔥</S.ExerciseInfo>
       </S.ExerciseInfoContainer>
-    </div>
+    </GlobalSytle.Container>
   );
 };
 

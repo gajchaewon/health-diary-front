@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import * as S from "./Homepage.styled";
+import { useSelector } from "react-redux";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
@@ -14,22 +15,22 @@ import {
   useGetAllDiariesQuery,
   useLazyGetMyDiariesQuery,
 } from "../../features/diaries/diaryApiSlice";
-import { useDispatch } from "react-redux";
+import { selectCurrentUser } from "../../features/auth/authSlice";
 import WorkoutCalendar from "../../components/calendar/WorkoutCalendar";
 import FitnessCenterRoundedIcon from "@mui/icons-material/FitnessCenterRounded";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import moment from "moment";
+import NicknameToProfile from "../../components/profile/NicknameToProfile";
 
 const Homepage = () => {
-  const dispatch = useDispatch();
   const { isLoggedIn } = useOutletContext();
-  //const myDiaries = useSelector(selectMyDiaries);
   const today = new Date().toISOString().slice(0, 10); // 오늘 날짜를 YYYY-MM-DD 형식으로 가져옵니다.
   const searchType = "DATE";
   const [searchValue, setSearchValue] = useState(today);
   const [page, setPage] = useState(0);
   const [selectedDate, setSelectedDate] = useState(null); // 초기값을 오늘 날짜로 설정
+  const currentUserId = useSelector(selectCurrentUser)?.id;
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -151,7 +152,17 @@ const Homepage = () => {
                 <div key={diary.id}>
                   <ListItem alignItems="flex-start">
                     <ListItemAvatar sx={{ margin: "10px 18px 15px 0" }}>
-                      <Avatar alt="Remy Sharp" />
+                      <Avatar
+                        sx={{
+                          bgcolor: "#00aeff",
+                          width: "50px",
+                          height: "50px",
+                          fontSize: "24px",
+                        }}
+                        title={diary.nickname}
+                      >
+                        {diary.nickname.charAt(0)}
+                      </Avatar>
                     </ListItemAvatar>
                     <ListItemText
                       primary={
@@ -165,24 +176,39 @@ const Homepage = () => {
                       secondary={
                         <React.Fragment>
                           <Typography
-                            sx={{ display: "inline", marginRight: "10px" }}
+                            sx={{
+                              display: "inline",
+                              marginRight: "10px",
+                              overflow: "hidden",
+                              whiteSpace: "nowrap",
+                              textOverflow: "ellipsis",
+                              WebkitBoxOrient: "vertical",
+                              WebkitLineClamp: "1",
+                            }}
                             component="span"
                             variant="body2"
                             color="text.primary"
                             fontSize="20px"
                           >
-                            <NavLink
-                              to={`/user/${diary.userId}/view`}
-                              state={{ diary: diary }}
-                              style={{
-                                textDecoration: "none",
-                                color: "#444648",
-                              }}
-                            >
-                              {diary.nickname}
-                            </NavLink>
+                            <NicknameToProfile
+                              diary={diary}
+                              currentUserId={currentUserId}
+                            />
                           </Typography>
-                          {diary.content}
+                          <Typography
+                            sx={{
+                              display: "-webkit-box",
+                              WebkitBoxOrient: "vertical",
+                              overflow: "hidden",
+                              whiteSpace: "normal",
+                              textOverflow: "ellipsis",
+                              WebkitLineClamp: "1",
+                            }}
+                            variant="body2"
+                            color="text.secondary"
+                          >
+                            {diary.content}
+                          </Typography>
                         </React.Fragment>
                       }
                     />

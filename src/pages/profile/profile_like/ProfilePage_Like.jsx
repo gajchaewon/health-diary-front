@@ -35,7 +35,7 @@ const ProfilePageLike = () => {
             ))}
           </>
         ) : (
-          <></>
+          <>다이어리가 없습니다.</>
         )}
       </S.CardContainer>
       <Pagination

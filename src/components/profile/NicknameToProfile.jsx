@@ -1,13 +1,16 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-const NicknameToProfile = ({ currentUserId, diary }) => {
+const NicknameToProfile = ({ currentUserId, diary, userInfo }) => {
+  const userId = diary?.userId || userInfo?.id;
+  const nickname = diary?.nickname || userInfo?.nickname;
+
   return (
     <>
       {!currentUserId ? (
         <>
           <NavLink
-            to={`/user/${diary.userId}/view`}
+            to={`/user/${userId}/view`}
             style={{
               textDecoration: "none",
               color: "#444648",
@@ -18,7 +21,7 @@ const NicknameToProfile = ({ currentUserId, diary }) => {
         </>
       ) : (
         <>
-          {currentUserId === diary?.userId ? (
+          {currentUserId === userId ? (
             <>
               <NavLink
                 to="/mprof/view"
@@ -27,19 +30,19 @@ const NicknameToProfile = ({ currentUserId, diary }) => {
                   color: "#444648",
                 }}
               >
-                {diary.nickname}
+                {nickname}
               </NavLink>
             </>
           ) : (
             <>
               <NavLink
-                to={`/user/${diary?.userId}/view`}
+                to={`/user/${userId}/view`}
                 style={{
                   textDecoration: "none",
                   color: "#444648",
                 }}
               >
-                {diary.nickname}
+                {nickname}
               </NavLink>
             </>
           )}
