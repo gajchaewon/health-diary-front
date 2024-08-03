@@ -11,10 +11,16 @@ export const SmallDiaryCard = styled.div`
   align-items: center;
   margin: 10px;
   padding: 10px;
+  overflow: auto; // 스크롤바 숨기기
+  &::-webkit-scrollbar {
+    display: none; // 웹킷 기반 브라우저에서 스크롤바 숨기기
+  }
 `;
 
 export const PictureinCard = styled.div`
-  width: 80%;
+  width: 500px;
+  height: 400px;
+  box-sizing: border-box;
   height: 250px;
   margin: 20px 0;
   background-color: white;
