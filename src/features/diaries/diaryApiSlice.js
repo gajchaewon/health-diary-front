@@ -82,10 +82,15 @@ export const diaryApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: file,
         formdata: true,
-        // headers: {
-        //   "Content-Type": "multipart/form-data",
-        // },
       }),
+      invalidatesTags: ["Diary"],
+    }),
+    deleteImage: builder.mutation({
+      query: (imageId) => ({
+        url: `/diaries/images/${imageId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Diary"],
     }),
     addComment: builder.mutation({
       query: (data) => ({
@@ -128,6 +133,7 @@ export const { useEditDiaryMutation } = diaryApiSlice;
 export const { useGetADiaryQuery } = diaryApiSlice;
 export const { useLikeDiaryMutation } = diaryApiSlice;
 export const { useUploadImageMutation } = diaryApiSlice;
+export const { useDeleteImageMutation } = diaryApiSlice;
 export const { useAddCommentMutation } = diaryApiSlice;
 export const { useDeleteCommentMutation } = diaryApiSlice;
 export const { useEditCommentMutation } = diaryApiSlice;
