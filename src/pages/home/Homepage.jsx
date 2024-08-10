@@ -107,6 +107,9 @@ const Homepage = () => {
                     content={datedDiary[page]?.content}
                     diaryId={datedDiary[page]?.id}
                   />
+                  <S.AddDiaryBtn2 to="adddiary">
+                    <AddCircleRoundedIcon sx={{ fontSize: "50px" }} />
+                  </S.AddDiaryBtn2>
                   {fetchDatedDiary?.numberOfElements <= 1 ? (
                     <></>
                   ) : (
