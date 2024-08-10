@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import RandomImage from "../RandomImage";
 
 export const SmallDiaryCard = styled.div`
   display: flex;
@@ -17,7 +18,7 @@ export const SmallDiaryCard = styled.div`
   }
 `;
 
-export const PictureinCard = styled.div`
+export const PictureinCard = styled.img`
   width: 500px;
   height: 400px;
   box-sizing: border-box;
@@ -50,7 +51,11 @@ const DiaryCard = (props) => {
     <>
       <SmallDiaryCard>
         <TitleinCard to={`/diary/${props.diaryId}`}>{props.title}</TitleinCard>
-        <PictureinCard />
+        {props?.images?.length > 0 ? (
+          <PictureinCard src={props?.images[0]?.url} alt="pic" />
+        ) : (
+          <PictureinCard src={`/${RandomImage()}`} alt="rpic" />
+        )}
         <ContentinCard>{props.content}</ContentinCard>
       </SmallDiaryCard>
     </>

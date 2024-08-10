@@ -25,6 +25,7 @@ export const CalendarWrapper = styled.div`
 `;
 export const DiaryWrapper = styled.div`
   display: flex;
+  position: relative;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -46,11 +47,22 @@ export const AddDiaryBtn = styled(Link)`
   height: 100px;
   border-radius: 50%;
   color: #434343;
-  font-size: 90px;
-  font-weight: 800;
   text-decoration: none;
   &:hover {
     color: #121212;
+  }
+`;
+
+export const AddDiaryBtn2 = styled(Link)`
+  display: flex;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: fit-content;
+  color: lightgray;
+  text-decoration: none;
+  &:hover {
+    color: #434343;
   }
 `;
 

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -6,6 +7,7 @@ import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import { useDeleteDiaryMutation } from "../../features/diaries/diaryApiSlice";
 import { useDispatch } from "react-redux";
 import { deleteDiary } from "../../features/diaries/diarySlice";
+import RandomImage from "../RandomImage";
 
 export const CommunityCard = styled.div`
   display: flex;
@@ -86,15 +88,16 @@ const DiaryCard = ({ diary }) => {
 
   return (
     <>
+      {console.log(diary?.images)}
       <CommunityCard>
         <TitleinCard to={`/diary/${diary.id}`} state={{ diary: diary }}>
           {diary.title}
         </TitleinCard>
         <NicknameinCard>{diary.nickname}</NicknameinCard>
-        {diary?.images ? (
+        {diary?.images.length > 0 ? (
           <PictureinCard src={diary?.images[0]?.url} alt="pic" />
         ) : (
-          <PictureinCard />
+          <PictureinCard src={`/${RandomImage()}`} alt="rpic" />
         )}
 
         <ContentinCard>{diary.content}</ContentinCard>

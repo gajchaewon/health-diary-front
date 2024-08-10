@@ -9,6 +9,7 @@ import moment from "moment";
 import * as React from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import styled from "styled-components";
+import RandomImage from "../RandomImage";
 
 export const TitleinCard = styled(Link)`
   text-decoration: none;
@@ -71,7 +72,22 @@ export default function CardDiary({ diary }) {
         }
         subheader={moment(diary.createdAt).format("YYYY-MM-DD")}
       />
-      <CardMedia component="img" height="194" image="" alt="img" />
+
+      {diary?.images.length > 0 ? (
+        <CardMedia
+          component="img"
+          height="194"
+          image={diary?.images[0]?.url}
+          alt="img"
+        />
+      ) : (
+        <CardMedia
+          component="img"
+          height="194"
+          image={`/${RandomImage()}`}
+          alt="img"
+        />
+      )}
       <CardContent
         sx={{
           height: "60px",

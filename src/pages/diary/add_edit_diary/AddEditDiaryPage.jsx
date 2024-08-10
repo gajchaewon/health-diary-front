@@ -16,6 +16,7 @@ import {
   useAddDiaryMutation,
   useEditDiaryMutation,
   useUploadImageMutation,
+  useDeleteImageMutation,
 } from "../../../features/diaries/diaryApiSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -37,8 +38,10 @@ const AddEditDiaryPage = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [adding, { isLoading: isAddLoading }] = useAddDiaryMutation();
   const [editing, { isLoading: isEditLoading }] = useEditDiaryMutation();
-  const [uploading, { isLoading: isUploadLoading, data: imgData }] =
+  const [uploading, { isLoading: isImgUploadLoading }] =
     useUploadImageMutation();
+  const [deleting, { isLoading: isImgDeletingLoading }] =
+    useDeleteImageMutation();
 
   const onTitleChange = (e) => setTitle(e.target.value);
   const onContentChange = (e) => setContent(e.target.value);
@@ -59,7 +62,7 @@ const AddEditDiaryPage = () => {
 
   const handleImageUpload = async (event) => {
     const formData = new FormData();
-    if (event.target.files !== null && !isUploadLoading) {
+    if (event.target?.files !== null && !isImgUploadLoading) {
       try {
         formData.append("file", event.target.files[0]);
         console.log(event.target.files[0]);
@@ -75,12 +78,17 @@ const AddEditDiaryPage = () => {
     }
   };
 
-  const handleImageDelete = () => {
-    //사진 삭제 api 넣기(실제 삭제 기능은 구현되지x)
-    const updatedImages = [...images];
-    updatedImages.splice(currentPage, 1);
-    setImages(updatedImages);
-    setCurrentPage((prevPage) => (prevPage > 0 ? prevPage - 1 : 0));
+  const handleImageDelete = async (currentPage) => {
+    try {
+      await deleting(images[currentPage]?.imageId);
+      const updatedImages = [...images];
+      updatedImages.splice(currentPage, 1);
+      setImages(updatedImages);
+      setCurrentPage((prevPage) => (prevPage > 0 ? prevPage - 1 : 0));
+      console.log("삭제성공");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const nextPage = () => {
@@ -94,7 +102,6 @@ const AddEditDiaryPage = () => {
   const saveCheck = [title, content].every(Boolean) === true;
 
   const onSaveBtnClick = async () => {
-    console.log(images);
     const imageIds = images.map((image) => image.imageId);
     if (saveCheck) {
       try {
@@ -193,7 +200,9 @@ const AddEditDiaryPage = () => {
                       src={images[currentPage].url}
                       alt="preview"
                     />
-                    <S.DeleteButton onClick={handleImageDelete}>
+                    <S.DeleteButton
+                      onClick={() => handleImageDelete(currentPage)}
+                    >
                       <DeleteIcon />
                     </S.DeleteButton>
                     <S.NextButton
@@ -281,10 +290,12 @@ const AddEditDiaryPage = () => {
                     <ArrowBackIosNewRoundedIcon sx={{ fontSize: 40 }} />
                   </S.PrevButton>
                   <S.ImagePreview
-                    src={diary.images[currentPage]}
+                    src={diary?.images[currentPage]}
                     alt="preview"
                   />
-                  <S.DeleteButton onClick={handleImageDelete}>
+                  <S.DeleteButton
+                    onClick={() => handleImageDelete(currentPage)}
+                  >
                     <DeleteIcon />
                   </S.DeleteButton>
                   <S.NextButton
