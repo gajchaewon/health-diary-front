@@ -49,6 +49,7 @@ export const Divider = styled.div`
 
 export const TagsContainer = styled.div`
   display: flex;
+  flex-wrap: wrap;
   margin: 50px;
 `;
 

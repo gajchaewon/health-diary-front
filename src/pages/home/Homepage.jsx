@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import * as S from "./Homepage.styled";
-import { useSelector } from "react-redux";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
@@ -15,7 +14,6 @@ import {
   useGetAllDiariesQuery,
   useLazyGetMyDiariesQuery,
 } from "../../features/diaries/diaryApiSlice";
-import { selectCurrentUser } from "../../features/auth/authSlice";
 import WorkoutCalendar from "../../components/calendar/WorkoutCalendar";
 import FitnessCenterRoundedIcon from "@mui/icons-material/FitnessCenterRounded";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
@@ -30,7 +28,6 @@ const Homepage = () => {
   const [searchValue, setSearchValue] = useState(today);
   const [page, setPage] = useState(0);
   const [selectedDate, setSelectedDate] = useState(null); // 초기값을 오늘 날짜로 설정
-  const currentUserId = useSelector(selectCurrentUser)?.id;
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -193,10 +190,7 @@ const Homepage = () => {
                             color="text.primary"
                             fontSize="20px"
                           >
-                            <NicknameToProfile
-                              diary={diary}
-                              currentUserId={currentUserId}
-                            />
+                            <NicknameToProfile diary={diary} />
                           </Typography>
                           <Typography
                             sx={{

@@ -1,7 +1,10 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
+import { selectCurrentUser } from "../../features/auth/authSlice";
 
-const NicknameToProfile = ({ currentUserId, diary, userInfo }) => {
+const NicknameToProfile = ({ diary, userInfo }) => {
+  const currentUserId = useSelector(selectCurrentUser)?.id;
   const userId = diary?.userId || userInfo?.id;
   const nickname = diary?.nickname || userInfo?.nickname;
 

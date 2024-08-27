@@ -8,24 +8,31 @@ import { useDeleteDiaryMutation } from "../../features/diaries/diaryApiSlice";
 import { useDispatch } from "react-redux";
 import { deleteDiary } from "../../features/diaries/diarySlice";
 import RandomImage from "../RandomImage";
+import Tags from "../tag/Tags";
+import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
+import InsertCommentOutlinedIcon from "@mui/icons-material/InsertCommentOutlined";
+import NicknameToProfile from "../profile/NicknameToProfile";
 
 export const CommunityCard = styled.div`
   display: flex;
   position: relative;
   flex-direction: column;
-  width: 500px;
+  width: 450px;
   height: 600px;
+  margin: 10px 0;
   box-sizing: border-box;
-  background-color: #f5f5f5;
-  margin: 50px 70px;
-  padding: 50px;
+  background-color: #fcfeff;
+  padding: 45px;
   border-radius: 0.6rem;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  overflow: hidden; /* 추가: 자식 요소가 넘칠 경우 숨기도록 설정 */
 `;
 
 export const PictureinCard = styled.img`
-  width: 400px;
-  height: 250px;
+  width: 100%;
+  height: 220px; /* 이미지 높이를 고정된 값으로 설정 */
   margin: 20px 0;
+  box-sizing: border-box;
 `;
 
 export const TitleinCard = styled(Link)`
@@ -35,21 +42,30 @@ export const TitleinCard = styled(Link)`
   font-weight: 600;
   width: fit-content;
 `;
-export const NicknameinCard = styled.div`
+export const NicknameinCardWrapper = styled.div`
   display: flex;
   font-size: 18px;
   font-weight: 500;
   justify-content: flex-end;
 `;
+
 export const ContentinCard = styled.div`
   font-size: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; /* 최대 3줄까지만 표시 */
+  line-height: 1.5em; /* 줄 간격 조정 */
+  max-height: calc(3 * 1.5em); /* 3줄까지만 보이도록 높이 제한 */
+  box-sizing: border-box;
 `;
+
 export const BtnContainer = styled.div`
   position: absolute;
   width: fit-content;
   display: flex;
-  justify-content: flex-end;
-  right: 3%;
+  right: 30px;
   bottom: 2%;
 `;
 export const Btn = styled.button`
@@ -59,6 +75,25 @@ export const Btn = styled.button`
   background-color: transparent;
   font-size: 16px;
   font-weight: 500;
+`;
+
+export const TagsContainer = styled.div`
+  max-height: 65px;
+  display: flex;
+  /* align-items: center;
+  justify-content: center; */
+  flex-wrap: wrap; /* 해시태그들이 줄을 넘어가면 다음 줄로 이동 */
+  overflow: hidden; /* 넘치는 해시태그 숨기기 */
+  position: absolute;
+  bottom: 80px;
+`;
+
+export const CardInfo = styled.div`
+  display: flex;
+  padding: 3px;
+  margin: 10px 5px;
+  align-items: center;
+  justify-content: center;
 `;
 
 const DiaryCard = ({ diary }) => {
@@ -88,12 +123,14 @@ const DiaryCard = ({ diary }) => {
 
   return (
     <>
-      {console.log(diary?.images)}
+      {console.log(diary)}
       <CommunityCard>
         <TitleinCard to={`/diary/${diary.id}`} state={{ diary: diary }}>
           {diary.title}
         </TitleinCard>
-        <NicknameinCard>{diary.nickname}</NicknameinCard>
+        <NicknameinCardWrapper>
+          <NicknameToProfile diary={diary} />
+        </NicknameinCardWrapper>
         {diary?.images.length > 0 ? (
           <PictureinCard src={diary?.images[0]?.url} alt="pic" />
         ) : (
@@ -101,6 +138,9 @@ const DiaryCard = ({ diary }) => {
         )}
 
         <ContentinCard>{diary.content}</ContentinCard>
+        <TagsContainer>
+          <Tags hashtags={diary.hashtags} />
+        </TagsContainer>
         {isMyPage ? (
           <BtnContainer>
             <Btn onClick={onEditBtnClick}>
@@ -111,7 +151,19 @@ const DiaryCard = ({ diary }) => {
             </Btn>
           </BtnContainer>
         ) : (
-          <div></div>
+          <BtnContainer>
+            <CardInfo>
+              <FavoriteRoundedIcon
+                sx={{ fontSize: "24px", color: "#384958" }}
+              />
+              &ensp;{diary?.likeInfo?.totalCount}
+            </CardInfo>
+            <CardInfo>
+              <InsertCommentOutlinedIcon
+                sx={{ fontSize: "24px", color: "#384958" }}
+              />
+            </CardInfo>
+          </BtnContainer>
         )}
       </CommunityCard>
     </>
