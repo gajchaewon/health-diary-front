@@ -28,7 +28,9 @@ const RoutineList = () => {
           .reverse()
           .map((routine) => <RoutineCard key={routine.id} routine={routine} />)
       ) : (
-        <div>No routines available</div>
+        <div style={{ margin: "20vh 0" }}>
+          루틴이 없습니다. 새로 추가해주세요!
+        </div>
       )}
     </div>
   );
