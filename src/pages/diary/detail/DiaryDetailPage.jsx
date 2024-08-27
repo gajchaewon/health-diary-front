@@ -15,6 +15,7 @@ import Comments from "../../../components/comment/Comments";
 import { selectCurrentUser } from "../../../features/auth/authSlice";
 import NicknameToProfile from "../../../components/profile/NicknameToProfile";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import Tags from "../../../components/tag/Tags";
 
 const DiaryDetailPage = () => {
   const dispatch = useDispatch();
@@ -69,9 +70,7 @@ const DiaryDetailPage = () => {
         )}
         <S.Content>{singleDiary.content}</S.Content>
         <S.TagsContainer>
-          {singleDiary?.hashtags.map((tag) => (
-            <S.TagChip>{tag.hashtag}</S.TagChip>
-          ))}
+          <Tags hashtags={singleDiary?.hashtags} />
         </S.TagsContainer>
         <S.LikeContainer>
           <button
