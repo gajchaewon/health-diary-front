@@ -38,8 +38,9 @@ export const Searchbar = styled.input`
 `;
 
 export const CommunityCardContainer = styled.div`
+  width: 100%;
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  position: relative;
   justify-content: center;
+  flex-wrap: wrap;
 `;

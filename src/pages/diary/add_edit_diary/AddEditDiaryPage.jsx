@@ -160,6 +160,7 @@ const AddEditDiaryPage = () => {
               onChange={onTitleChange}
               value={title}
               fullWidth
+              inputProps={{ maxLength: 30 }}
             />
           </S.TitleWrapper>
 
@@ -174,6 +175,7 @@ const AddEditDiaryPage = () => {
                 style={{ backgroundColor: "aliceblue" }}
                 onChange={onContentChange}
                 value={content}
+                inputProps={{ maxLength: 250 }}
               />
             </S.ContentWrapper>
           ) : (

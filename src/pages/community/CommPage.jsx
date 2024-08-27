@@ -43,7 +43,7 @@ const CommPage = () => {
           </S.SearchbardWrapper>
           <S.CommunityCardContainer>
             {Object.entries(diaries).map((diary) => (
-              <div key={diary[1].id}>
+              <div key={diary[1].id} style={{ margin: "10px 50px" }}>
                 <Diarycard diary={diary[1]} />
               </div>
             ))}
