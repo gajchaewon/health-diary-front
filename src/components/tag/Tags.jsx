@@ -1,5 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import { changeSearchData } from "../../features/diaries/diarySlice";
+import { useNavigate } from "react-router-dom";
 
 export const TagChip = styled.div`
   width: fit-content;
@@ -19,10 +22,19 @@ export const TagChip = styled.div`
 `;
 
 const Tags = ({ hashtags }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const onTagClick = (hashtag) => {
+    dispatch(changeSearchData({ searchType: "HASHTAG", searchValue: hashtag }));
+    navigate("/comm");
+  };
+
   return (
     <>
       {hashtags?.map((tag) => (
-        <TagChip>{tag.hashtag}</TagChip>
+        <TagChip key={tag.id} onClick={() => onTagClick(tag.hashtag)}>
+          {tag.hashtag}
+        </TagChip>
       ))}
     </>
   );

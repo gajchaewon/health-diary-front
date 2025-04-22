@@ -12,6 +12,7 @@ import { useLoginMutation } from "../../features/auth/authApiSlice";
 import { logIn } from "../../features/auth/authSlice";
 import { useDispatch } from "react-redux";
 import { useOutletContext } from "react-router-dom";
+import { CircularProgress } from "@mui/material";
 
 const LoginPage = () => {
   const { isLoggedIn } = useOutletContext();
@@ -43,8 +44,6 @@ const LoginPage = () => {
         dispatch(logIn({ ...userData }));
         setEmail("");
         setPassword("");
-        navigate("/");
-
         console.log("success");
       } catch (err) {
         console.log("login failed");
@@ -114,7 +113,16 @@ const LoginPage = () => {
             label="Password"
           />
         </FormControl>
-        <S.LoginBtn onClick={onLoginBtnClick}>로그인</S.LoginBtn>
+
+        {isLoading ? (
+          <S.DisabledLoginBtn>
+            로그인하는 중... &nbsp;
+            <CircularProgress size="2rem" sx={{ color: "white" }} />
+          </S.DisabledLoginBtn>
+        ) : (
+          <S.LoginBtn onClick={onLoginBtnClick}>로그인</S.LoginBtn>
+        )}
+
         <S.SignUp to="/signup">회원가입</S.SignUp>
       </S.IdPwdContainer>
     </S.LoginContainer>

@@ -44,12 +44,6 @@ const Comment = ({ comment }) => {
     }
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      onEditBtnClick();
-    }
-  };
-
   return (
     <S.CommentContainer>
       {userInfo?.id === comment.userInfo?.id ? (
@@ -87,7 +81,6 @@ const Comment = ({ comment }) => {
               value={content}
               onChange={onContentChange}
               rows={3}
-              onKeyDown={handleKeyDown}
             />
           </S.CommentTextarea>
           <S.CommentActions>

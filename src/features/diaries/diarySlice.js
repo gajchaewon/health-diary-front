@@ -8,6 +8,10 @@ const initialState = {
   ],
   myDiaries: [],
   singleDiary: [],
+  search: {
+    searchType: "TITLE",
+    searchValue: "",
+  },
   error: null,
 };
 
@@ -15,6 +19,11 @@ const diarySlice = createSlice({
   name: "diary",
   initialState,
   reducers: {
+    changeSearchData: {
+      reducer(state, action) {
+        state.search = action.payload;
+      },
+    },
     getAllDiaries: {
       reducer(state, action) {
         state.diaries = action.payload;
@@ -112,5 +121,6 @@ export const {
   addComment,
   deleteComment,
   editComment,
+  changeSearchData,
 } = diarySlice.actions;
 export default diarySlice.reducer;

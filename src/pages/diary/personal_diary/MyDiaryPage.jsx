@@ -36,7 +36,7 @@ const MyDiaryPage = () => {
 
   useEffect(() => {
     fetchData();
-  }, [searchTrigger, searchType]);
+  }, [searchTrigger]);
 
   useEffect(() => {
     if (isError) {

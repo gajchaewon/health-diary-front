@@ -96,7 +96,7 @@ export const CardInfo = styled.div`
   justify-content: center;
 `;
 
-const DiaryCard = ({ diary }) => {
+const DiaryCard = ({ diary, fetchData }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -123,7 +123,6 @@ const DiaryCard = ({ diary }) => {
 
   return (
     <>
-      {console.log(diary)}
       <CommunityCard>
         <TitleinCard to={`/diary/${diary.id}`} state={{ diary: diary }}>
           {diary.title}

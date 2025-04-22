@@ -45,6 +45,13 @@ export const LoginBtn = styled(Link)`
   }
 `;
 
+export const DisabledLoginBtn = styled(LoginBtn)`
+  cursor: default;
+  &:hover {
+    background-color: grey;
+  }
+`;
+
 export const SignUp = styled(Link)`
   margin: 30px 0;
   text-decoration: none;

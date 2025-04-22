@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
 export const DiaryContainers = styled.div`
@@ -9,6 +10,7 @@ export const Comm = styled.div`
   color: #212121;
   font-size: 45px;
   font-weight: 700;
+  cursor: pointer;
 `;
 
 export const SearchbardWrapper = styled.div`
@@ -39,6 +41,7 @@ export const Searchbar = styled.input`
 
 export const CommunityCardContainer = styled.div`
   width: 100%;
+  padding: 70px 0;
   display: flex;
   position: relative;
   justify-content: center;

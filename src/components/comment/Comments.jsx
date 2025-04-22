@@ -34,19 +34,12 @@ const Comments = ({ diaryId }) => {
     }
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      onAddBtnClick();
-    }
-  };
-
   return (
     <S.CommentsContainer>
       comment({comments?.length})
       <S.CommentTextarea>
         <TextField
           onChange={onContentChange}
-          onKeyDown={handleKeyDown}
           value={content}
           id="outlined-textarea"
           label="comment"
